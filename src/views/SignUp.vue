@@ -1,7 +1,44 @@
 <script setup lang="ts">
 import { ref } from 'vue'
+import HomeButton from '@/components/HomeButton.vue'
+import axios from 'axios'
+
 const visible = ref(false)
-import HomeButton from '@/components/HomeButton.vue';
+const apiResponse = ref(null)
+
+interface User {
+  fullName: string
+  eMail: string
+  password: string
+  rePassword: string
+}
+
+const formData = ref<User>({
+  fullName: '',
+  eMail: '',
+  password: '',
+  rePassword: ''
+})
+
+const registerUser = async () => {
+  axios
+    .post('api/register', formData.value)
+    .then((response: any) => {
+      if (response.data && response.data.token) {
+        localStorage.setItem('token', response.data.token)
+        console.log(response.data);
+        apiResponse.value = response.data
+      }
+      formData.value.fullName = ''
+      formData.value.eMail = ''
+      formData.value.password = ''
+      formData.value.rePassword = ''
+      return response
+    })
+    .catch((error: any) => {
+      return error
+    })
+}
 </script>
 
 <template>
@@ -22,6 +59,7 @@ import HomeButton from '@/components/HomeButton.vue';
         placeholder="Enter Full Name"
         prepend-inner-icon="mdi-account"
         variant="outlined"
+        v-model="formData.fullName"
       ></v-text-field>
 
       <div class="text-subtitle-1 text-medium-emphasis">Email</div>
@@ -31,6 +69,7 @@ import HomeButton from '@/components/HomeButton.vue';
         placeholder="Email address"
         prepend-inner-icon="mdi-email-outline"
         variant="outlined"
+        v-model="formData.eMail"
       ></v-text-field>
 
       <div class="text-subtitle-1 text-medium-emphasis d-flex align-center justify-space-between">
@@ -45,6 +84,7 @@ import HomeButton from '@/components/HomeButton.vue';
         prepend-inner-icon="mdi-lock-outline"
         variant="outlined"
         @click:append-inner="visible = !visible"
+        v-model="formData.password"
       ></v-text-field>
 
       <div class="text-subtitle-1 text-medium-emphasis d-flex align-center justify-space-between">
@@ -59,9 +99,12 @@ import HomeButton from '@/components/HomeButton.vue';
         prepend-inner-icon="mdi-lock-outline"
         variant="outlined"
         @click:append-inner="visible = !visible"
+        v-model="formData.rePassword"
       ></v-text-field>
 
-      <v-btn block class="mb-8" color="blue" size="large" variant="tonal"> Sign-Up </v-btn>
+      <v-btn block class="mb-8" color="blue" size="large" variant="tonal" @click="registerUser">
+        Sign-Up
+      </v-btn>
 
       <v-card-text class="text-center">
         <router-link class="text-blue text-decoration-none" to="/signin">
@@ -69,10 +112,15 @@ import HomeButton from '@/components/HomeButton.vue';
         </router-link>
       </v-card-text>
     </v-card>
+    <HomeButton style="text-align: center; margin-top: 25px" />
 
-    <HomeButton style="text-align: center; margin-top:25px"/>
+    {{ formData }}
+    <!-- Display the API response -->
+    <div v-if="apiResponse">
+      <h2>API Response:</h2>
+      <pre>{{ apiResponse }}</pre>
+    </div>
   </div>
 </template>
 
-
-<!-- https://codesandbox.io/p/sandbox/vuetify-top-navbar-frhu8?file=%2Fsrc%2Fcomponents%2FLanding.vue%3A3%2C5-3%2C24 -->
+<!-- https://mock-api.binaryboxtuts.com/ -->

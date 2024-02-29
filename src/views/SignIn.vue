@@ -38,7 +38,7 @@ import HomeButton from "../components/HomeButton.vue"
         @click:append-inner="visible = !visible"
       ></v-text-field>
 
-      <v-btn block class="mb-8" color="blue" size="large" variant="tonal"> Log In </v-btn>
+      <v-btn block class="mb-8" color="blue" size="large" variant="tonal" to="/dashboard"> Log In </v-btn>
 
       <v-card-text class="text-center">
         <router-link class="text-blue text-decoration-none" to="/signup">

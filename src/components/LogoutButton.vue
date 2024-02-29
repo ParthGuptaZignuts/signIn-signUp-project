@@ -2,8 +2,6 @@
 
 <template>
   <div class="demo-space-x">
-    <VBtn variant="flat" color="info" to="/"> Home</VBtn>
+    <VBtn variant="flat" color="error" to="/">Log Out</VBtn>
   </div>
 </template>
-
-
