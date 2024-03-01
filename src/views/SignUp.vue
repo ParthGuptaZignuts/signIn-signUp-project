@@ -3,6 +3,7 @@ import { ref } from 'vue'
 import HomeButton from '@/components/HomeButton.vue'
 import axios from 'axios'
 import Swal from 'sweetalert2'
+import router from '@/router'
 
 const visible = ref(false)
 const apiResponse = ref(null)
@@ -40,6 +41,7 @@ const registerUser = () => {
         timer: 1500
       });
 
+      router.push('/signin')
       // Clear form data after successful registration
       formData.value.name = '';
       formData.value.email = '';
@@ -147,7 +149,6 @@ const registerUser = () => {
     </v-card>
     <HomeButton style="text-align: center; margin-top: 25px" />
 
-    {{ formData }}
     <!-- Display the API response -->
     <div v-if="apiResponse">
       <h2>API Response:</h2>

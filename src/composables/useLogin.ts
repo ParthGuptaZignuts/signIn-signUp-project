@@ -27,7 +27,7 @@ export function useLogin() {
             showConfirmButton: false,
             timer: 1500
           })
-          router.push('/')
+          router.push('/dashboard')
           formData.value.email = ''
           formData.value.password = ''
         } else {
