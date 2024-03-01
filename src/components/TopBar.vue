@@ -82,6 +82,10 @@ const handleSave = () => {
       </v-toolbar-items>
     </v-toolbar>
 
+    <v-content>
+      <router-view></router-view>
+    </v-content>
+
     <v-dialog v-model="isCreatePostDialogOpen" max-width="500">
       <v-card>
         {{ data }}
@@ -106,12 +110,12 @@ const handleSave = () => {
                       ></v-textarea>
                     </v-col>
                   </v-row>
-                  <v-row >
+                  <v-row class="justify-center">
                     <v-col>
                       <div class="demo-space-x" @click="handleSave" :disabled="isSaving">
                         <VBtn variant="text" color="info">Save</VBtn>
                       </div>
-                    </v-col >
+                    </v-col>
                     <v-col>
                       <div class="demo-space-x" @click="closeCreatePostDialog">
                         <VBtn variant="text" color="error">Close</VBtn>
