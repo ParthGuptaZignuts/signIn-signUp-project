@@ -24,34 +24,44 @@ const formData = ref<User>({
 const registerUser = () => {
   axios
     .post('api/register', formData.value)
-    .then((response: any) => {
+    .then((response) => {
+      console.log('response:', response);
+
       if (response.data && response.data.token) {
-        localStorage.setItem('token', response.data.token)
-        apiResponse.value = response.data
-        console.log(apiResponse)
+        localStorage.setItem('token', response.data.token);
+        apiResponse.value = response.data;
+        console.log(apiResponse);
       }
+
       Swal.fire({
         icon: 'success',
         title: 'User created successfully!',
         showConfirmButton: false,
         timer: 1500
-      })
-      formData.value.name = ''
-      formData.value.email = ''
-      formData.value.password = ''
-      formData.value.password_confirmation = ''
-      return response
+      });
+
+      // Clear form data after successful registration
+      formData.value.name = '';
+      formData.value.email = '';
+      formData.value.password = '';
+      formData.value.password_confirmation = '';
+
+      return response;
     })
-    .catch((error: any) => {
+    .catch((error) => {
+      console.error('Error:', error);
+
       Swal.fire({
         icon: 'error',
-        title: 'An Error Occurred!',
+        title: 'An error occurred!',
         showConfirmButton: false,
         timer: 1500
-      })
-      return error
-    })
-}
+      });
+
+      return Promise.reject(error); // Re-throw the error to handle it elsewhere
+    });
+};
+
 </script>
 
 <template>
@@ -146,4 +156,3 @@ const registerUser = () => {
   </div>
 </template>
 
-<!-- https://mock-api.binaryboxtuts.com/ -->
