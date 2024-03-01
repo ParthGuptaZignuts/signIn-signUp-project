@@ -1,8 +1,8 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import SignIn from "../views/SignIn.vue" 
+import SignIn from '../views/SignIn.vue'
 import SignUp from '@/views/SignUp.vue'
 import LandingView from '@/views/LandingView.vue'
-import DashboardView from "../views/DashboardView.vue"
+import DashboardView from '../views/DashboardView.vue'
 import CreatePost from '@/views/CreatePost.vue'
 
 const router = createRouter({
@@ -24,20 +24,20 @@ const router = createRouter({
       component: SignIn
     },
     {
-      path:'/dashboard',
-      name:'Dashboard',
+      path: '/dashboard',
+      name: 'Dashboard',
       component: DashboardView,
-      meta:{
+      meta: {
         layout: 'default'
-      },
+      }
     },
     {
-      path:'/createpost',
-      name:'CreatePost',
+      path: '/createpost',
+      name: 'CreatePost',
       component: CreatePost,
-      meta:{
+      meta: {
         layout: 'LayoutCreate'
-      },
+      }
     }
   ]
 })

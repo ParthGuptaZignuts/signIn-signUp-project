@@ -14,8 +14,9 @@ export const useUserAuthData = () => {
   const userEmail = ref<string>('')
 
   const getUser = () => {
-    return axios.get('/api/user', { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
-      .then(r => {
+    return axios
+      .get('/api/user', { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
+      .then((r) => {
         const userData = r.data as UserData
 
         user.value = userData
@@ -23,31 +24,36 @@ export const useUserAuthData = () => {
 
         return { user: userData, email: userData.email }
       })
-      .catch(e => {
+      .catch((e) => {
         return e
       })
   }
 
   const logoutAction = () => {
-    return axios.post('/api/logout', {}, { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
-      .then(r => {
+    return axios
+      .post(
+        '/api/logout',
+        {},
+        { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } }
+      )
+      .then((r) => {
         localStorage.setItem('token', '')
         router.push('/')
         Swal.fire({
           icon: 'success',
           title: 'Logged out successfully!',
           showConfirmButton: false,
-          timer: 1500,
+          timer: 1500
         })
 
         return r
       })
-      .catch(e => {
+      .catch((e) => {
         Swal.fire({
           icon: 'error',
           title: 'Invalid response from the server',
           showConfirmButton: false,
-          timer: 1500,
+          timer: 1500
         })
 
         return e
@@ -58,11 +64,13 @@ export const useUserAuthData = () => {
     getUser()
     if (localStorage.getItem('token') === '' || localStorage.getItem('token') === null)
       router.push('/')
-    else
-      getUser()
+    else getUser()
   })
 
   return {
-    user, userEmail, getUser, logoutAction,
+    user,
+    userEmail,
+    getUser,
+    logoutAction
   }
 }

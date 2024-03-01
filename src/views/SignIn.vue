@@ -5,7 +5,7 @@ import HomeButton from '../components/HomeButton.vue'
 
 import { useLogin } from '@/composables/useLogin'
 
-const { formData, handleLogin } = useLogin() ;
+const { formData, handleLogin } = useLogin()
 </script>
 
 <template>
@@ -45,7 +45,7 @@ const { formData, handleLogin } = useLogin() ;
           v-model="formData.password"
         ></v-text-field>
 
-        <v-btn block class="mb-8" color="blue" size="large" variant="tonal" type="submit" >
+        <v-btn block class="mb-8" color="blue" size="large" variant="tonal" type="submit">
           Log In
         </v-btn>
 
@@ -59,7 +59,6 @@ const { formData, handleLogin } = useLogin() ;
     <HomeButton style="text-align: center; margin-top: 25px" />
   </div>
 </template>
-
 
 <!-- testing for login  
 email : realhalamadrid04@gmail.com

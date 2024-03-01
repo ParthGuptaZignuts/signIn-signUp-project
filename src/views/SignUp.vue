@@ -26,12 +26,12 @@ const registerUser = () => {
   axios
     .post('api/register', formData.value)
     .then((response) => {
-      console.log('response:', response);
+      console.log('response:', response)
 
       if (response.data && response.data.token) {
-        localStorage.setItem('token', response.data.token);
-        apiResponse.value = response.data;
-        console.log(apiResponse);
+        localStorage.setItem('token', response.data.token)
+        apiResponse.value = response.data
+        console.log(apiResponse)
       }
 
       Swal.fire({
@@ -39,31 +39,30 @@ const registerUser = () => {
         title: 'User created successfully!',
         showConfirmButton: false,
         timer: 1500
-      });
+      })
 
       router.push('/signin')
       // Clear form data after successful registration
-      formData.value.name = '';
-      formData.value.email = '';
-      formData.value.password = '';
-      formData.value.password_confirmation = '';
+      formData.value.name = ''
+      formData.value.email = ''
+      formData.value.password = ''
+      formData.value.password_confirmation = ''
 
-      return response;
+      return response
     })
     .catch((error) => {
-      console.error('Error:', error);
+      console.error('Error:', error)
 
       Swal.fire({
         icon: 'error',
         title: 'An error occurred!',
         showConfirmButton: false,
         timer: 1500
-      });
+      })
 
-      return Promise.reject(error); // Re-throw the error to handle it elsewhere
-    });
-};
-
+      return Promise.reject(error) // Re-throw the error to handle it elsewhere
+    })
+}
 </script>
 
 <template>
@@ -156,4 +155,3 @@ const registerUser = () => {
     </div>
   </div>
 </template>
-

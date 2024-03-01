@@ -5,5 +5,3 @@
     <VBtn variant="flat" color="info" to="/"> Home</VBtn>
   </div>
 </template>
-
-
