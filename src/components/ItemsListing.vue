@@ -64,6 +64,7 @@ onMounted(() => {
   fetchProjectList()
 })
 
+
 const headers = [
   {
     title: 'Name',
@@ -111,6 +112,7 @@ const truncateDes = (text: string) => {
   }
   return text;
 }
+
 </script>
 
 <template>
@@ -130,7 +132,7 @@ const truncateDes = (text: string) => {
           <td>
             <div class="demo-space-x">
               <span>{{ truncateText(item.name) }}</span>
-              <VTooltip open-on-focus location="top" activator="parent">
+              <VTooltip  open-on-focus location="top" activator="parent">
                 {{ item.name }}
               </VTooltip> 
             </div>
