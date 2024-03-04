@@ -2,7 +2,7 @@
 import { ref, onMounted, computed } from 'vue'
 import axios from 'axios'
 import Swal from 'sweetalert2'
-// import ProjectDetails from "./ProjectDetails.vue"
+import ProjectDetails from "./ProjectDetails.vue"
 
 interface Project {
   id: number;
@@ -93,13 +93,8 @@ const filteredProjects = computed(() => {
   });
 });
 
-const selectedProject = ref<Project | null>(null);
-const projectDetailsDialog = ref<{ dialog: boolean }>({ dialog: false });
 
-const handleView = (project: Project) => {
-  selectedProject.value = project;
-  projectDetailsDialog.value.dialog = true;
-};
+
 </script>
 
 <template>
@@ -123,11 +118,7 @@ const handleView = (project: Project) => {
           <td>
             <v-row>
               <v-col cols="3">
-              <v-btn color="green">
-                <router-link :to="`/show/${item.id}`">
-                  show
-                </router-link>
-              </v-btn>        
+                <ProjectDetails  :project="item" />       
               </v-col>
               <v-col cols="3">
                 <v-btn color="blue">Edit</v-btn>
@@ -142,5 +133,4 @@ const handleView = (project: Project) => {
     </v-data-table>
   </v-card>
 
-  <!-- <ProjectDetails v-if="projectDetailsDialog.dialog" :project="selectedProject" ref="projectDetails" /> -->
 </template>
