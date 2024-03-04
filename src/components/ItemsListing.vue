@@ -66,19 +66,19 @@ onMounted(() => {
 
 const headers = [
   {
-    text: 'Name',
+    title: 'Name',
     align: 'start',
     sortable: false,
     value: 'name'
   },
   {
-    text: 'Description',
+    title: 'Description',
     align: 'start',
     sortable: false,
     value: 'description'
   },
   {
-    text: 'Actions',
+    title: 'Actions',
     align: 'start',
     sortable: false,
     value: 'actions'
@@ -93,28 +93,40 @@ const filteredProjects = computed(() => {
     )
   })
 })
+
+const truncateText = (text: string) => {
+  console.log(text);
+  let result = text.substring(0, 20);
+  result = result + '...'
+  return result ;
+};
+
+const truncateDes = (text: string) => {
+  console.log(text);
+  let result = text.substring(0, 50);
+  result = result + '...'
+  return result ;
+};
 </script>
 
 <template>
   <v-card title="Dashboard" flat>
-    <template v-slot:text>
-      <v-text-field
-        v-model="search"
-        label="Search"
-        prepend-inner-icon="mdi-magnify"
-        variant="outlined"
-        hide-details
-        single-line
-      ></v-text-field>
-    </template>
+    <v-text-field
+      v-model="search"
+      label="Search"
+      prepend-inner-icon="mdi-magnify"
+      variant="outlined"
+      hide-details
+      single-line
+    ></v-text-field>
 
     <v-data-table :headers="headers" :items="filteredProjects" :search="search">
       <template v-slot:item="{ item }">
         <tr>
-          <td>{{ item.name }}</td>
-          <td>{{ item.description }}</td>
+          <td>{{ truncateText(item.name) }}</td>
+          <td>{{ truncateDes(item.description) }}</td>
           <td>
-            <v-row>
+            <v-row class="flex-column flex-sm-row ma-0">
               <v-col cols="3">
                 <ProjectDetails :project="item" />
               </v-col>
