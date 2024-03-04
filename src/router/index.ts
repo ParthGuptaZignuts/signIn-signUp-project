@@ -44,8 +44,8 @@ const router = createRouter({
       path: '/show/:id',
       name: 'show-project',
       component: ProjectDetails,
-      props: true, 
-    },
+      props: true
+    }
   ]
 })
 

@@ -2,27 +2,28 @@
 import { ref, onMounted, computed } from 'vue'
 import axios from 'axios'
 import Swal from 'sweetalert2'
-import ProjectDetails from "./ProjectDetails.vue"
+import ProjectDetails from './ProjectDetails.vue'
+import ProjectEdit from './ProjectEdit.vue'
 
 interface Project {
-  id: number;
-  name: string;
-  description: string;
+  id: number
+  name: string
+  description: string
 }
 
-const projects = ref<Project[]>([]);
-const search = ref<string>('');
+const projects = ref<Project[]>([])
+const search = ref<string>('')
 
 const fetchProjectList = () => {
   axios
     .get<Project[]>('/api/projects')
     .then((response) => {
-      projects.value = response.data;
+      projects.value = response.data
     })
     .catch((error) => {
-      console.error(error);
-    });
-};
+      console.error(error)
+    })
+}
 
 const handleDelete = (id: number) => {
   Swal.fire({
@@ -32,7 +33,7 @@ const handleDelete = (id: number) => {
     showCancelButton: true,
     confirmButtonColor: '#3085d6',
     cancelButtonColor: '#d33',
-    confirmButtonText: 'Yes, delete it!',
+    confirmButtonText: 'Yes, delete it!'
   }).then((result) => {
     if (result.isConfirmed) {
       axios
@@ -42,59 +43,56 @@ const handleDelete = (id: number) => {
             icon: 'success',
             title: 'Project deleted successfully!',
             showConfirmButton: false,
-            timer: 1500,
-          });
-          fetchProjectList();
+            timer: 1500
+          })
+          fetchProjectList()
         })
         .catch((error) => {
-          console.error(error);
+          console.error(error)
           Swal.fire({
             icon: 'error',
             title: 'An Error Occurred!',
             showConfirmButton: false,
-            timer: 1500,
-          });
-        });
+            timer: 1500
+          })
+        })
     }
-  });
-};
+  })
+}
 
 onMounted(() => {
-  fetchProjectList();
-});
+  fetchProjectList()
+})
 
 const headers = [
   {
     text: 'Name',
     align: 'start',
     sortable: false,
-    value: 'name',
+    value: 'name'
   },
   {
     text: 'Description',
     align: 'start',
     sortable: false,
-    value: 'description',
+    value: 'description'
   },
   {
     text: 'Actions',
     align: 'start',
     sortable: false,
-    value: 'actions',
-  },
-];
+    value: 'actions'
+  }
+]
 
 const filteredProjects = computed(() => {
   return projects.value.filter((project) => {
     return (
       project.name.toLowerCase().includes(search.value.toLowerCase()) ||
       project.description.toLowerCase().includes(search.value.toLowerCase())
-    );
-  });
-});
-
-
-
+    )
+  })
+})
 </script>
 
 <template>
@@ -110,7 +108,7 @@ const filteredProjects = computed(() => {
       ></v-text-field>
     </template>
 
-    <v-data-table  :headers="headers" :items="filteredProjects" :search="search">
+    <v-data-table :headers="headers" :items="filteredProjects" :search="search">
       <template v-slot:item="{ item }">
         <tr>
           <td>{{ item.name }}</td>
@@ -118,10 +116,10 @@ const filteredProjects = computed(() => {
           <td>
             <v-row>
               <v-col cols="3">
-                <ProjectDetails  :project="item" />       
+                <ProjectDetails :project="item" />
               </v-col>
               <v-col cols="3">
-                <v-btn color="blue">Edit</v-btn>
+                <ProjectEdit :exprojectId="item.id" value="Edit" />
               </v-col>
               <v-col cols="3">
                 <v-btn color="red" @click="handleDelete(item.id)">Delete</v-btn>
@@ -132,5 +130,4 @@ const filteredProjects = computed(() => {
       </template>
     </v-data-table>
   </v-card>
-
 </template>

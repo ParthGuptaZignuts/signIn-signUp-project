@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import ItemsListing from '@/components/ItemsListing.vue';
+import ItemsListing from '@/components/ItemsListing.vue'
 </script>
 
 <template>
-<ItemsListing/>
+  <ItemsListing />
 </template>
