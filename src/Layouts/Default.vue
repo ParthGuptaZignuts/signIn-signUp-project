@@ -12,7 +12,6 @@ import { RouterView } from 'vue-router'
         <VRow>
           <VCol cols="12">
             <TopBar />
-            <RouterView />
           </VCol>
         </VRow>
       </VContainer>
