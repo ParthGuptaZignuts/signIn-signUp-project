@@ -2,26 +2,27 @@
 import { ref, onMounted, computed } from 'vue'
 import axios from 'axios'
 import Swal from 'sweetalert2'
+// import ProjectDetails from "./ProjectDetails.vue"
 
 interface Project {
-  id: number
-  name: string
-  description: string
+  id: number;
+  name: string;
+  description: string;
 }
 
-const projects = ref<Project[]>([])
-const search = ref<string>('')
+const projects = ref<Project[]>([]);
+const search = ref<string>('');
 
 const fetchProjectList = () => {
   axios
     .get<Project[]>('/api/projects')
     .then((response) => {
-      projects.value = response.data
+      projects.value = response.data;
     })
     .catch((error) => {
-      console.error(error)
-    })
-}
+      console.error(error);
+    });
+};
 
 const handleDelete = (id: number) => {
   Swal.fire({
@@ -31,7 +32,7 @@ const handleDelete = (id: number) => {
     showCancelButton: true,
     confirmButtonColor: '#3085d6',
     cancelButtonColor: '#d33',
-    confirmButtonText: 'Yes, delete it!'
+    confirmButtonText: 'Yes, delete it!',
   }).then((result) => {
     if (result.isConfirmed) {
       axios
@@ -41,56 +42,64 @@ const handleDelete = (id: number) => {
             icon: 'success',
             title: 'Project deleted successfully!',
             showConfirmButton: false,
-            timer: 1500
-          })
-          fetchProjectList()
+            timer: 1500,
+          });
+          fetchProjectList();
         })
         .catch((error) => {
-          console.error(error)
+          console.error(error);
           Swal.fire({
             icon: 'error',
             title: 'An Error Occurred!',
             showConfirmButton: false,
-            timer: 1500
-          })
-        })
+            timer: 1500,
+          });
+        });
     }
-  })
-}
+  });
+};
 
 onMounted(() => {
-  fetchProjectList()
-})
+  fetchProjectList();
+});
 
 const headers = [
   {
     text: 'Name',
     align: 'start',
     sortable: false,
-    value: 'name'
+    value: 'name',
   },
   {
     text: 'Description',
     align: 'start',
     sortable: false,
-    value: 'description'
+    value: 'description',
   },
   {
     text: 'Actions',
     align: 'start',
     sortable: false,
-    value: 'actions'
-  }
-]
+    value: 'actions',
+  },
+];
 
 const filteredProjects = computed(() => {
   return projects.value.filter((project) => {
     return (
       project.name.toLowerCase().includes(search.value.toLowerCase()) ||
       project.description.toLowerCase().includes(search.value.toLowerCase())
-    )
-  })
-})
+    );
+  });
+});
+
+const selectedProject = ref<Project | null>(null);
+const projectDetailsDialog = ref<{ dialog: boolean }>({ dialog: false });
+
+const handleView = (project: Project) => {
+  selectedProject.value = project;
+  projectDetailsDialog.value.dialog = true;
+};
 </script>
 
 <template>
@@ -114,7 +123,11 @@ const filteredProjects = computed(() => {
           <td>
             <v-row>
               <v-col cols="3">
-                <v-btn color="green">View</v-btn>
+              <v-btn color="green">
+                <router-link :to="`/show/${item.id}`">
+                  show
+                </router-link>
+              </v-btn>        
               </v-col>
               <v-col cols="3">
                 <v-btn color="blue">Edit</v-btn>
@@ -128,4 +141,6 @@ const filteredProjects = computed(() => {
       </template>
     </v-data-table>
   </v-card>
+
+  <!-- <ProjectDetails v-if="projectDetailsDialog.dialog" :project="selectedProject" ref="projectDetails" /> -->
 </template>

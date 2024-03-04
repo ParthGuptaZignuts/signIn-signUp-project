@@ -4,6 +4,7 @@ import SignUp from '@/views/SignUp.vue'
 import LandingView from '@/views/LandingView.vue'
 import DashboardView from '../views/DashboardView.vue'
 import CreatePost from '@/views/CreatePost.vue'
+import ProjectDetails from '@/components/ProjectDetails.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -38,7 +39,13 @@ const router = createRouter({
       meta: {
         layout: 'LayoutCreate'
       }
-    }
+    },
+    {
+      path: '/show/:id',
+      name: 'show-project',
+      component: ProjectDetails,
+      props: true, 
+    },
   ]
 })
 
