@@ -95,18 +95,22 @@ const filteredProjects = computed(() => {
 })
 
 const truncateText = (text: string) => {
-  console.log(text);
-  let result = text.substring(0, 20);
-  result = result + '...'
-  return result ;
-};
+  if(text.length >= 25){
+    let result = text.substring(0, 25)
+    result = result + '...'
+    return result
+  }
+  return text;
+}
 
 const truncateDes = (text: string) => {
-  console.log(text);
-  let result = text.substring(0, 50);
-  result = result + '...'
-  return result ;
-};
+  if(text.length >= 60){
+    let ans = text.substring(0, 60)
+    ans = ans + '...'
+    return ans
+  }
+  return text;
+}
 </script>
 
 <template>
@@ -123,8 +127,24 @@ const truncateDes = (text: string) => {
     <v-data-table :headers="headers" :items="filteredProjects" :search="search">
       <template v-slot:item="{ item }">
         <tr>
-          <td>{{ truncateText(item.name) }}</td>
-          <td>{{ truncateDes(item.description) }}</td>
+          <td>
+            <div class="demo-space-x">
+              <span>{{ truncateText(item.name) }}</span>
+              <VTooltip open-on-focus location="top" activator="parent">
+                {{ item.name }}
+              </VTooltip> 
+            </div>
+          </td>
+
+          <td>
+            <div class="demo-space-x">
+              <span>{{ truncateDes(item.description) }}</span>
+              <VTooltip open-on-focus location="top" activator="parent">
+                {{ item.description }}
+              </VTooltip> 
+            </div>
+          </td>
+
           <td>
             <v-row class="flex-column flex-sm-row ma-0">
               <v-col cols="3">

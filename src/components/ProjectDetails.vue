@@ -10,7 +10,7 @@ defineProps<{
   <div class="text-center d-inline pr-2">
     <v-btn @click="dialog = true" color="green"> View </v-btn>
 
-    <v-dialog v-model="dialog" max-width="600">
+    <v-dialog v-model="dialog" max-width="fit-content">
       <v-card>
         <v-card-title class="headline"> Title : {{ project.name }}</v-card-title>
         <v-card-subtitle>Description : {{ project.description }}</v-card-subtitle>
