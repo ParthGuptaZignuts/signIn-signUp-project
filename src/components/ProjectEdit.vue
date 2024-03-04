@@ -94,7 +94,11 @@ onMounted(() => {
         <VCardText>
           <VRow dense>
             <VCol cols="12">
-              <VTextField v-model="project.projectName" label="Project Name" required></VTextField>
+              <VTextField
+                v-model="project.projectName"
+                label="Project Name"
+                required
+              ></VTextField>
             </VCol>
             <VCol cols="12">
               <VTextField
@@ -108,9 +112,9 @@ onMounted(() => {
         <v-divider></v-divider>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn  @click="dialog = false">Close</v-btn>
-          <div class="demo-space-x"> 
-              <v-btn color="info"  @click="saveProject">Save Changes</v-btn>
+          <v-btn @click="dialog = false">Close</v-btn>
+          <div class="demo-space-x">
+            <v-btn color="info" @click="saveProject">Save Changes</v-btn>
           </div>
         </v-card-actions>
       </VCard>

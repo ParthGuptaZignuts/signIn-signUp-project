@@ -60,10 +60,6 @@ const handleSave = () => {
       project.value.description = ''
       data.value = response.data
       closeCreatePostDialog()
-
-      // Trigger navigation to the dashboard route
-      // const router = useRouter()
-      // await router.push('/dashboard')
       return response
     })
     .catch((error: AxiosError) => {
@@ -92,8 +88,6 @@ const handleSave = () => {
 
     <v-dialog v-model="isCreatePostDialogOpen" persistent max-width="500">
       <v-card>
-        {{ data }}
-        <LayoutDiv>
           <h2 class="text-center mt-5 mb-3">Create New Project</h2>
           <v-card>
             <v-card-body>
@@ -120,13 +114,11 @@ const handleSave = () => {
                       ></v-textarea>
                     </v-col>
                   </v-row>
-                  <v-row class="justify-center">
+                  <v-row >
                     <v-col>
                       <div class="demo-space-x" @click="handleSave" :disabled="isSaving">
-                        <VBtn variant="text" color="info">Save</VBtn>
+                        <VBtn variant="text"  color="info">Save</VBtn>
                       </div>
-                    </v-col>
-                    <v-col>
                       <div class="demo-space-x" @click="closeCreatePostDialog">
                         <VBtn variant="text" color="error">Close</VBtn>
                       </div>
@@ -136,7 +128,6 @@ const handleSave = () => {
               </v-form>
             </v-card-body>
           </v-card>
-        </LayoutDiv>
       </v-card>
     </v-dialog>
   </v-app>
