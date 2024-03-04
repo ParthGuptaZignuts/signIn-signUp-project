@@ -64,6 +64,8 @@ const saveProject = () => {
       project.value.projectName = ''
       project.value.projectDescription = ''
       dialog.value = false
+      projectId.value = 0; 
+      getProject();
     })
     .catch((error) => {
       Swal.fire({
