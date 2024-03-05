@@ -1,7 +1,5 @@
 <script setup lang="ts">
-import LogoutButton from './LogoutButton.vue'
-import { useUserAuthData } from '../composables/useLogout'
-const { user, userEmail } = useUserAuthData()
+
 
 import { watch } from 'vue'
 import { useI18n } from 'vue-i18n'
@@ -21,12 +19,23 @@ watch(locale, (newlocale) => {
         </v-list-item-content>
       </v-list-item>
       <v-divider></v-divider>
-      <v-list-item class="text-center"> {{ t('Name') }} : {{ user?.name }} </v-list-item>
+      <!-- <v-list-item class="text-center"> {{ t('Name') }} : {{ user?.name }} </v-list-item>
       <v-list-item class="text-center">
         {{ userEmail }}
       </v-list-item>
       <v-list-item class="text-center">
         <LogoutButton class="mt-5" />
+      </v-list-item> -->
+      <v-list-item class="text-center">
+        <div>
+          <v-icon>mdi mdi-translate</v-icon>
+          {{ t('Select Language') }}:
+        </div>
+        <select v-model="locale">
+          <option>Gujarati</option>
+          <option>English</option>
+          <option>Hindi</option>
+        </select>
       </v-list-item>
     </v-list>
   </v-navigation-drawer>

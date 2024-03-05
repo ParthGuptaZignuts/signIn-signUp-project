@@ -1,7 +1,11 @@
 <script setup lang="ts">
 import { watch } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { useUserAuthData } from '../composables/useLogout'
+import avatar1 from '../assets/avatar.png'
+import LogoutButton from './LogoutButton.vue'
 
+const { user, userEmail } = useUserAuthData()
 const { t, locale } = useI18n()
 watch(locale, (newlocale) => {
   localStorage.setItem('locale', newlocale)
@@ -19,15 +23,31 @@ watch(locale, (newlocale) => {
           {{ t('Home') }}
         </VBtn>
 
-        <div class="pt-5">
-          <v-icon>mdi mdi-translate</v-icon>
-          {{ t('Select Language') }}:
-        </div>
-        <select v-model="locale">
-          <option>Gujarati</option>
-          <option>English</option>
-          <option>Hindi</option>
-        </select>
+        <VMenu open-on-hover>
+          <template #activator="{ props }">
+            <div class="demo-space-x pt-2 ml-2 mr-2">
+              <VBadge
+                dot
+                bordered
+                color="success"
+                location="bottom end"
+                :offset-x="5"
+                :offset-y="1"
+                v-bind="props"
+              >
+                <VAvatar size="large">
+                  <VImg :src="avatar1" />
+                </VAvatar>
+              </VBadge>
+            </div>
+          </template>
+
+          <VList>
+            <VListItem>{{ t('Name') }} : {{ user?.name }}</VListItem>
+            <VListItem>{{ userEmail }}</VListItem>
+            <VListItem><LogoutButton /></VListItem>
+          </VList>
+        </VMenu>
       </v-toolbar-items>
     </v-toolbar>
 
