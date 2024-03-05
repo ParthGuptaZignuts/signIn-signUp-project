@@ -5,7 +5,6 @@ import { useLogin } from '@/composables/useLogin'
 
 const { formData, handleLogin } = useLogin()
 const visible = ref(false)
-
 </script>
 
 <template>

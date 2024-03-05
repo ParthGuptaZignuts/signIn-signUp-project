@@ -4,7 +4,7 @@ import HomeButton from '@/components/HomeButton.vue'
 import axios from 'axios'
 import Swal from 'sweetalert2'
 import router from '@/router'
-import {EmailValidator ,PasswordValidator} from "../validation"
+import { EmailValidator, PasswordValidator } from '../validation'
 
 const visible = ref(false)
 const apiResponse = ref(null)
@@ -165,6 +165,5 @@ const registerUser = () => {
       </form>
     </v-card>
     <HomeButton style="text-align: center; margin-top: 25px" />
-
   </div>
 </template>

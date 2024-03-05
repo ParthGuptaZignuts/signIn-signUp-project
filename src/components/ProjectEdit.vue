@@ -89,13 +89,14 @@ const handleClose = () => {
   emit('handleDialog', false)
 }
 
-watch(() => props.isVisible, (newValue) => {
-  if (newValue && props.projectId) {
-    getProject()
+watch(
+  () => props.isVisible,
+  (newValue) => {
+    if (newValue && props.projectId) {
+      getProject()
+    }
   }
-})
-
-
+)
 </script>
 
 <template>

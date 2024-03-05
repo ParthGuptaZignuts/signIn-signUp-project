@@ -21,7 +21,7 @@ watch(locale, (newlocale) => {
 
         <div class="pt-5">
           <v-icon>mdi mdi-translate</v-icon>
-          {{ t('Select Language') }} ->
+          {{ t('Select Language') }}:
         </div>
         <select v-model="locale">
           <option>Gujarati</option>

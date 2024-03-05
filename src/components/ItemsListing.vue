@@ -20,7 +20,7 @@ interface Project {
 
 const projects = ref<Project[]>([])
 const search = ref<string>('')
-  const headers = [
+const headers = [
   {
     title: 'Name',
     align: 'start',
@@ -40,10 +40,10 @@ const search = ref<string>('')
     value: 'actions'
   }
 ]
-const viewDialog = ref(false);
+const viewDialog = ref(false)
 const projectDetails = ref({})
 
-const createEditDialog = ref(false);
+const createEditDialog = ref(false)
 const pId = ref<string>('')
 
 const fetchProjectList = () => {
@@ -125,7 +125,7 @@ const truncateDes = (text: string) => {
 
 const editItemBackup = (id: number) => {
   createEditDialog.value = true
-  pId.value = id 
+  pId.value = id
 }
 
 const viewItemBackup = (item: object) => {
@@ -140,15 +140,32 @@ const handleViewDialog = (event: boolean) => {
 const handleEditDialog = (event: boolean) => {
   createEditDialog.value = event
 }
-const create = () =>{
-  createEditDialog.value = true 
+const create = () => {
+  createEditDialog.value = true
   pId.value = null
+}
+
+const downloadData = () => {
+  const csvContent =
+    'data:text/csv;charset=utf-8,' +
+    'Name,Description\n' +
+    filteredProjects.value.map((project) => `${project.name},${project.description}`).join('\n')
+  const encodedUri = encodeURI(csvContent)
+  const link = document.createElement('a')
+  link.setAttribute('href', encodedUri)
+  link.setAttribute('download', 'project_data.csv')
+  document.body.appendChild(link)
+  link.click()
+  document.body.removeChild(link)
 }
 </script>
 
 <template>
   <div>
-    <v-btn color="success" class="mt-5" @click="create" @createEditSuccess="fetchProjectList">Create</v-btn>
+    <v-btn color="success" class="mt-5" @click="create" @createEditSuccess="fetchProjectList"
+      >Create</v-btn
+    >
+    <VIcon icon="mdi mdi-file-download" class="float-end mt-5" size="35" @click="downloadData" />
     <v-card :title="t('Dashboard')" flat>
       <v-text-field
         v-model="search"
@@ -158,28 +175,38 @@ const create = () =>{
         hide-details
         single-line
       ></v-text-field>
-  
+
       <v-data-table :headers="headers" :items="filteredProjects" :search="search">
         <template v-slot:item="{ item }">
           <tr>
             <td>
               <div class="demo-space-x">
                 <span>{{ truncateText(item.name) }}</span>
-                <VTooltip open-on-focus location="top" activator="parent" v-if="item.name.length >=24">
+                <VTooltip
+                  open-on-focus
+                  location="top"
+                  activator="parent"
+                  v-if="item.name.length >= 24"
+                >
                   {{ item.name }}
                 </VTooltip>
               </div>
             </td>
-  
+
             <td>
               <div class="demo-space-x">
                 <span>{{ truncateDes(item.description) }}</span>
-                <VTooltip open-on-focus location="top" activator="parent" v-if="item.description.length >=59">
+                <VTooltip
+                  open-on-focus
+                  location="top"
+                  activator="parent"
+                  v-if="item.description.length >= 59"
+                >
                   {{ item.description }}
                 </VTooltip>
               </div>
             </td>
-  
+
             <td>
               <v-row class="flex-column flex-md-row ma-0">
                 <v-col cols="3">
@@ -189,7 +216,7 @@ const create = () =>{
                   <VIcon icon="mdi-pencil" @click="editItemBackup(item.id)" />
                 </v-col>
                 <v-col cols="3">
-                 <VIcon icon="mdi mdi-delete-empty" @click="handleDelete(item.id)" />
+                  <VIcon icon="mdi mdi-delete-empty" @click="handleDelete(item.id)" />
                 </v-col>
               </v-row>
             </td>
@@ -197,9 +224,16 @@ const create = () =>{
         </template>
       </v-data-table>
     </v-card>
-    <ProjectDetails :is-visible="viewDialog" :project="projectDetails" @handleDialog="handleViewDialog" />
-    <ProjectEdit :is-visible="createEditDialog" :projectId="pId" @handleDialog="handleEditDialog" @createEditSuccess="fetchProjectList" />
+    <ProjectDetails
+      :is-visible="viewDialog"
+      :project="projectDetails"
+      @handleDialog="handleViewDialog"
+    />
+    <ProjectEdit
+      :is-visible="createEditDialog"
+      :projectId="pId"
+      @handleDialog="handleEditDialog"
+      @createEditSuccess="fetchProjectList"
+    />
   </div>
 </template>
-
-
