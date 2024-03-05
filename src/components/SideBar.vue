@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
 import LogoutButton from './LogoutButton.vue'
 import { useUserAuthData } from '../composables/useLogout'
 const { user, userEmail } = useUserAuthData()

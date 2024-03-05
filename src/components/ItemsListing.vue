@@ -71,22 +71,21 @@ onMounted(() => {
   fetchProjectList()
 })
 
-
 const headers = [
   {
-    title:"Name",
+    title: 'Name',
     align: 'start',
     sortable: false,
     value: 'name'
   },
   {
-    title:'Description',
+    title: 'Description',
     align: 'start',
     sortable: false,
     value: 'description'
   },
   {
-    title: "Actions",
+    title: 'Actions',
     align: 'start',
     sortable: false,
     value: 'actions'
@@ -103,23 +102,22 @@ const filteredProjects = computed(() => {
 })
 
 const truncateText = (text: string) => {
-  if(text.length >= 25){
+  if (text.length >= 25) {
     let result = text.substring(0, 25)
     result = result + '...'
     return result
   }
-  return text;
+  return text
 }
 
 const truncateDes = (text: string) => {
-  if(text.length >= 60){
+  if (text.length >= 60) {
     let ans = text.substring(0, 60)
     ans = ans + '...'
     return ans
   }
-  return text;
+  return text
 }
-
 </script>
 
 <template>
@@ -139,9 +137,9 @@ const truncateDes = (text: string) => {
           <td>
             <div class="demo-space-x">
               <span>{{ truncateText(item.name) }}</span>
-              <VTooltip  open-on-focus location="top" activator="parent">
+              <VTooltip open-on-focus location="top" activator="parent">
                 {{ item.name }}
-              </VTooltip> 
+              </VTooltip>
             </div>
           </td>
 
@@ -150,12 +148,12 @@ const truncateDes = (text: string) => {
               <span>{{ truncateDes(item.description) }}</span>
               <VTooltip open-on-focus location="top" activator="parent">
                 {{ item.description }}
-              </VTooltip> 
+              </VTooltip>
             </div>
           </td>
 
           <td>
-            <v-row class="flex-column  flex-md-row ma-0">
+            <v-row class="flex-column flex-md-row ma-0">
               <v-col cols="3">
                 <ProjectDetails :project="item" />
               </v-col>

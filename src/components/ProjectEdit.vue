@@ -64,8 +64,8 @@ const saveProject = () => {
       project.value.projectName = ''
       project.value.projectDescription = ''
       dialog.value = false
-      projectId.value = 0; 
-      getProject();
+      projectId.value = 0
+      getProject()
     })
     .catch((error) => {
       Swal.fire({
@@ -96,11 +96,7 @@ onMounted(() => {
         <VCardText>
           <VRow dense>
             <VCol cols="12">
-              <VTextField
-                v-model="project.projectName"
-                label="Project Name"
-                required
-              ></VTextField>
+              <VTextField v-model="project.projectName" label="Project Name" required></VTextField>
             </VCol>
             <VCol cols="12">
               <VTextField

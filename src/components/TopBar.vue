@@ -34,16 +34,6 @@ watch(locale, (newlocale) => {
 
     <CreatePostButton />
 
-    <!-- <p>{{ t('The App') }}</p>
-    <p>{{ t('Awesome App') }}</p>
-    <p>{{ t('Home') }} </p>
-    <p>{{ t('Name') }}</p>
-    <p>{{ t('Create Post') }}</p>
-    <p>{{ t('LOG OUT') }}</p>
-    <p>{{ t('Dashboard') }}</p>
-    <p>{{ t('Description') }}</p>
-    <p>{{ t('Actions') }}</p> -->
-
     <v-content>
       <router-view></router-view>
     </v-content>

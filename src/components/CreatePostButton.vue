@@ -52,7 +52,6 @@ const handleSave = () => {
     })
 }
 
-
 const { t, locale } = useI18n()
 watch(locale, (newlocale) => {
   localStorage.setItem('locale', newlocale)
@@ -65,7 +64,7 @@ watch(locale, (newlocale) => {
   </div>
   <v-dialog v-model="isCreatePostDialogOpen" persistent max-width="500">
     <v-card>
-      <h2 class="text-center mt-5 mb-3"> {{ t('Create New Project') }}</h2>
+      <h2 class="text-center mt-5 mb-3">{{ t('Create New Project') }}</h2>
       <v-card>
         <v-card-body>
           <v-form>

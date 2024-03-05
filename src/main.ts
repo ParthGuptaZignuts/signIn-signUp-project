@@ -15,22 +15,21 @@ import '@mdi/font/css/materialdesignicons.css'
 // import axios
 import axios from 'axios'
 
-import { createI18n } from "vue-i18n";
-import en from "./language/en-US.json";
-import hi from "./language/hi-Hindi.json"
-import gu from "./language/gu-Gujarati.json"
+import { createI18n } from 'vue-i18n'
+import en from './language/en-US.json'
+import hi from './language/hi-Hindi.json'
+import gu from './language/gu-Gujarati.json'
 
 const i18n = createI18n({
   legacy: false,
-  locale: localStorage.getItem("locale") ?? "English",
-  fallbackLocale: "zh-TW",
+  locale: localStorage.getItem('locale') ?? 'English',
+  fallbackLocale: 'zh-TW',
   messages: {
-    "Hindi": hi,
-    "English": en,
-    "Gujarati": gu
+    Hindi: hi,
+    English: en,
+    Gujarati: gu
   }
-});
-
+})
 
 const vuetify = createVuetify({
   components,
