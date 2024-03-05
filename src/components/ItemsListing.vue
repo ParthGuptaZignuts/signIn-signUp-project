@@ -97,13 +97,14 @@ onMounted(() => {
 })
 
 const filteredProjects = computed(() => {
-  return projects.value.filter((project) => {
-    return (
-      project.name.toLowerCase().includes(search.value.toLowerCase()) ||
-      project.description.toLowerCase().includes(search.value.toLowerCase())
-    )
-  })
-  .reverse() ;
+  return projects.value
+    .filter((project) => {
+      return (
+        project.name.toLowerCase().includes(search.value.toLowerCase()) ||
+        project.description.toLowerCase().includes(search.value.toLowerCase())
+      )
+    })
+    .reverse()
 })
 
 const truncateText = (text: string) => {
@@ -163,8 +164,8 @@ const downloadData = () => {
 
 <template>
   <div>
-    <v-btn color="success" class="mt-5" @click="create" @createEditSuccess="fetchProjectList"
-      >Create</v-btn
+    <VBtn color="success" class="mt-5" @click="create" @createEditSuccess="fetchProjectList"
+      >Create</VBtn
     >
     <VIcon icon="mdi mdi-file-download" class="float-end mt-5" size="35" @click="downloadData" />
     <v-card :title="t('Dashboard')" flat>

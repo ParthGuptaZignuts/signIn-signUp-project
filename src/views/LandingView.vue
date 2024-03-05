@@ -16,8 +16,8 @@
       </blockquote>
     </v-flex>
     <v-flex xs12 sm6 offset-sm3 class="text-xs-center" mt-5 style="display: flex; gap: 30px">
-      <v-btn color="primary" to="/signup">Sign Up</v-btn>
-      <v-btn to="/signin">Sign In</v-btn>
+      <VBtn color="primary" to="/signup">Sign Up</VBtn>
+      <VBtn to="/signin">Sign In</VBtn>
     </v-flex>
   </v-card>
 </template>

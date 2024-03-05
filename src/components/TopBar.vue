@@ -14,10 +14,10 @@ watch(locale, (newlocale) => {
       <v-toolbar-title>{{ t('Awesome App') }}</v-toolbar-title>
       <v-spacer></v-spacer>
       <v-toolbar-items class="hidden-xs-only">
-        <v-btn :to="'/dashboard'">
+        <VBtn :to="'/dashboard'">
           <v-icon>mdi mdi-home-outline</v-icon>
           {{ t('Home') }}
-        </v-btn>
+        </VBtn>
 
         <div class="pt-5">
           <v-icon>mdi mdi-translate</v-icon>

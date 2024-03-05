@@ -145,7 +145,7 @@ const registerUser = () => {
           required="true"
         ></v-text-field>
 
-        <v-btn
+        <VBtn
           block
           class="mb-8"
           color="blue"
@@ -155,7 +155,7 @@ const registerUser = () => {
           @click="registerUser"
         >
           Sign-Up
-        </v-btn>
+        </VBtn>
 
         <v-card-text class="text-center">
           <router-link class="text-blue text-decoration-none" to="/signin">

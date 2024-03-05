@@ -15,7 +15,7 @@ defineProps<{
       <v-card-subtitle>Description : {{ project?.description }}</v-card-subtitle>
 
       <v-card-actions>
-        <v-btn class="ms-auto" @click="emit('handleDialog', false)">Close</v-btn>
+        <VBtn class="ms-auto" @click="emit('handleDialog', false)">Close</VBtn>
       </v-card-actions>
     </v-card>
   </v-dialog>

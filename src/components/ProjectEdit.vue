@@ -120,9 +120,9 @@ watch(
       <v-divider></v-divider>
       <v-card-actions>
         <v-spacer></v-spacer>
-        <v-btn @click="handleClose">Close</v-btn>
+        <VBtn @click="handleClose">Close</VBtn>
         <div class="demo-space-x">
-          <v-btn color="info" @click="saveProject">Save Changes</v-btn>
+          <VBtn color="info" @click="saveProject">Save Changes</VBtn>
         </div>
       </v-card-actions>
     </VCard>

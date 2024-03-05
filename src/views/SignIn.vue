@@ -45,9 +45,9 @@ const visible = ref(false)
           v-model="formData.password"
         ></v-text-field>
 
-        <v-btn block class="mb-8" color="blue" size="large" variant="tonal" type="submit">
+        <VBtn block class="mb-8" color="blue" size="large" variant="tonal" type="submit">
           Log In
-        </v-btn>
+        </VBtn>
 
         <v-card-text class="text-center">
           <router-link class="text-blue text-decoration-none" to="/signup">
