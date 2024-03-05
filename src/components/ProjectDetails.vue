@@ -1,24 +1,22 @@
 <script setup lang="ts">
 import type Project from '@/Project'
-import { ref } from 'vue'
-const dialog = ref(false)
+
+const emit = defineEmits(['handleDialog'])
 defineProps<{
   project: Project
+  isVisible: boolean
 }>()
 </script>
+
 <template>
-  <div class="text-center d-inline pr-2">
-    <v-btn @click="dialog = true" color="green"> View </v-btn>
+  <v-dialog :model-value="isVisible" max-width="fit-content" persistent>
+    <v-card>
+      <v-card-title class="headline"> Title : {{ project?.name }}</v-card-title>
+      <v-card-subtitle>Description : {{ project?.description }}</v-card-subtitle>
 
-    <v-dialog v-model="dialog" max-width="fit-content">
-      <v-card>
-        <v-card-title class="headline"> Title : {{ project.name }}</v-card-title>
-        <v-card-subtitle>Description : {{ project.description }}</v-card-subtitle>
-
-        <v-card-actions>
-          <v-btn class="ms-auto" text @click="dialog = false">Close</v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
-  </div>
+      <v-card-actions>
+        <v-btn class="ms-auto" @click="emit('handleDialog', false)">Close</v-btn>
+      </v-card-actions>
+    </v-card>
+  </v-dialog>
 </template>

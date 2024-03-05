@@ -4,9 +4,20 @@ import HomeButton from '@/components/HomeButton.vue'
 import axios from 'axios'
 import Swal from 'sweetalert2'
 import router from '@/router'
+import {EmailValidator ,PasswordValidator} from "../validation"
 
 const visible = ref(false)
 const apiResponse = ref(null)
+
+const ConfirmPasswordValidator = (value: string) => {
+  if (value) {
+    if (formData.value.password === value) {
+      return true
+    }
+    return 'Passwords do not match.'
+  }
+  return 'Confirm Password is required.'
+}
 
 interface User {
   name: string
@@ -85,6 +96,7 @@ const registerUser = () => {
           prepend-inner-icon="mdi-account"
           variant="outlined"
           v-model="formData.name"
+          required="true"
         ></v-text-field>
 
         <div class="text-subtitle-1 text-medium-emphasis">Email</div>
@@ -95,6 +107,8 @@ const registerUser = () => {
           prepend-inner-icon="mdi-email-outline"
           variant="outlined"
           v-model="formData.email"
+          :rules="[EmailValidator]"
+          required="true"
         ></v-text-field>
 
         <div class="text-subtitle-1 text-medium-emphasis d-flex align-center justify-space-between">
@@ -110,6 +124,8 @@ const registerUser = () => {
           variant="outlined"
           @click:append-inner="visible = !visible"
           v-model="formData.password"
+          :rules="[PasswordValidator]"
+          required="true"
         ></v-text-field>
 
         <div class="text-subtitle-1 text-medium-emphasis d-flex align-center justify-space-between">
@@ -125,6 +141,8 @@ const registerUser = () => {
           variant="outlined"
           @click:append-inner="visible = !visible"
           v-model="formData.password_confirmation"
+          :rules="[ConfirmPasswordValidator]"
+          required="true"
         ></v-text-field>
 
         <v-btn
@@ -148,10 +166,5 @@ const registerUser = () => {
     </v-card>
     <HomeButton style="text-align: center; margin-top: 25px" />
 
-    <!-- Display the API response -->
-    <div v-if="apiResponse">
-      <h2>API Response:</h2>
-      <pre>{{ apiResponse }}</pre>
-    </div>
   </div>
 </template>

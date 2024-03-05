@@ -20,6 +20,31 @@ interface Project {
 
 const projects = ref<Project[]>([])
 const search = ref<string>('')
+  const headers = [
+  {
+    title: 'Name',
+    align: 'start',
+    sortable: false,
+    value: 'name'
+  },
+  {
+    title: 'Description',
+    align: 'start',
+    sortable: false,
+    value: 'description'
+  },
+  {
+    title: 'Actions',
+    align: 'start',
+    sortable: false,
+    value: 'actions'
+  }
+]
+const viewDialog = ref(false);
+const projectDetails = ref({})
+
+const createEditDialog = ref(false);
+const pId = ref<string>('')
 
 const fetchProjectList = () => {
   axios
@@ -71,27 +96,6 @@ onMounted(() => {
   fetchProjectList()
 })
 
-const headers = [
-  {
-    title: 'Name',
-    align: 'start',
-    sortable: false,
-    value: 'name'
-  },
-  {
-    title: 'Description',
-    align: 'start',
-    sortable: false,
-    value: 'description'
-  },
-  {
-    title: 'Actions',
-    align: 'start',
-    sortable: false,
-    value: 'actions'
-  }
-]
-
 const filteredProjects = computed(() => {
   return projects.value.filter((project) => {
     return (
@@ -118,55 +122,84 @@ const truncateDes = (text: string) => {
   }
   return text
 }
+
+const editItemBackup = (id: number) => {
+  createEditDialog.value = true
+  pId.value = id 
+}
+
+const viewItemBackup = (item: object) => {
+  viewDialog.value = true
+  projectDetails.value = item
+}
+
+const handleViewDialog = (event: boolean) => {
+  viewDialog.value = event
+}
+
+const handleEditDialog = (event: boolean) => {
+  createEditDialog.value = event
+}
+const create = () =>{
+  createEditDialog.value = true 
+  pId.value = null
+}
 </script>
 
 <template>
-  <v-card :title="t('Dashboard')" flat>
-    <v-text-field
-      v-model="search"
-      :label="t('Search')"
-      prepend-inner-icon="mdi-magnify"
-      variant="outlined"
-      hide-details
-      single-line
-    ></v-text-field>
-
-    <v-data-table :headers="headers" :items="filteredProjects" :search="search">
-      <template v-slot:item="{ item }">
-        <tr>
-          <td>
-            <div class="demo-space-x">
-              <span>{{ truncateText(item.name) }}</span>
-              <VTooltip open-on-focus location="top" activator="parent">
-                {{ item.name }}
-              </VTooltip>
-            </div>
-          </td>
-
-          <td>
-            <div class="demo-space-x">
-              <span>{{ truncateDes(item.description) }}</span>
-              <VTooltip open-on-focus location="top" activator="parent">
-                {{ item.description }}
-              </VTooltip>
-            </div>
-          </td>
-
-          <td>
-            <v-row class="flex-column flex-md-row ma-0">
-              <v-col cols="3">
-                <ProjectDetails :project="item" />
-              </v-col>
-              <v-col cols="3">
-                <ProjectEdit :exprojectId="item.id" value="Edit" />
-              </v-col>
-              <v-col cols="3">
-                <v-btn color="red" @click="handleDelete(item.id)">Delete</v-btn>
-              </v-col>
-            </v-row>
-          </td>
-        </tr>
-      </template>
-    </v-data-table>
-  </v-card>
+  <div>
+    <v-btn color="success" class="mt-5" @click="create" @createEditSuccess="fetchProjectList">Create</v-btn>
+    <v-card :title="t('Dashboard')" flat>
+      <v-text-field
+        v-model="search"
+        :label="t('Search')"
+        prepend-inner-icon="mdi-magnify"
+        variant="outlined"
+        hide-details
+        single-line
+      ></v-text-field>
+  
+      <v-data-table :headers="headers" :items="filteredProjects" :search="search">
+        <template v-slot:item="{ item }">
+          <tr>
+            <td>
+              <div class="demo-space-x">
+                <span>{{ truncateText(item.name) }}</span>
+                <VTooltip open-on-focus location="top" activator="parent" v-if="item.name.length >=24">
+                  {{ item.name }}
+                </VTooltip>
+              </div>
+            </td>
+  
+            <td>
+              <div class="demo-space-x">
+                <span>{{ truncateDes(item.description) }}</span>
+                <VTooltip open-on-focus location="top" activator="parent" v-if="item.description.length >=59">
+                  {{ item.description }}
+                </VTooltip>
+              </div>
+            </td>
+  
+            <td>
+              <v-row class="flex-column flex-md-row ma-0">
+                <v-col cols="3">
+                  <VIcon icon="mdi-eye" @click="viewItemBackup(item)" />
+                </v-col>
+                <v-col cols="3">
+                  <VIcon icon="mdi-pencil" @click="editItemBackup(item.id)" />
+                </v-col>
+                <v-col cols="3">
+                 <VIcon icon="mdi mdi-delete-empty" @click="handleDelete(item.id)" />
+                </v-col>
+              </v-row>
+            </td>
+          </tr>
+        </template>
+      </v-data-table>
+    </v-card>
+    <ProjectDetails :is-visible="viewDialog" :project="projectDetails" @handleDialog="handleViewDialog" />
+    <ProjectEdit :is-visible="createEditDialog" :projectId="pId" @handleDialog="handleEditDialog" @createEditSuccess="fetchProjectList" />
+  </div>
 </template>
+
+

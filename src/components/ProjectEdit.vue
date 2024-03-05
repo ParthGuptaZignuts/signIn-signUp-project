@@ -1,40 +1,41 @@
 <script setup lang="ts">
-import { ref, onMounted, defineProps } from 'vue'
+import { ref, defineProps, watch } from 'vue'
 import axios from 'axios'
 import Swal from 'sweetalert2'
 import type Project from '../Project'
 
 const loading = ref(false)
-const dialog = ref(false)
-const projectId = ref<number>()
+
 const project = ref<Project>({
   projectName: '',
   projectDescription: ''
 })
 
-const { value, exprojectId } = defineProps<{ value: string; exprojectId?: number }>()
+const props = defineProps<{
+  projectId: number | string
+  isVisible: boolean
+}>()
+
+const emit = defineEmits(['handleDialog', 'createEditSuccess'])
 
 const getProject = () => {
-  if (exprojectId) {
-    projectId.value = exprojectId
-    axios
-      .get(`/api/projects/${projectId.value}`)
-      .then((response) => {
-        let projectData = response.data
-        project.value.projectName = projectData.name
-        project.value.projectDescription = projectData.description
-        return response
+  axios
+    .get(`/api/projects/${props.projectId}`)
+    .then((response) => {
+      let projectData = response.data
+      project.value.projectName = projectData.name
+      project.value.projectDescription = projectData.description
+      return response
+    })
+    .catch((error) => {
+      Swal.fire({
+        icon: 'error',
+        title: 'An Error Occurred!',
+        showConfirmButton: false,
+        timer: 1500
       })
-      .catch((error) => {
-        Swal.fire({
-          icon: 'error',
-          title: 'An Error Occurred!',
-          showConfirmButton: false,
-          timer: 1500
-        })
-        return error
-      })
-  }
+      return error
+    })
 }
 
 const saveProject = () => {
@@ -48,13 +49,14 @@ const saveProject = () => {
     return
   }
   loading.value = true
-  const method = projectId.value ? 'patch' : 'post'
-  const url = projectId.value ? `/api/projects/${projectId.value}` : '/api/projects'
+  const method = props.projectId ? 'patch' : 'post'
+  const url = props.projectId ? `/api/projects/${props.projectId}` : '/api/projects'
   axios[method](url, {
     name: project.value.projectName,
     description: project.value.projectDescription
   })
     .then(() => {
+      emit('createEditSuccess', true)
       Swal.fire({
         icon: 'success',
         title: 'Project saved successfully!',
@@ -63,9 +65,7 @@ const saveProject = () => {
       })
       project.value.projectName = ''
       project.value.projectDescription = ''
-      dialog.value = false
-      projectId.value = 0
-      getProject()
+      emit('handleDialog', false)
     })
     .catch((error) => {
       Swal.fire({
@@ -81,41 +81,48 @@ const saveProject = () => {
     })
 }
 
-onMounted(() => {
-  getProject()
+const handleClose = () => {
+  project.value = {
+    projectName: '',
+    projectDescription: ''
+  }
+  emit('handleDialog', false)
+}
+
+watch(() => props.isVisible, (newValue) => {
+  if (newValue && props.projectId) {
+    getProject()
+  }
 })
+
+
 </script>
 
 <template>
-  <div class="text-center d-inline">
-    <VDialog v-model="dialog" max-width="600">
-      <template #activator="{ props: activatorProps }">
-        <v-btn color="blue" :text="value" v-bind="activatorProps"></v-btn>
-      </template>
-      <VCard prepend-icon="mdi-pencil" :title="`${projectId ? 'Edit' : 'Create'} Project`">
-        <VCardText>
-          <VRow dense>
-            <VCol cols="12">
-              <VTextField v-model="project.projectName" label="Project Name" required></VTextField>
-            </VCol>
-            <VCol cols="12">
-              <VTextField
-                v-model="project.projectDescription"
-                label="Project Description"
-                required
-              ></VTextField>
-            </VCol>
-          </VRow>
-        </VCardText>
-        <v-divider></v-divider>
-        <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn @click="dialog = false">Close</v-btn>
-          <div class="demo-space-x">
-            <v-btn color="info" @click="saveProject">Save Changes</v-btn>
-          </div>
-        </v-card-actions>
-      </VCard>
-    </VDialog>
-  </div>
+  <VDialog :model-value="isVisible" max-width="600" persistent>
+    <VCard prepend-icon="mdi-pencil" :title="`${projectId ? 'Edit' : 'Create'} Project`">
+      <VCardText>
+        <VRow dense>
+          <VCol cols="12">
+            <VTextField v-model="project.projectName" label="Project Name" required></VTextField>
+          </VCol>
+          <VCol cols="12">
+            <VTextField
+              v-model="project.projectDescription"
+              label="Project Description"
+              required
+            ></VTextField>
+          </VCol>
+        </VRow>
+      </VCardText>
+      <v-divider></v-divider>
+      <v-card-actions>
+        <v-spacer></v-spacer>
+        <v-btn @click="handleClose">Close</v-btn>
+        <div class="demo-space-x">
+          <v-btn color="info" @click="saveProject">Save Changes</v-btn>
+        </div>
+      </v-card-actions>
+    </VCard>
+  </VDialog>
 </template>

@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import CreatePostButton from './CreatePostButton.vue'
 import { watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 
@@ -31,8 +30,6 @@ watch(locale, (newlocale) => {
         </select>
       </v-toolbar-items>
     </v-toolbar>
-
-    <CreatePostButton />
 
     <v-content>
       <router-view></router-view>

@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-const visible = ref(false)
 import HomeButton from '../components/HomeButton.vue'
-
 import { useLogin } from '@/composables/useLogin'
 
 const { formData, handleLogin } = useLogin()
+const visible = ref(false)
+
 </script>
 
 <template>
@@ -28,6 +28,7 @@ const { formData, handleLogin } = useLogin()
           prepend-inner-icon="mdi-email-outline"
           variant="outlined"
           v-model="formData.email"
+          required="true"
         ></v-text-field>
 
         <div class="text-subtitle-1 text-medium-emphasis d-flex align-center justify-space-between">
