@@ -1,6 +1,4 @@
 <script setup lang="ts">
-
-
 import { watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 
@@ -11,24 +9,17 @@ watch(locale, (newlocale) => {
 </script>
 
 <template>
-  <v-navigation-drawer app>
-    <v-list>
-      <v-list-item class="text-center">
-        <v-list-item-content class="font-weight-bold; mt-3">
+  <VNavigationDrawer app>
+    <VList>
+      <VListItem class="text-center">
+        <VListItem-content class="font-weight-bold; mt-3">
           {{ t('The App') }}
-        </v-list-item-content>
-      </v-list-item>
-      <v-divider></v-divider>
-      <!-- <v-list-item class="text-center"> {{ t('Name') }} : {{ user?.name }} </v-list-item>
-      <v-list-item class="text-center">
-        {{ userEmail }}
-      </v-list-item>
-      <v-list-item class="text-center">
-        <LogoutButton class="mt-5" />
-      </v-list-item> -->
-      <v-list-item class="text-center">
+        </VListItem-content>
+      </VListItem>
+      <VDivider></VDivider>
+      <VListItem class="text-center">
         <div>
-          <v-icon>mdi mdi-translate</v-icon>
+          <VIcon>mdi mdi-translate</VIcon>
           {{ t('Select Language') }}:
         </div>
         <select v-model="locale">
@@ -36,7 +27,7 @@ watch(locale, (newlocale) => {
           <option>English</option>
           <option>Hindi</option>
         </select>
-      </v-list-item>
-    </v-list>
-  </v-navigation-drawer>
+      </VListItem>
+    </VList>
+  </VNavigationDrawer>
 </template>

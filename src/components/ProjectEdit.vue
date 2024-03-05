@@ -105,7 +105,12 @@ watch(
       <VCardText>
         <VRow dense>
           <VCol cols="12">
-            <VTextField v-model="project.projectName" label="Project Name" required variant="outlined"></VTextField>
+            <VTextField
+              v-model="project.projectName"
+              label="Project Name"
+              required
+              variant="outlined"
+            ></VTextField>
           </VCol>
           <VCol cols="12">
             <VTextField
@@ -117,14 +122,14 @@ watch(
           </VCol>
         </VRow>
       </VCardText>
-      <v-divider></v-divider>
-      <v-card-actions>
-        <v-spacer></v-spacer>
+      <VDivider></VDivider>
+      <VCardActions>
+        <VSpacer></VSpacer>
         <VBtn @click="handleClose">Close</VBtn>
         <div class="demo-space-x">
           <VBtn color="info" @click="saveProject">Save Changes</VBtn>
         </div>
-      </v-card-actions>
+      </VCardActions>
     </VCard>
   </VDialog>
 </template>

@@ -9,14 +9,14 @@ defineProps<{
 </script>
 
 <template>
-  <v-dialog :model-value="isVisible" max-width="fit-content" persistent>
-    <v-card>
-      <v-card-title class="headline"> Title : {{ project?.name }}</v-card-title>
-      <v-card-subtitle>Description : {{ project?.description }}</v-card-subtitle>
+  <VDialog :model-value="isVisible" max-width="fit-content" persistent>
+    <VCard>
+      <VCardTitle class="headline"> Title : {{ project?.name }}</VCardTitle>
+      <VCardSubtitle>Description : {{ project?.description }}</VCardSubtitle>
 
-      <v-card-actions>
+      <VCardActions>
         <VBtn class="ms-auto" @click="emit('handleDialog', false)">Close</VBtn>
-      </v-card-actions>
-    </v-card>
-  </v-dialog>
+      </VCardActions>
+    </VCard>
+  </VDialog>
 </template>

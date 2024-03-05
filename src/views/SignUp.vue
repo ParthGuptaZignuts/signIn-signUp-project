@@ -86,22 +86,22 @@ const registerUser = () => {
       Sign-Up
     </h1>
 
-    <v-card class="mx-auto pa-12 pb-8" elevation="8" max-width="448" rounded="lg">
+    <VCard class="mx-auto pa-12 pb-8" elevation="8" max-width="448" rounded="lg">
       <form @submit.prevent="registerUser">
         <div class="text-subtitle-1 text-medium-emphasis">Name</div>
 
-        <v-text-field
+        <VTextField
           density="compact"
           placeholder="Enter Full Name"
           prepend-inner-icon="mdi-account"
           variant="outlined"
           v-model="formData.name"
           required="true"
-        ></v-text-field>
+        ></VTextField>
 
         <div class="text-subtitle-1 text-medium-emphasis">Email</div>
 
-        <v-text-field
+        <VTextField
           density="compact"
           placeholder="Email address"
           prepend-inner-icon="mdi-email-outline"
@@ -109,13 +109,13 @@ const registerUser = () => {
           v-model="formData.email"
           :rules="[EmailValidator]"
           required="true"
-        ></v-text-field>
+        ></VTextField>
 
         <div class="text-subtitle-1 text-medium-emphasis d-flex align-center justify-space-between">
           Password
         </div>
 
-        <v-text-field
+        <VTextField
           :append-inner-icon="visible ? 'mdi-eye-off' : 'mdi-eye'"
           :type="visible ? 'text' : 'password'"
           density="compact"
@@ -126,13 +126,13 @@ const registerUser = () => {
           v-model="formData.password"
           :rules="[PasswordValidator]"
           required="true"
-        ></v-text-field>
+        ></VTextField>
 
         <div class="text-subtitle-1 text-medium-emphasis d-flex align-center justify-space-between">
           Re-Enter Password
         </div>
 
-        <v-text-field
+        <VTextField
           :append-inner-icon="visible ? 'mdi-eye-off' : 'mdi-eye'"
           :type="visible ? 'text' : 'password'"
           density="compact"
@@ -143,7 +143,7 @@ const registerUser = () => {
           v-model="formData.password_confirmation"
           :rules="[ConfirmPasswordValidator]"
           required="true"
-        ></v-text-field>
+        ></VTextField>
 
         <VBtn
           block
@@ -157,13 +157,13 @@ const registerUser = () => {
           Sign-Up
         </VBtn>
 
-        <v-card-text class="text-center">
-          <router-link class="text-blue text-decoration-none" to="/signin">
-            Sign In <v-icon icon="mdi-chevron-right"></v-icon>
-          </router-link>
-        </v-card-text>
+        <VCardText class="text-center">
+          <RouterLink class="text-blue text-decoration-none" to="/signin">
+            Sign In <VIcon icon="mdi-chevron-right"></VIcon>
+          </RouterLink>
+        </VCardText>
       </form>
-    </v-card>
+    </VCard>
     <HomeButton style="text-align: center; margin-top: 25px" />
   </div>
 </template>

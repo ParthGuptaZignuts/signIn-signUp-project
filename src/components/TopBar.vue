@@ -13,13 +13,13 @@ watch(locale, (newlocale) => {
 </script>
 
 <template>
-  <v-app>
-    <v-toolbar app>
-      <v-toolbar-title>{{ t('Awesome App') }}</v-toolbar-title>
-      <v-spacer></v-spacer>
-      <v-toolbar-items class="hidden-xs-only">
+  <VApp>
+    <VToolbar app>
+      <VToolbarTitle>{{ t('Awesome App') }}</VToolbarTitle>
+      <VSpacer></VSpacer>
+      <VToolbarItems class="hidden-xs-only">
         <VBtn :to="'/dashboard'">
-          <v-icon>mdi mdi-home-outline</v-icon>
+          <VIcon>mdi mdi-home-outline</VIcon>
           {{ t('Home') }}
         </VBtn>
 
@@ -48,11 +48,11 @@ watch(locale, (newlocale) => {
             <VListItem><LogoutButton /></VListItem>
           </VList>
         </VMenu>
-      </v-toolbar-items>
-    </v-toolbar>
+      </VToolbarItems>
+    </VToolbar>
 
-    <v-content>
+    <VContent>
       <router-view></router-view>
-    </v-content>
-  </v-app>
+    </VContent>
+  </VApp>
 </template>

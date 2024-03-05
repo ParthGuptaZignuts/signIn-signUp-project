@@ -168,17 +168,17 @@ const downloadData = () => {
       >Create</VBtn
     >
     <VIcon icon="mdi mdi-file-download" class="float-end mt-5" size="35" @click="downloadData" />
-    <v-card :title="t('Dashboard')" flat>
-      <v-text-field
+    <VCard :title="t('Dashboard')" flat>
+      <VTextField
         v-model="search"
         :label="t('Search')"
         prepend-inner-icon="mdi-magnify"
         variant="outlined"
         hide-details
         single-line
-      ></v-text-field>
+      ></VTextField>
 
-      <v-data-table :headers="headers" :items="filteredProjects" :search="search">
+      <VDataTable :headers="headers" :items="filteredProjects" :search="search">
         <template v-slot:item="{ item }">
           <tr>
             <td>
@@ -210,22 +210,22 @@ const downloadData = () => {
             </td>
 
             <td>
-              <v-row class="flex-column flex-md-row ma-0">
-                <v-col cols="3">
+              <VRow class="flex-column flex-md-row ma-0">
+                <VCol cols="3">
                   <VIcon icon="mdi-eye" @click="viewItemBackup(item)" />
-                </v-col>
-                <v-col cols="3">
+                </VCol>
+                <VCol cols="3">
                   <VIcon icon="mdi-pencil" @click="editItemBackup(item.id)" />
-                </v-col>
-                <v-col cols="3">
+                </VCol>
+                <VCol cols="3">
                   <VIcon icon="mdi mdi-delete-empty" @click="handleDelete(item.id)" />
-                </v-col>
-              </v-row>
+                </VCol>
+              </VRow>
             </td>
           </tr>
         </template>
-      </v-data-table>
-    </v-card>
+      </VDataTable>
+    </VCard>
     <ProjectDetails
       :is-visible="viewDialog"
       :project="projectDetails"

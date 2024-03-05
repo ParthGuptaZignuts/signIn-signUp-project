@@ -17,24 +17,24 @@ const visible = ref(false)
       Sign In
     </h1>
 
-    <v-card class="mx-auto pa-12 pb-8" elevation="8" max-width="448" rounded="lg">
+    <VCard class="mx-auto pa-12 pb-8" elevation="8" max-width="448" rounded="lg">
       <form @submit.prevent="handleLogin">
         <div class="text-subtitle-1 text-medium-emphasis">Account</div>
 
-        <v-text-field
+        <VTextField
           density="compact"
           placeholder="Email address"
           prepend-inner-icon="mdi-email-outline"
           variant="outlined"
           v-model="formData.email"
           required="true"
-        ></v-text-field>
+        ></VTextField>
 
         <div class="text-subtitle-1 text-medium-emphasis d-flex align-center justify-space-between">
           Password
         </div>
 
-        <v-text-field
+        <VTextField
           :append-inner-icon="visible ? 'mdi-eye-off' : 'mdi-eye'"
           :type="visible ? 'text' : 'password'"
           density="compact"
@@ -43,19 +43,19 @@ const visible = ref(false)
           variant="outlined"
           @click:append-inner="visible = !visible"
           v-model="formData.password"
-        ></v-text-field>
+        ></VTextField>
 
         <VBtn block class="mb-8" color="blue" size="large" variant="tonal" type="submit">
           Log In
         </VBtn>
 
-        <v-card-text class="text-center">
-          <router-link class="text-blue text-decoration-none" to="/signup">
-            Sign up now <v-icon icon="mdi-chevron-right"></v-icon>
-          </router-link>
-        </v-card-text>
+        <VCardText class="text-center">
+          <RouterLink class="text-blue text-decoration-none" to="/signup">
+            Sign up now <VIcon icon="mdi-chevron-right"></VIcon>
+          </RouterLink>
+        </VCardText>
       </form>
-    </v-card>
+    </VCard>
     <HomeButton style="text-align: center; margin-top: 25px" />
   </div>
 </template>
