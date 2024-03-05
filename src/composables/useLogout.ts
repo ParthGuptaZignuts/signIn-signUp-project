@@ -18,10 +18,8 @@ export const useUserAuthData = () => {
       .get('/api/user', { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } })
       .then((r) => {
         const userData = r.data as UserData
-
         user.value = userData
         userEmail.value = userData.email
-
         return { user: userData, email: userData.email }
       })
       .catch((e) => {

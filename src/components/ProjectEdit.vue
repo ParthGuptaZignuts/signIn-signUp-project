@@ -105,13 +105,14 @@ watch(
       <VCardText>
         <VRow dense>
           <VCol cols="12">
-            <VTextField v-model="project.projectName" label="Project Name" required></VTextField>
+            <VTextField v-model="project.projectName" label="Project Name" required variant="outlined"></VTextField>
           </VCol>
           <VCol cols="12">
             <VTextField
               v-model="project.projectDescription"
               label="Project Description"
               required
+              variant="outlined"
             ></VTextField>
           </VCol>
         </VRow>

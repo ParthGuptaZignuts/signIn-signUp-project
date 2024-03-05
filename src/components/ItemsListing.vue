@@ -103,6 +103,7 @@ const filteredProjects = computed(() => {
       project.description.toLowerCase().includes(search.value.toLowerCase())
     )
   })
+  .reverse() ;
 })
 
 const truncateText = (text: string) => {
