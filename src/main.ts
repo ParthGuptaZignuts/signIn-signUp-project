@@ -15,6 +15,23 @@ import '@mdi/font/css/materialdesignicons.css'
 // import axios
 import axios from 'axios'
 
+import { createI18n } from "vue-i18n";
+import en from "./language/en-US.json";
+import hi from "./language/hi-Hindi.json"
+import gu from "./language/gu-Gujarati.json"
+
+const i18n = createI18n({
+  legacy: false,
+  locale: localStorage.getItem("locale") ?? "English",
+  fallbackLocale: "zh-TW",
+  messages: {
+    "Hindi": hi,
+    "English": en,
+    "Gujarati": gu
+  }
+});
+
+
 const vuetify = createVuetify({
   components,
   directives,
@@ -28,6 +45,7 @@ const app = createApp(App)
 app.use(createPinia())
 app.use(router)
 app.use(vuetify)
+app.use(i18n)
 app.mount('#app')
 
 // use axios

@@ -1,32 +1,48 @@
 <script setup lang="ts">
 import CreatePostButton from './CreatePostButton.vue'
-interface MenuItem {
-  title: string
-  path: string
-  icon: string
-}
+import { watch } from 'vue'
+import { useI18n } from 'vue-i18n'
 
-const appTitle: string = 'Awesome App'
-const menuItems: MenuItem[] = [
-  { title: 'Home', path: '/dashboard', icon: 'mdi mdi-home-outline' },
-  { title: 'Select Language', icon: 'mdi ' }
-]
+const { t, locale } = useI18n()
+watch(locale, (newlocale) => {
+  localStorage.setItem('locale', newlocale)
+})
 </script>
 
 <template>
   <v-app>
     <v-toolbar app>
-      <v-toolbar-title>{{ appTitle }}</v-toolbar-title>
+      <v-toolbar-title>{{ t('Awesome App') }}</v-toolbar-title>
       <v-spacer></v-spacer>
       <v-toolbar-items class="hidden-xs-only">
-        <v-btn flat v-for="item in menuItems" :key="item.title">
-          <v-icon left dark>{{ item.icon }}</v-icon>
-          {{ item.title }}
+        <v-btn :to="'/dashboard'">
+          <v-icon>mdi mdi-home-outline</v-icon>
+          {{ t('Home') }}
         </v-btn>
+
+        <div class="pt-5">
+          <v-icon>mdi mdi-translate</v-icon>
+          {{ t('Select Language') }} ->
+        </div>
+        <select v-model="locale">
+          <option>Gujarati</option>
+          <option>English</option>
+          <option>Hindi</option>
+        </select>
       </v-toolbar-items>
     </v-toolbar>
 
     <CreatePostButton />
+
+    <!-- <p>{{ t('The App') }}</p>
+    <p>{{ t('Awesome App') }}</p>
+    <p>{{ t('Home') }} </p>
+    <p>{{ t('Name') }}</p>
+    <p>{{ t('Create Post') }}</p>
+    <p>{{ t('LOG OUT') }}</p>
+    <p>{{ t('Dashboard') }}</p>
+    <p>{{ t('Description') }}</p>
+    <p>{{ t('Actions') }}</p> -->
 
     <v-content>
       <router-view></router-view>

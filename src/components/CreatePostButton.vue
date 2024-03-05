@@ -2,6 +2,8 @@
 import { ref } from 'vue'
 import axios, { AxiosError } from 'axios'
 import Swal from 'sweetalert2'
+import { watch } from 'vue'
+import { useI18n } from 'vue-i18n'
 
 interface Project {
   name: string
@@ -49,15 +51,21 @@ const handleSave = () => {
       return error
     })
 }
+
+
+const { t, locale } = useI18n()
+watch(locale, (newlocale) => {
+  localStorage.setItem('locale', newlocale)
+})
 </script>
 
 <template>
   <div class="demo-space-x mt-5">
-    <VBtn color="primary" @click="openCreatePostDialog"> CREATE POST</VBtn>
+    <VBtn color="primary" @click="openCreatePostDialog">{{ t('Create Post') }}</VBtn>
   </div>
   <v-dialog v-model="isCreatePostDialogOpen" persistent max-width="500">
     <v-card>
-      <h2 class="text-center mt-5 mb-3">Create New Project</h2>
+      <h2 class="text-center mt-5 mb-3"> {{ t('Create New Project') }}</h2>
       <v-card>
         <v-card-body>
           <v-form>
@@ -86,10 +94,10 @@ const handleSave = () => {
               <v-row>
                 <v-col>
                   <div class="demo-space-x" @click="handleSave" :disabled="isSaving">
-                    <VBtn variant="text" color="info">Save</VBtn>
+                    <VBtn variant="text" color="info">{{ t('Save') }}</VBtn>
                   </div>
                   <div class="demo-space-x" @click="closeCreatePostDialog">
-                    <VBtn variant="text" color="error">Close</VBtn>
+                    <VBtn variant="text" color="error">{{ t('Close') }}</VBtn>
                   </div>
                 </v-col>
               </v-row>

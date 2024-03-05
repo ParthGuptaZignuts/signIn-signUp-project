@@ -4,6 +4,13 @@ import axios from 'axios'
 import Swal from 'sweetalert2'
 import ProjectDetails from './ProjectDetails.vue'
 import ProjectEdit from './ProjectEdit.vue'
+import { watch } from 'vue'
+import { useI18n } from 'vue-i18n'
+
+const { t, locale } = useI18n()
+watch(locale, (newlocale) => {
+  localStorage.setItem('locale', newlocale)
+})
 
 interface Project {
   id: number
@@ -67,19 +74,19 @@ onMounted(() => {
 
 const headers = [
   {
-    title: 'Name',
+    title:"Name",
     align: 'start',
     sortable: false,
     value: 'name'
   },
   {
-    title: 'Description',
+    title:'Description',
     align: 'start',
     sortable: false,
     value: 'description'
   },
   {
-    title: 'Actions',
+    title: "Actions",
     align: 'start',
     sortable: false,
     value: 'actions'
@@ -116,10 +123,10 @@ const truncateDes = (text: string) => {
 </script>
 
 <template>
-  <v-card title="Dashboard" flat>
+  <v-card :title="t('Dashboard')" flat>
     <v-text-field
       v-model="search"
-      label="Search"
+      :label="t('Search')"
       prepend-inner-icon="mdi-magnify"
       variant="outlined"
       hide-details
@@ -148,7 +155,7 @@ const truncateDes = (text: string) => {
           </td>
 
           <td>
-            <v-row class="flex-column flex-sm-row ma-0">
+            <v-row class="flex-column  flex-md-row ma-0">
               <v-col cols="3">
                 <ProjectDetails :project="item" />
               </v-col>
