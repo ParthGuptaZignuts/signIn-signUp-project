@@ -18,7 +18,6 @@ watch(locale, (newlocale) => {
       </VListItem>
       <VDivider></VDivider>
       <VListItem class="text-center">
-        <!-- Use VSelect for better styling and functionality -->
         <VSelect v-model="locale" :items="['Gujarati', 'English', 'Hindi']" dense outlined>
           <template #prepend-inner>
             <VIcon>mdi mdi-translate</VIcon>
@@ -38,10 +37,9 @@ select {
   border-radius: 5px;
 }
 
-/* Responsive adjustments */
 @media only screen and (max-width: 600px) {
   select {
-    width: 100%; /* Set the width to 100% for smaller screens */
+    width: 100%; 
   }
 }
 </style>
