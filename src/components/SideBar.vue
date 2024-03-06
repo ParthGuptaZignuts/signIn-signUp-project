@@ -18,27 +18,30 @@ watch(locale, (newlocale) => {
       </VListItem>
       <VDivider></VDivider>
       <VListItem class="text-center">
-        <div>
-          <VIcon>mdi mdi-translate</VIcon>
-          {{ t('Select Language') }}:
-        </div>
-
-        <select style="width: fit-content" v-model="locale">
-          <option>Gujarati</option>
-          <option>English</option>
-          <option>Hindi</option>
-        </select>
+        <!-- Use VSelect for better styling and functionality -->
+        <VSelect v-model="locale" :items="['Gujarati', 'English', 'Hindi']" dense outlined>
+          <template #prepend-inner>
+            <VIcon>mdi mdi-translate</VIcon>
+          </template>
+        </VSelect>
       </VListItem>
     </VList>
   </VNavigationDrawer>
 </template>
 
 <style scoped>
-select{
+select {
   margin-top: 5px;
   color: white;
   border: 1px solid white;
   padding: 0.25rem .75rem;
   border-radius: 5px;
+}
+
+/* Responsive adjustments */
+@media only screen and (max-width: 600px) {
+  select {
+    width: 100%; /* Set the width to 100% for smaller screens */
+  }
 }
 </style>

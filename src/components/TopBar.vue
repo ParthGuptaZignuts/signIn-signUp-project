@@ -20,7 +20,16 @@ watch(locale, (newlocale) => {
       <VToolbarItems class="hidden-xs-only">
         <VBtn :to="'/dashboard'">
           <VIcon>mdi mdi-home-outline</VIcon>
-          {{ t('Home') }}
+          <div class="titleHide">
+            {{ t('Home') }}
+          </div>
+        </VBtn>
+
+        <VBtn :to="'/marketplace'">
+          <VIcon>mdi mdi-cart-variant</VIcon>
+          <div class="titleHide">
+            {{ t('Market Place') }}
+          </div>
         </VBtn>
 
         <VMenu open-on-hover>
@@ -56,3 +65,12 @@ watch(locale, (newlocale) => {
     </VContent>
   </VApp>
 </template>
+
+<style scoped>
+@media only screen and (max-width:768px){
+  .titleHide{
+    display: none;
+  }
+  
+}
+</style>
