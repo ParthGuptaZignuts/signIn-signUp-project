@@ -1,8 +1,7 @@
 <script setup lang="ts">
-import MarketPlaceTable from '@/components/MarketPlaceTable.vue';
+import MarketPlaceDailog from '@/components/MarketPlaceDailog.vue';
 </script>
 
 <template>
-<MarketPlaceTable />
-
+<MarketPlaceDailog />
 </template>
