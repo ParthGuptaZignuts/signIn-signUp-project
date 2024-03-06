@@ -9,7 +9,7 @@ watch(locale, (newlocale) => {
 </script>
 
 <template>
-  <VNavigationDrawer app>
+  <VNavigationDrawer app style="background-color: #283046; color: white">
     <VList>
       <VListItem class="text-center">
         <VListItem-content class="font-weight-bold; mt-3">
@@ -22,7 +22,8 @@ watch(locale, (newlocale) => {
           <VIcon>mdi mdi-translate</VIcon>
           {{ t('Select Language') }}:
         </div>
-        <select v-model="locale">
+
+        <select style="width: fit-content" v-model="locale">
           <option>Gujarati</option>
           <option>English</option>
           <option>Hindi</option>
@@ -31,3 +32,13 @@ watch(locale, (newlocale) => {
     </VList>
   </VNavigationDrawer>
 </template>
+
+<style scoped>
+select{
+  margin-top: 5px;
+  color: white;
+  border: 1px solid white;
+  padding: 0.25rem .75rem;
+  border-radius: 5px;
+}
+</style>

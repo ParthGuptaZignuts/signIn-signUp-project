@@ -43,7 +43,7 @@ watch(locale, (newlocale) => {
           </template>
 
           <VList>
-            <VListItem>{{ t('Name') }} : {{ user?.name }}</VListItem>
+            <VListItem> <VIcon class="pr-2 pb-1">mdi mdi-account</VIcon>{{ user?.name }}</VListItem>
             <VListItem>{{ userEmail }}</VListItem>
             <VListItem><LogoutButton /></VListItem>
           </VList>
