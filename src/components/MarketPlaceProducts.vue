@@ -9,6 +9,10 @@ const getRandomColor = () => {
   const randomIndex = getRandomIndex()
   return lightColors[randomIndex]
 }
+
+const exploreSub = () => {
+
+}
 </script>
 
 <template>
@@ -20,7 +24,9 @@ const getRandomColor = () => {
             <v-card-subtitle>{{ item.description }}</v-card-subtitle>
             <v-card-text>{{ item.category }}</v-card-text>
             <v-card-actions>
-              <v-btn color="#000">Explore</v-btn>
+                <RouterLink :to=" `/marketplace/category/${item.id} `">
+                    <v-btn color="#000" @click="exploreSub" >Explore</v-btn>
+                </RouterLink>
             </v-card-actions>
           </v-card>
         </v-col>

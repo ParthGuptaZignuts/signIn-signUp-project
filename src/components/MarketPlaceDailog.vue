@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import Swal from 'sweetalert2/dist/sweetalert2.all.min.js';
-import 'sweetalert2/dist/sweetalert2.min.css';
 import { ref, watch } from 'vue'
 import MarketPlaceProducts from './MarketPlaceProducts.vue'
 

@@ -44,38 +44,6 @@ export const items = ref<Items[]>([
   },
   {
     id: '2',
-    title: 'Smartphone',
-    description: 'Feature-rich mobile devices',
-    category: 'Electronics',
-    subCategory: [
-      {
-        id: '3',
-        parentCategory: 'Electronics',
-        title: 'Flagship Smartphones',
-        description: 'Top-of-the-line smartphones with cutting-edge technology',
-        price: 1000,
-        imageUrl: 'smartphone_image_url_1.jpg'
-      },
-      {
-        id: '4',
-        parentCategory: 'Electronics',
-        title: 'Budget Smartphones',
-        description: 'Cost-effective smartphones with essential features',
-        price: 300,
-        imageUrl: 'smartphone_image_url_2.jpg'
-      },
-      {
-        id: '5',
-        parentCategory: 'Electronics',
-        title: 'Camera Phones',
-        description: 'Smartphones with advanced camera capabilities',
-        price: 800,
-        imageUrl: 'smartphone_image_url_3.jpg'
-      }
-    ]
-  },
-  {
-    id: '3',
     title: 'Dairy Products',
     description: 'Fresh and nutritious dairy items',
     category: 'Food',
@@ -100,7 +68,7 @@ export const items = ref<Items[]>([
     ]
   },
   {
-    id: '4',
+    id: '3',
     title: 'Footwear',
     description: 'Stylish and comfortable footwear for all occasions',
     category: 'Fashion',
@@ -132,7 +100,7 @@ export const items = ref<Items[]>([
     ]
   },
   {
-    id: '5',
+    id: '4',
     title: 'Fashion Accessories',
     description: 'Stylish accessories to enhance your look',
     category: 'Fashion',
@@ -164,7 +132,7 @@ export const items = ref<Items[]>([
     ]
   },
   {
-    id: '6',
+    id: '5',
     title: 'Clothing',
     description: 'Stylish and comfortable clothing for every season',
     category: 'Fashion',
@@ -196,7 +164,7 @@ export const items = ref<Items[]>([
     ]
   },
   {
-    id: '7',
+    id: '6',
     title: 'Household Items',
     description: 'Essential items for your home',
     category: 'Home',
@@ -228,7 +196,7 @@ export const items = ref<Items[]>([
     ]
   },
   {
-    id: '8',
+    id: '7',
     title: 'Beverages',
     description: 'Refreshing drinks for every occasion',
     category: 'Food',
@@ -260,7 +228,7 @@ export const items = ref<Items[]>([
     ]
   },
   {
-    id: '9',
+    id: '8',
     title: 'Food',
     description: 'Delicious and nutritious food items',
     category: 'Food',
