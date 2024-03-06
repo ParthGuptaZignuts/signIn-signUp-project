@@ -3,5 +3,6 @@ import MarketPlaceTable from '@/components/MarketPlaceTable.vue';
 </script>
 
 <template>
-<MarketPlaceTable/>
+<MarketPlaceTable />
+
 </template>

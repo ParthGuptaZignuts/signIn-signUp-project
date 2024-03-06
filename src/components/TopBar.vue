@@ -24,13 +24,14 @@ watch(locale, (newlocale) => {
             {{ t('Home') }}
           </div>
         </VBtn>
-
+      
         <VBtn :to="'/marketplace'">
           <VIcon>mdi mdi-cart-variant</VIcon>
           <div class="titleHide">
             {{ t('Market Place') }}
           </div>
         </VBtn>
+        
 
         <VMenu open-on-hover>
           <template #activator="{ props }">
