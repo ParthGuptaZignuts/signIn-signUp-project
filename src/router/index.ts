@@ -6,6 +6,7 @@ import DashboardView from '../views/DashboardView.vue'
 import CreatePost from '@/views/CreatePost.vue'
 import ProjectDetails from '@/components/ProjectDetails.vue'
 import MarketPlace from '@/views/MarketPlace.vue'
+import MarketPlaceSubProducts from "@/components/MarketPlaceSubProducts.vue"
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -37,9 +38,6 @@ const router = createRouter({
       path: '/createpost',
       name: 'CreatePost',
       component: CreatePost,
-      meta: {
-        layout: 'LayoutCreate'
-      }
     },
     {
       path: '/show/:id',
@@ -54,7 +52,17 @@ const router = createRouter({
       meta: {
         layout: 'default'
       }
+    },
+    {
+      path: '/marketplace/category/:id',
+      name: 'marketPlaceSubProduct',
+      component: MarketPlaceSubProducts,
+      props : true ,
+      meta: {
+        layout: 'default'
+      }
     }
+
   ]
 })
 
