@@ -257,6 +257,30 @@ export const items = ref<Items[]>([
         price: 2.5,
         imageUrl: 'dairy_products_image_url.jpg'
       },
+      {
+        id: '26',
+        parentCategory: 'Food',
+        title: 'Snacks',
+        description: 'Tasty snacks for any time of the day',
+        price: 3.0,
+        imageUrl: 'snacks_image_url.jpg'
+      },
+      {
+        id: '27',
+        parentCategory: 'Food',
+        title: 'Canned Goods',
+        description: 'Convenient canned goods for your pantry',
+        price: 4.0,
+        imageUrl: 'canned_goods_image_url.jpg'
+      },
+      {
+        id: '28',
+        parentCategory: 'Food',
+        title: 'Dairy Products',
+        description: 'Fresh and nutritious dairy items',
+        price: 2.5,
+        imageUrl: 'dairy_products_image_url.jpg'
+      },
     ]
   },
 ]);
