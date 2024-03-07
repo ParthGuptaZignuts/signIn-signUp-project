@@ -59,7 +59,13 @@ onBeforeUnmount(() => {
 
 function loadCartFromLocalStorage() {
   const storedItems = localStorage.getItem(STORAGE_KEY);
-  return storedItems ? JSON.parse(storedItems) : [];
+  if(storedItems && storedItems !== undefined){
+    console.log(storedItems)
+    return JSON.parse(storedItems)
+  } else {
+    return []
+  }
+  // return storedItems && storedItems !== undefined ? JSON.parse(storedItems) : [];
 }
 
 function saveCartToLocalStorage(cartItems) {
