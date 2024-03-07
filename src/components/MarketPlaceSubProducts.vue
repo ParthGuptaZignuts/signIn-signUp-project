@@ -7,6 +7,11 @@ const value = ref(items)
 const router = useRouter()
 const currentId = ref(router.currentRoute.value.params.id)
 const currentSubcategories = ref([])
+const dialogVisible = ref(false);
+
+const openDialog = () => {
+  dialogVisible.value = true;
+};
 
 const filterSubcategories = (itemId) => {
   const currentItem = value.value.find((item) => item.id === itemId)
@@ -32,7 +37,26 @@ onMounted(() => {
 
 <template>
   <div>
-    <h1>{{ currentSubcategories[0]?.parentCategory }} <VIcon class="float-end mt-5" size="30">mdi mdi-cart-check</VIcon></h1>
+    <v-dialog v-model="dialogVisible" fullscreen>
+        <v-card>
+          <v-card-title>
+            <span class="headline">Shopping Cart</span>
+            <v-btn icon @click="dialogVisible = false" class="float-end">
+              <v-icon >mdi-close</v-icon>
+            </v-btn>
+          </v-card-title>
+          <v-card-text>
+            <!-- Place your shopping cart content here -->
+            <!-- You can customize this part based on your needs -->
+            <!-- For example, display the items in the cart, their quantities, etc. -->
+            <div v-for="(item, index) in cartItems" :key="index">
+              {{ item.title }} - Quantity: {{ item.quantity }}
+            </div>
+          </v-card-text>
+        </v-card>
+      </v-dialog>
+
+    <h1>{{ currentSubcategories[0]?.parentCategory }} <VIcon class="float-end mt-5" size="30" @click="openDialog" >mdi mdi-cart-check</VIcon></h1>
     
     <v-row class="pt-5">
       <v-col
