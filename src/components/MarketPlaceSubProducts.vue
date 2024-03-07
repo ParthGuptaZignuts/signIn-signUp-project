@@ -30,6 +30,7 @@ const updateSubcategories = () => {
 }
 
 const addToCart = (item) => {
+  item.date = localStorage.getItem("selectedDate")
   cart.value.push(item)
   saveCartToLocalStorage(cart.value);
   console.log(`Added ${item.title} to the cart`)
