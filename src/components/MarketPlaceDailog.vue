@@ -7,9 +7,7 @@ const currentDate = new Date()
 const selectedDate = ref()
 const showProduct = ref(false)
 
-const handleCloseClick = () =>{
-  isVisible.value = false ; 
-}
+
 
 watch(selectedDate, (newVal) => {
   localStorage.setItem('selectedDate', new Date(newVal).toLocaleDateString())
@@ -35,7 +33,6 @@ watch(selectedDate, (newVal) => {
           ></v-date-picker>
         </v-row>
       </v-container>
-      <v-btn color="error" @click="handleCloseClick">Close</v-btn>
     </VCard>
   </VDialog>
 
