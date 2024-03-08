@@ -172,39 +172,57 @@ const placeOrder = (): void => {
               <v-list-item-group v-if="cart.length > 0">
                 <v-list-item v-for="(cartItem, index) in cart" :key="index">
                   <v-list-item-content>
-                    <v-card class="cart-item-card" elevation="3" style="background-color:#f9f9f9">
+                    <v-card class="cart-item-card" elevation="3" style="background-color: #f9f9f9">
                       <v-container>
-                        <v-row align="center">
-                          <v-col class="image-col" cols="4">
+                        <v-row>
+                          <!-- Image Column -->
+                          <v-col cols="2">
                             <v-img :src="cartItem.image" max-height="100"></v-img>
                           </v-col>
-                          <v-col class="details-col" cols="8">
-                            <v-card-title class="item-title" style="font-size: 18px">{{
-                              cartItem.title
-                            }}</v-card-title>
-                            <v-card-subtitle class="item-price" style="font-size: 16px">{{
-                              `$${cartItem.price.toFixed(2)}`
-                            }}</v-card-subtitle>
-                            <v-row class="quantity-row" justify="center">
-                              <v-col class="quantity-col">
-                                <v-btn icon @click="decreaseQuantity(index)" class="quantity-btn">
-                                  <v-icon>mdi-minus</v-icon>
-                                </v-btn>
+        
+                          <!-- Details Column -->
+                          <v-col cols="5">
+                            <v-row>
+                              <v-col cols="12">
+                                <v-card-title class="item-title" style="font-size: 18px">{{ cartItem.title }}</v-card-title>
                               </v-col>
-                              <v-col class="quantity-col">
-                                <span class="item-quantity">{{ cartItem.quantity }}</span>
+                              <v-col cols="12">
+                                <v-card-subtitle class="item-price" style="font-size: 16px">{{ `$${cartItem.price.toFixed(2)}` }}</v-card-subtitle>
                               </v-col>
-                              <v-col class="quantity-col">
-                                <v-btn icon @click="increaseQuantity(index)" class="quantity-btn">
-                                  <v-icon>mdi-plus</v-icon>
-                                </v-btn>
-                              </v-col>
-                              <v-col class="quantity-col">
-                                <v-btn icon @click="removeItem(index)" class="delete-btn">
-                                  <v-icon>mdi-delete</v-icon>
-                                </v-btn>
-                              </v-col>
+                             
                             </v-row>
+                          </v-col>
+
+                          <v-col cols="5">
+                            <v-col cols="12">
+                              <v-row align="center">
+                                <!-- Decrease Quantity Button -->
+                                <v-col cols="2">
+                                  <v-btn icon @click="decreaseQuantity(index)" class="quantity-btn bg-transparent" elevation="0">
+                                    <v-icon>mdi-minus</v-icon>
+                                  </v-btn>
+                                </v-col>
+      
+                                <!-- Quantity Display -->
+                                <v-col cols="2">
+                                  <span class="item-quantity">{{ cartItem.quantity }}</span>
+                                </v-col>
+      
+                                <!-- Increase Quantity Button -->
+                                <v-col cols="2">
+                                  <v-btn icon @click="increaseQuantity(index)" class="quantity-btn bg-transparent" elevation="0" >
+                                    <v-icon>mdi-plus</v-icon>
+                                  </v-btn>
+                                </v-col>
+      
+                                <!-- Delete Button -->
+                                <v-col cols="6">
+                                  <v-btn icon @click="removeItem(index)" class="delete-btn float-end bg-transparent" elevation="0" >
+                                    <v-icon>mdi-delete</v-icon>
+                                  </v-btn>
+                                </v-col>
+                              </v-row>
+                            </v-col>
                           </v-col>
                         </v-row>
                       </v-container>
@@ -212,6 +230,8 @@ const placeOrder = (): void => {
                   </v-list-item-content>
                 </v-list-item>
               </v-list-item-group>
+        
+              <!-- No items message -->
               <v-list-item v-else>
                 <v-list-item-content>No items in the cart</v-list-item-content>
               </v-list-item>
@@ -219,8 +239,12 @@ const placeOrder = (): void => {
           </v-col>
 
           <!-- right side -->
-          <v-col cols="12" md="4" style="margin-left: -10px; margin-top: 20px;">
-            <v-card class="total-card" elevation="3" style="border-radius: 15px; background-color: #283046;; height: 800px; color:white">
+          <v-col cols="12" md="4" style="margin-left: -10px; margin-top: 20px">
+            <v-card
+              class="total-card"
+              elevation="3"
+              style="border-radius: 15px; background-color: #283046; height: 800px; color: white"
+            >
               <v-container>
                 <!-- Total Amount Section -->
                 <v-row>
@@ -280,9 +304,7 @@ const placeOrder = (): void => {
                 <v-row>
                   <v-col>
                     <div class="demo-space-x">
-                      <VBtn variant="flat" color="info"  @click="placeOrder">
-                        Place Order
-                      </VBtn>
+                      <VBtn variant="flat" color="info" @click="placeOrder"> Place Order </VBtn>
                     </div>
                   </v-col>
                 </v-row>
@@ -294,7 +316,8 @@ const placeOrder = (): void => {
     </v-dialog>
 
     <h1>
-      <router-link to="/marketplace"><VIcon>mdi mdi-chevron-left</VIcon></router-link> {{ currentSubcategories[0]?.parentCategory }}
+      <router-link to="/marketplace"><VIcon>mdi mdi-chevron-left</VIcon></router-link>
+      {{ currentSubcategories[0]?.parentCategory }}
       <VIcon class="float-end mt-5" size="30" @click="openDialog">mdi mdi-cart-check</VIcon>
     </h1>
 
@@ -425,7 +448,4 @@ const placeOrder = (): void => {
   text-align: right;
 }
 
-.delete-btn {
-  color: #ff5733;
-}
 </style>
