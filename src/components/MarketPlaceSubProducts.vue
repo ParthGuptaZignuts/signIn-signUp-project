@@ -158,8 +158,8 @@ const placeOrder = (): void => {
       <v-card>
         <!-- header -->
         <v-card-title class="d-flex align-center justify-space-between">
-          <span class="headline">Shopping Cart</span>
-          <v-btn icon @click="closeDialog">
+          <span class="headline" style="color:#283046; font-weight:900;font-size:40px">Shopping Cart</span>
+          <v-btn icon @click="closeDialog" class="bg-transparent" elevation="0">
             <v-icon>mdi-close</v-icon>
           </v-btn>
         </v-card-title>
@@ -239,7 +239,7 @@ const placeOrder = (): void => {
           </v-col>
 
           <!-- right side -->
-          <v-col cols="12" md="4" style="margin-left: -10px; margin-top: 20px">
+          <v-col cols="12" md="4" style="margin: auto ; margin-left: -20px;">
             <v-card
               class="total-card"
               elevation="3"
