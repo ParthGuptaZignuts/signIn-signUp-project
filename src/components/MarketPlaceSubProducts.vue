@@ -3,14 +3,45 @@ import { ref, onMounted, onBeforeUnmount } from 'vue'
 import { useRouter } from 'vue-router'
 import { items } from '../ItemProducts'
 
-const STORAGE_KEY = 'cartItems'
+const STORAGE_KEY_PREFIX = 'cartItems_'
+
+const cart = ref([])
 
 const value = ref(items)
 const router = useRouter()
 const currentId = ref(router.currentRoute.value.params.id)
 const currentSubcategories = ref([])
 const dialogVisible = ref(false)
-const cart = ref(loadCartFromLocalStorage())
+
+onMounted(() => {
+  cart.value = loadCartFromLocalStorage()
+  updateSubcategories()
+  router.afterEach(() => {
+    currentId.value = router.currentRoute.value.params.id
+    updateSubcategories()
+  })
+})
+
+onBeforeUnmount(() => {
+  const selectedDate = localStorage.getItem('selectedDate')
+  const storageKey = STORAGE_KEY_PREFIX + selectedDate
+  localStorage.setItem(storageKey, JSON.stringify(cart.value))
+})
+
+function loadCartFromLocalStorage() {
+  const selectedDate = localStorage.getItem('selectedDate')
+  const storageKey = STORAGE_KEY_PREFIX + selectedDate
+  const storedItems = JSON.parse(localStorage.getItem(storageKey))
+
+  if (storedItems && storedItems !== undefined) {
+    console.log(storedItems)
+    cart.value = storedItems 
+    updateSubcategories()
+    return storedItems
+  } else {
+    return []
+  }
+}
 
 const openDialog = () => {
   dialogVisible.value = true
@@ -30,49 +61,27 @@ const updateSubcategories = () => {
 }
 
 const addToCart = (item) => {
-  item.date = localStorage.getItem('selectedDate')
-  cart.value.push(item)
-  saveCartToLocalStorage(cart.value)
-  console.log(`Added ${item.title} to the cart`)
+  const selectedDate = localStorage.getItem('selectedDate')
+  const storageKey = STORAGE_KEY_PREFIX + selectedDate
+  const existingItems = JSON.parse(localStorage.getItem(storageKey)) || []
+  existingItems.push(item)
+  localStorage.setItem(storageKey, JSON.stringify(existingItems))
+  cart.value = existingItems
+  console.log(`Added ${item.title} to the cart for date ${selectedDate}`)
 }
 
 const removeFromCart = (index) => {
-  const removedItem = cart.value.splice(index, 1)[0]
-  saveCartToLocalStorage(cart.value)
-  console.log(`Removed ${removedItem.title} from the cart`)
+  const selectedDate = localStorage.getItem('selectedDate')
+  const storageKey = STORAGE_KEY_PREFIX + selectedDate
+  const existingItems = JSON.parse(localStorage.getItem(storageKey)) || []
+  const removedItem = existingItems.splice(index, 1)[0]
+  localStorage.setItem(storageKey, JSON.stringify(existingItems))
+  cart.value = [...existingItems]
+  console.log(`Removed ${removedItem.title} from the cart for date ${selectedDate}`)
 }
 
 const calculateTotalAmount = () => {
   return cart.value.reduce((total, item) => total + item.price, 0).toFixed(2)
-}
-
-onMounted(() => {
-  updateSubcategories()
-  router.afterEach(() => {
-    currentId.value = router.currentRoute.value.params.id
-    updateSubcategories()
-  })
-})
-
-onBeforeUnmount(() => {
-  saveCartToLocalStorage(cart.value)
-})
-
-function loadCartFromLocalStorage() {
-  const storedItems = localStorage.getItem(STORAGE_KEY)
-  if (storedItems && storedItems !== undefined) {
-    const parsedItems = JSON.parse(storedItems)
-    const selectedDate = localStorage.getItem('selectedDate')
-    const filteredItems = parsedItems.filter((item) => item.date == selectedDate)
-    console.log(filteredItems)
-    return filteredItems
-  } else {
-    return []
-  }
-}
-
-function saveCartToLocalStorage(cartItems) {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(cartItems))
 }
 </script>
 

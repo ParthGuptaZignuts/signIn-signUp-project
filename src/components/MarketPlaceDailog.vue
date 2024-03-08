@@ -12,9 +12,8 @@ const handleCloseClick = () =>{
 }
 
 watch(selectedDate, (newVal) => {
-  console.log(new Date(newVal).toLocaleDateString())
   localStorage.setItem('selectedDate', new Date(newVal).toLocaleDateString())
-  console.log('Selected date:', newVal)
+  console.log(new Date(newVal).toLocaleDateString())
   isVisible.value = false
 
   if (newVal && !isVisible.value) {
