@@ -1,23 +1,25 @@
 <script setup lang="ts">
-import { ref, onMounted, onBeforeUnmount } from 'vue'
-import { useRouter } from 'vue-router'
-import { items } from '../ItemProducts'
+import { ref, onMounted, onBeforeUnmount, Ref } from 'vue'
+import { useRouter, RouteLocationNormalizedLoaded } from 'vue-router'
+import { items, Item, Subcategory } from '../ItemProducts'
+
+interface CartItem extends Item {
+  quantity: number
+}
 
 const STORAGE_KEY_PREFIX = 'cartItems_'
-
-const cart = ref([])
-
-const value = ref(items)
+const cart: Ref<CartItem[]> = ref([])
+const value: Ref<Item[]> = ref(items)
 const router = useRouter()
-const currentId = ref(router.currentRoute.value.params.id)
-const currentSubcategories = ref([])
-const dialogVisible = ref(false)
+const currentId: Ref<string | number> = ref(router.currentRoute.value.params.id)
+const currentSubcategories: Ref<Subcategory[]> = ref([])
+const dialogVisible: Ref<boolean> = ref(false)
 
 onMounted(() => {
   cart.value = loadCartFromLocalStorage()
   updateSubcategories()
-  router.afterEach(() => {
-    currentId.value = router.currentRoute.value.params.id
+  router.afterEach((to: RouteLocationNormalizedLoaded) => {
+    currentId.value = to.params.id
     updateSubcategories()
   })
 })
@@ -28,14 +30,13 @@ onBeforeUnmount(() => {
   localStorage.setItem(storageKey, JSON.stringify(cart.value))
 })
 
-function loadCartFromLocalStorage() {
+function loadCartFromLocalStorage(): CartItem[] {
   const selectedDate = localStorage.getItem('selectedDate')
   const storageKey = STORAGE_KEY_PREFIX + selectedDate
   const storedItems = JSON.parse(localStorage.getItem(storageKey))
 
   if (storedItems && storedItems !== undefined) {
-    console.log(storedItems)
-    cart.value = storedItems 
+    cart.value = storedItems
     updateSubcategories()
     return storedItems
   } else {
@@ -43,45 +44,84 @@ function loadCartFromLocalStorage() {
   }
 }
 
-const openDialog = () => {
+const openDialog = (): void => {
   dialogVisible.value = true
 }
 
-const closeDialog = () => {
+const closeDialog = (): void => {
   dialogVisible.value = false
 }
 
-const filterSubcategories = (itemId) => {
+const filterSubcategories = (itemId: string | number): Subcategory[] => {
   const currentItem = value.value.find((item) => item.id === itemId)
   return currentItem ? currentItem.subCategory : []
 }
 
-const updateSubcategories = () => {
+const updateSubcategories = (): void => {
   currentSubcategories.value = filterSubcategories(currentId.value)
 }
 
-const addToCart = (item) => {
-  const selectedDate = localStorage.getItem('selectedDate')
-  const storageKey = STORAGE_KEY_PREFIX + selectedDate
-  const existingItems = JSON.parse(localStorage.getItem(storageKey)) || []
-  existingItems.push(item)
-  localStorage.setItem(storageKey, JSON.stringify(existingItems))
-  cart.value = existingItems
-  console.log(`Added ${item.title} to the cart for date ${selectedDate}`)
+const increaseQuantity = (index: number): void => {
+  cart.value[index].quantity++
+  updateTotalAmount()
 }
 
-const removeFromCart = (index) => {
+
+const decreaseQuantity = (index: number): void => {
+  if (cart.value[index].quantity > 1) {
+    cart.value[index].quantity--
+  } else {
+    removeFromCart(index)
+  }
+  updateTotalAmount() 
+}
+
+const addToCart = (item: Subcategory): void => {
   const selectedDate = localStorage.getItem('selectedDate')
   const storageKey = STORAGE_KEY_PREFIX + selectedDate
   const existingItems = JSON.parse(localStorage.getItem(storageKey)) || []
-  const removedItem = existingItems.splice(index, 1)[0]
+
+  const existingItemIndex = existingItems.findIndex((cartItem) => cartItem.id === item.id)
+
+  if (existingItemIndex !== -1) {
+    existingItems[existingItemIndex].quantity++
+  } else {
+    item.quantity = 1
+    existingItems.push(item)
+  }
+
   localStorage.setItem(storageKey, JSON.stringify(existingItems))
   cart.value = [...existingItems]
-  console.log(`Removed ${removedItem.title} from the cart for date ${selectedDate}`)
+  updateTotalAmount()
 }
 
-const calculateTotalAmount = () => {
+const removeFromCart = (index: number): void => {
+  const selectedDate = localStorage.getItem('selectedDate')
+  const storageKey = STORAGE_KEY_PREFIX + selectedDate
+  const existingItems = JSON.parse(localStorage.getItem(storageKey)) || []
+
+  if (existingItems[index].quantity > 1) {
+    existingItems[index].quantity--
+  } else {
+    const removedItem = existingItems.splice(index, 1)[0]
+    console.log(`Removed ${removedItem.title} from the cart for date ${selectedDate}`)
+  }
+
+  localStorage.setItem(storageKey, JSON.stringify(existingItems))
+  cart.value = [...existingItems]
+}
+
+const totalAmount: Ref<number> = ref(0.0)
+  const updateTotalAmount = (): void => {
+  totalAmount.value = +calculateTotalAmount()
+}
+const calculateTotalAmount = (): string => {
   return cart.value.reduce((total, item) => total + item.price, 0).toFixed(2)
+}
+
+const removeItem = (index: number): void => {
+  cart.value.splice(index, 1)
+  updateTotalAmount()
 }
 </script>
 
@@ -89,6 +129,7 @@ const calculateTotalAmount = () => {
   <div>
     <v-dialog v-model="dialogVisible" fullscreen>
       <v-card>
+        <!-- header -->
         <v-card-title class="d-flex align-center justify-space-between">
           <span class="headline">Shopping Cart</span>
           <v-btn icon @click="closeDialog">
@@ -96,33 +137,84 @@ const calculateTotalAmount = () => {
           </v-btn>
         </v-card-title>
         <v-divider></v-divider>
-        <v-list>
-          <v-list-item-group v-if="cart.length > 0">
-            <v-list-item v-for="(cartItem, index) in cart" :key="index">
-              <v-list-item-content>
-                <v-list-item-title>{{ cartItem.title }}</v-list-item-title>
-                <v-list-item-subtitle>{{ `$${cartItem.price.toFixed(2)}` }}</v-list-item-subtitle>
-              </v-list-item-content>
-              <v-list-item-action>
-                <v-btn icon @click="removeFromCart(index)">
-                  <v-icon>mdi-delete</v-icon>
-                </v-btn>
-              </v-list-item-action>
-            </v-list-item>
-          </v-list-item-group>
-          <v-list-item v-else>
-            <v-list-item-content>No items in the cart</v-list-item-content>
-          </v-list-item>
-        </v-list>
-        <v-divider></v-divider>
-        <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn @click="closeDialog">Close</v-btn>
-          <span>Total Amount: ${{ calculateTotalAmount() }}</span>
-        </v-card-actions>
+
+        <v-row>
+          <!-- left side  -->
+          <v-col cols="12" md="8">
+            <v-list>
+              <v-list-item-group v-if="cart.length > 0">
+                <v-list-item v-for="(cartItem, index) in cart" :key="index">
+                  <v-list-item-content>
+                    <v-card class="cart-item-card" elevation="3">
+                      <v-container>
+                        <v-row align="center">
+                          <v-col class="image-col" cols="4">
+                            <v-img :src="cartItem.image" max-height="100"></v-img>
+                          </v-col>
+                          <v-col class="details-col" cols="8">
+                            <v-card-title class="item-title" style="font-size: 18px">{{
+                              cartItem.title
+                            }}</v-card-title>
+                            <v-card-subtitle class="item-price" style="font-size: 16px">{{
+                              `$${cartItem.price.toFixed(2)}`
+                            }}</v-card-subtitle>
+                            <v-row class="quantity-row" justify="center">
+                              <v-col class="quantity-col">
+                                <v-btn icon @click="decreaseQuantity(index)" class="quantity-btn">
+                                  <v-icon>mdi-minus</v-icon>
+                                </v-btn>
+                              </v-col>
+                              <v-col class="quantity-col">
+                                <span class="item-quantity">{{ cartItem.quantity }}</span>
+                              </v-col>
+                              <v-col class="quantity-col">
+                                <v-btn icon @click="increaseQuantity(index)" class="quantity-btn">
+                                  <v-icon>mdi-plus</v-icon>
+                                </v-btn>
+                              </v-col>
+                              <v-col class="quantity-col">
+                                <v-btn icon @click="removeItem(index)" class="delete-btn">
+                                  <v-icon>mdi-delete</v-icon>
+                                </v-btn>
+                              </v-col>
+                            </v-row>
+                          </v-col>
+                        </v-row>
+                      </v-container>
+                    </v-card>
+                  </v-list-item-content>
+                </v-list-item>
+              </v-list-item-group>
+              <v-list-item v-else>
+                <v-list-item-content>No items in the cart</v-list-item-content>
+              </v-list-item>
+            </v-list>
+          </v-col>
+
+          <!-- right side -->
+          <v-col cols="12" md="4">
+            <v-card class="total-card" elevation="3">
+              <v-container>
+                <v-row>
+                  <v-col>
+                    <v-card-title class="total-title" style="font-size: 20px"
+                      >Total Amount</v-card-title
+                    >
+                    <v-card-subtitle class="total-amount" style="font-size: 18px"
+                      >${{ calculateTotalAmount() }}</v-card-subtitle
+                    >
+                    <v-divider></v-divider>
+                    <v-card-subtitle class="item-count"
+                      >Items in Cart: {{ cart.length }}</v-card-subtitle
+                    >
+                  </v-col>
+                </v-row>
+              </v-container>
+            </v-card>
+          </v-col>
+        </v-row>
       </v-card>
     </v-dialog>
-
     <h1>
       {{ currentSubcategories[0]?.parentCategory }}
       <VIcon class="float-end mt-5" size="30" @click="openDialog">mdi mdi-cart-check</VIcon>
@@ -186,5 +278,75 @@ const calculateTotalAmount = () => {
   margin-top: auto;
   background-color: #2196f3;
   color: white;
+}
+
+.item-title {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.item-price {
+  font-size: 16px;
+}
+
+.quantity-row {
+  margin-top: -8px;
+}
+
+.item-quantity {
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.cart-item-card {
+  margin-bottom: 16px;
+}
+
+.total-card {
+  height: 100%;
+}
+
+.total-title {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.total-amount {
+  font-size: 24px;
+  color: #f58551;
+}
+
+.cart-item-card {
+  margin-bottom: 16px;
+}
+
+.item-title {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.item-price {
+  font-size: 16px;
+  color: #888;
+}
+
+.quantity-row {
+  margin-top: 8px;
+}
+
+.quantity-col {
+  margin: 0 8px;
+}
+
+.item-quantity {
+  font-size: 16px;
+}
+
+.delete-col {
+  text-align: right;
+}
+
+.delete-btn {
+  color: #ff5733; 
 }
 </style>
