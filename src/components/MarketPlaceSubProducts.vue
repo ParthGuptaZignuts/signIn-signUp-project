@@ -3,7 +3,7 @@ import { ref, onMounted, onBeforeUnmount } from 'vue'
 import { useRouter } from 'vue-router'
 import { items } from '../ItemProducts'
 
-const STORAGE_KEY = 'cartItems';
+const STORAGE_KEY = 'cartItems'
 
 const value = ref(items)
 const router = useRouter()
@@ -30,15 +30,15 @@ const updateSubcategories = () => {
 }
 
 const addToCart = (item) => {
-  item.date = localStorage.getItem("selectedDate")
+  item.date = localStorage.getItem('selectedDate')
   cart.value.push(item)
-  saveCartToLocalStorage(cart.value);
+  saveCartToLocalStorage(cart.value)
   console.log(`Added ${item.title} to the cart`)
 }
 
 const removeFromCart = (index) => {
   const removedItem = cart.value.splice(index, 1)[0]
-  saveCartToLocalStorage(cart.value);
+  saveCartToLocalStorage(cart.value)
   console.log(`Removed ${removedItem.title} from the cart`)
 }
 
@@ -55,25 +55,26 @@ onMounted(() => {
 })
 
 onBeforeUnmount(() => {
-  saveCartToLocalStorage(cart.value);
+  saveCartToLocalStorage(cart.value)
 })
 
 function loadCartFromLocalStorage() {
-  const storedItems = localStorage.getItem(STORAGE_KEY);
-  if(storedItems && storedItems !== undefined){
-    console.log(storedItems)
-    return JSON.parse(storedItems)
+  const storedItems = localStorage.getItem(STORAGE_KEY)
+  if (storedItems && storedItems !== undefined) {
+    const parsedItems = JSON.parse(storedItems)
+    const selectedDate = localStorage.getItem('selectedDate')
+    const filteredItems = parsedItems.filter((item) => item.date == selectedDate)
+    console.log(filteredItems)
+    return filteredItems
   } else {
     return []
   }
-  // return storedItems && storedItems !== undefined ? JSON.parse(storedItems) : [];
 }
 
 function saveCartToLocalStorage(cartItems) {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(cartItems));
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(cartItems))
 }
 </script>
-
 
 <template>
   <div>
