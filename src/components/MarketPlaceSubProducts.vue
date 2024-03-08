@@ -2,8 +2,8 @@
 import { ref, onMounted, onBeforeUnmount, Ref } from 'vue'
 import { useRouter, RouteLocationNormalizedLoaded } from 'vue-router'
 import { items, Item, Subcategory } from '../ItemProducts'
-import { toast } from "vue3-toastify";
-import "vue3-toastify/dist/index.css";
+import { toast } from 'vue3-toastify'
+import 'vue3-toastify/dist/index.css'
 
 interface CartItem extends Item {
   quantity: number
@@ -94,10 +94,10 @@ const addToCart = (item: Subcategory): void => {
   cart.value = [...existingItems]
   updateTotalAmount()
   toast(`${item.title} added to cart`, {
-  "theme": "auto",
-  "type": "success",
-  "dangerouslyHTMLString": true
-})
+    theme: 'auto',
+    type: 'success',
+    dangerouslyHTMLString: true
+  })
 }
 
 const removeFromCart = (index: number): void => {
@@ -128,28 +128,28 @@ const removeItem = (index: number): void => {
   cart.value.splice(index, 1)
   updateTotalAmount()
   toast(`Item Removed from cart`, {
-  "theme": "auto",
-  "type": "error",
-  "dangerouslyHTMLString": true
-})
+    theme: 'auto',
+    type: 'error',
+    dangerouslyHTMLString: true
+  })
 }
 
 const formData = ref({
   name: '',
   cardNumber: '',
   expiryDate: '',
-  cvv: '',
-});
+  cvv: ''
+})
 
 const placeOrder = (): void => {
-  console.log('Placing order with:', formData, cart.value);
+  console.log('Placing order with:', formData, cart.value)
   formData.value = {
     name: '',
     cardNumber: '',
     expiryDate: '',
-    cvv: '',
-  };
-};
+    cvv: ''
+  }
+}
 </script>
 
 <template>
@@ -172,7 +172,7 @@ const placeOrder = (): void => {
               <v-list-item-group v-if="cart.length > 0">
                 <v-list-item v-for="(cartItem, index) in cart" :key="index">
                   <v-list-item-content>
-                    <v-card class="cart-item-card" elevation="3">
+                    <v-card class="cart-item-card" elevation="3" style="background-color:#f9f9f9">
                       <v-container>
                         <v-row align="center">
                           <v-col class="image-col" cols="4">
@@ -219,8 +219,8 @@ const placeOrder = (): void => {
           </v-col>
 
           <!-- right side -->
-          <v-col cols="12" md="4">
-            <v-card class="total-card" elevation="3">
+          <v-col cols="12" md="4" style="margin-left: -10px; margin-top: 20px;">
+            <v-card class="total-card" elevation="3" style="border-radius: 15px; background-color: #283046;; height: 800px; color:white">
               <v-container>
                 <!-- Total Amount Section -->
                 <v-row>
@@ -232,43 +232,69 @@ const placeOrder = (): void => {
                       ${{ totalAmount.toFixed(2) }}
                     </v-card-subtitle>
                     <v-divider></v-divider>
-                    <v-card-subtitle class="item-count">Items in Cart: {{ cart.length }}</v-card-subtitle>
+                    <v-card-subtitle class="item-count"
+                      >Items in Cart: {{ cart.length }}</v-card-subtitle
+                    >
                   </v-col>
                 </v-row>
-          
+
                 <!-- Payment Form Section -->
                 <v-row>
                   <v-col>
                     <v-form>
-                      <v-text-field v-model="formData.name" label="Name" required></v-text-field>
-                      <v-text-field v-model="formData.cardNumber" label="Card Number" required></v-text-field>
+                      <v-text-field
+                        v-model="formData.name"
+                        label="Name"
+                        required
+                        variant="outlined"
+                      ></v-text-field>
+                      <v-text-field
+                        v-model="formData.cardNumber"
+                        label="Card Number"
+                        required
+                        variant="outlined"
+                      ></v-text-field>
                       <v-row>
                         <v-col>
-                          <v-text-field v-model="formData.expiryDate" label="Expiry Date" required></v-text-field>
+                          <v-text-field
+                            v-model="formData.expiryDate"
+                            label="Expiry Date"
+                            required
+                            variant="outlined"
+                          ></v-text-field>
                         </v-col>
                         <v-col>
-                          <v-text-field v-model="formData.cvv" label="CVV" required></v-text-field>
+                          <v-text-field
+                            v-model="formData.cvv"
+                            label="CVV"
+                            required
+                            variant="outlined"
+                          ></v-text-field>
                         </v-col>
                       </v-row>
                     </v-form>
                   </v-col>
                 </v-row>
-          
+
                 <!-- Place Order Button -->
                 <v-row>
                   <v-col>
-                    <v-btn @click="placeOrder" color="primary">Place Order</v-btn>
+                    <div class="demo-space-x">
+                      <VBtn variant="flat" color="info"  @click="placeOrder">
+                        Place Order
+                      </VBtn>
+                    </div>
                   </v-col>
                 </v-row>
               </v-container>
             </v-card>
           </v-col>
-
         </v-row>
       </v-card>
     </v-dialog>
+
     <h1>
-        {{ currentSubcategories[0]?.parentCategory }}
+      <router-link to="/marketplace"><VIcon>mdi mdi-chevron-left</VIcon></router-link> {{ currentSubcategories[0]?.parentCategory }}
       <VIcon class="float-end mt-5" size="30" @click="openDialog">mdi mdi-cart-check</VIcon>
     </h1>
 
@@ -288,7 +314,8 @@ const placeOrder = (): void => {
           <div class="custom-card-text">{{ subcategory.description }}</div>
           <div class="custom-card-subtitle">{{ `$${subcategory.price.toFixed(2)}` }}</div>
           <v-btn @click="addToCart(subcategory)" class="custom-card-button">
-            <VIcon>mdi mdi-cart-plus</VIcon>Add to Cart</v-btn>
+            <VIcon>mdi mdi-cart-plus</VIcon>Add to Cart</v-btn
+          >
         </v-card>
       </v-col>
     </v-row>
@@ -364,7 +391,8 @@ const placeOrder = (): void => {
 
 .total-amount {
   font-size: 24px;
-  color: #f58551;
+  color: white;
+  font-weight: bolder;
 }
 
 .cart-item-card {
