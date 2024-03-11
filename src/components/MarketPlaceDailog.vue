@@ -22,15 +22,15 @@ watch(selectedDate, (newVal) => {
   <VDialog :model-value="isVisible" max-width="fit-content" persistent>
     <VCard>
       <VCardTitle class="headline text-center"> Select A Date </VCardTitle>
-      <v-container>
-        <v-row justify="space-around">
-          <v-date-picker
+      <VContainer>
+        <VRow justify="space-around">
+          <VDatePicker
             color="primary"
             :min="currentDate.toISOString().split('T')[0]"
             v-model="selectedDate"
-          ></v-date-picker>
-        </v-row>
-      </v-container>
+          ></VDatePicker>
+        </VRow>
+      </VContainer>
     </VCard>
   </VDialog>
 

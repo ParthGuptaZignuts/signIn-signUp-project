@@ -13,8 +13,8 @@ const getRandomColor = () => {
 
 <template>
   <div>
-    <v-row class="pt-5">
-      <v-col
+    <VRow class="pt-5">
+      <VCol
         v-for="(item, index) in value"
         :key="index"
         cols="12"
@@ -23,16 +23,16 @@ const getRandomColor = () => {
         lg="3"
         class="custom-card-col"
       >
-        <v-card :color="getRandomColor()" max-width="400" hover>
-          <v-card-title>{{ item.title }}</v-card-title>
-          <v-card-subtitle>{{ item.description }}</v-card-subtitle>
-          <v-card-text>{{ item.category }}</v-card-text>
-          <v-card-actions>
-            <v-btn color="#000" :to="`/marketplace/category/${item.id}`">Explore</v-btn>
-          </v-card-actions>
-        </v-card>
-      </v-col>
-    </v-row>
+        <VCard :color="getRandomColor()" max-width="400" hover>
+          <VCardTitle>{{ item.title }}</VCardTitle>
+          <VCard-subtitle>{{ item.description }}</VCard-subtitle>
+          <VCard-text>{{ item.category }}</VCard-text>
+          <VCard-actions>
+            <VBtn color="#000" :to="`/marketplace/category/${item.id}`">Explore</VBtn>
+          </VCard-actions>
+        </VCard>
+      </VCol>
+    </VRow>
   </div>
 </template>
 

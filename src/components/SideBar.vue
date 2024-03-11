@@ -12,9 +12,9 @@ watch(locale, (newlocale) => {
   <VNavigationDrawer app style="background-color: #283046; color: white">
     <VList>
       <VListItem class="text-center">
-        <VListItem-content class="font-weight-bold; mt-3">
+        <VListItemContent class="font-weight-bold; mt-3">
           {{ t('The App') }}
-        </VListItem-content>
+        </VListItemContent>
       </VListItem>
       <VDivider></VDivider>
       <VListItem class="text-center">

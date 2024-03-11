@@ -42,7 +42,6 @@ const headers = [
 ]
 const viewDialog = ref(false)
 const projectDetails = ref({})
-
 const createEditDialog = ref(false)
 const pId = ref<string>('')
 

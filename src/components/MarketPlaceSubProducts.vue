@@ -300,217 +300,217 @@ const updateLocalStorage = (): void => {
 
 <template>
   <div>
-    <v-dialog v-model="dialogVisible" fullscreen>
-      <v-card>
+    <VDialog v-model="dialogVisible" fullscreen>
+      <VCard>
         <!-- header -->
-        <v-card-title class="d-flex align-center justify-space-between">
+        <VCardTitle class="d-flex align-center justify-space-between">
           <span class="headline" style="color: #283046; font-weight: 900; font-size: 40px"
             >Shopping Cart</span
           >
-          <v-btn icon @click="closeDialog" class="bg-transparent" elevation="0">
-            <v-icon>mdi-close</v-icon>
-          </v-btn>
-        </v-card-title>
-        <v-divider></v-divider>
+          <VBtn icon @click="closeDialog" class="bg-transparent" elevation="0">
+            <VIcon>mdi-close</VIcon>
+          </VBtn>
+        </VCardTitle>
+        <VDivider></VDivider>
 
-        <v-row>
+        <VRow>
           <!-- left side  -->
-          <v-col cols="12" md="8">
-            <v-list>
-              <v-list-item-group v-if="cart.length > 0">
-                <v-list-item v-for="(cartItem, index) in cart" :key="index">
-                  <v-list-item-content>
-                    <v-card class="cart-item-card" elevation="3" style="background-color: #f9f9f9">
-                      <v-container>
-                        <v-row>
+          <VCol cols="12" md="8">
+            <VList>
+              <VListItemGroup v-if="cart.length > 0">
+                <VListItem v-for="(cartItem, index) in cart" :key="index">
+                  <VListItemContent>
+                    <VCard class="cart-item-card" elevation="3" style="background-color: #f9f9f9">
+                      <VContainer>
+                        <VRow>
                           <!-- Image Column -->
-                          <v-col cols="2">
-                            <v-img :src="cartItem.imageUrl" max-height="100"></v-img>
-                          </v-col>
+                          <VCol cols="2">
+                            <VImg :src="cartItem.imageUrl" max-height="100"></VImg>
+                          </VCol>
 
                           <!-- Details Column -->
-                          <v-col cols="5">
-                            <v-row>
-                              <v-col cols="12">
-                                <v-card-title class="item-title" style="font-size: 18px">{{
+                          <VCol cols="5">
+                            <VRow>
+                              <VCol cols="12">
+                                <VCardTitle class="item-title" style="font-size: 18px">{{
                                   cartItem.title
-                                }}</v-card-title>
-                              </v-col>
-                              <v-col cols="12">
-                                <v-card-subtitle class="item-price" style="font-size: 16px">{{
+                                }}</VCardTitle>
+                              </VCol>
+                              <VCol cols="12">
+                                <VCard-subtitle class="item-price" style="font-size: 16px">{{
                                   `$${cartItem.price.toFixed(2)}`
-                                }}</v-card-subtitle>
-                              </v-col>
-                            </v-row>
-                          </v-col>
+                                }}</VCard-subtitle>
+                              </VCol>
+                            </VRow>
+                          </VCol>
 
-                          <v-col cols="5">
-                            <v-col cols="12">
-                              <v-row align="center">
+                          <VCol cols="5">
+                            <VCol cols="12">
+                              <VRow align="center">
                                 <!-- Decrease Quantity Button -->
-                                <v-col cols="2">
-                                  <v-btn
+                                <VCol cols="2">
+                                  <VBtn
                                     icon
                                     @click="decreaseQuantity(index)"
                                     class="quantity-btn bg-transparent"
                                     elevation="0"
                                   >
-                                    <v-icon>mdi-minus</v-icon>
-                                  </v-btn>
-                                </v-col>
+                                    <VIcon>mdi-minus</VIcon>
+                                  </VBtn>
+                                </VCol>
 
                                 <!-- Quantity Display -->
-                                <v-col cols="2">
+                                <VCol cols="2">
                                   <span class="item-quantity">{{ cartItem.quantity }}</span>
-                                </v-col>
+                                </VCol>
 
                                 <!-- Increase Quantity Button -->
-                                <v-col cols="2">
-                                  <v-btn
+                                <VCol cols="2">
+                                  <VBtn
                                     icon
                                     @click="increaseQuantity(index)"
                                     class="quantity-btn bg-transparent"
                                     elevation="0"
                                   >
-                                    <v-icon>mdi-plus</v-icon>
-                                  </v-btn>
-                                </v-col>
+                                    <VIcon>mdi-plus</VIcon>
+                                  </VBtn>
+                                </VCol>
 
                                 <!-- Delete Button -->
-                                <v-col cols="6">
-                                  <v-btn
+                                <VCol cols="6">
+                                  <VBtn
                                     icon
                                     @click="removeItem(index)"
                                     class="delete-btn float-end bg-transparent"
                                     elevation="0"
                                   >
-                                    <v-icon>mdi-delete</v-icon>
-                                  </v-btn>
-                                </v-col>
-                              </v-row>
-                            </v-col>
-                          </v-col>
-                        </v-row>
-                      </v-container>
-                    </v-card>
-                  </v-list-item-content>
-                </v-list-item>
-              </v-list-item-group>
+                                    <VIcon>mdi-delete</VIcon>
+                                  </VBtn>
+                                </VCol>
+                              </VRow>
+                            </VCol>
+                          </VCol>
+                        </VRow>
+                      </VContainer>
+                    </VCard>
+                  </VListItemContent>
+                </VListItem>
+              </VListItemGroup>
 
               <!-- No items message -->
-              <v-list-item v-else>
-                <v-list-item-content>No items in the cart</v-list-item-content>
-              </v-list-item>
-            </v-list>
-          </v-col>
+              <VListItem v-else>
+                <VListItemContent>No items in the cart</VListItemContent>
+              </VListItem>
+            </VList>
+          </VCol>
 
           <!-- right side -->
-          <v-col cols="12" md="4" style="margin: auto; margin-left: -20px">
-            <v-card
+          <VCol cols="12" md="4" style="margin: auto; margin-left: -20px">
+            <VCard
               class="total-card"
               elevation="3"
               style="border-radius: 15px; background-color: #283046; height: 800px; color: white"
             >
-              <v-container>
+              <VContainer>
                 <!-- Total Amount Section -->
-                <v-row>
-                  <v-col>
-                    <v-card-title class="total-title" style="font-size: 20px">
+                <VRow>
+                  <VCol>
+                    <VCardTitle class="total-title" style="font-size: 20px">
                       Total Amount
-                    </v-card-title>
-                    <v-card-subtitle class="total-amount" style="font-size: 18px">
+                    </VCardTitle>
+                    <VCard-subtitle class="total-amount" style="font-size: 18px">
                       ${{ totalAmount.toFixed(2) }}
-                    </v-card-subtitle>
-                    <v-divider></v-divider>
-                    <v-card-subtitle class="item-count"
-                      >Items in Cart: {{ cart.length }}</v-card-subtitle
+                    </VCard-subtitle>
+                    <VDivider></VDivider>
+                    <VCard-subtitle class="item-count"
+                      >Items in Cart: {{ cart.length }}</VCard-subtitle
                     >
-                  </v-col>
-                </v-row>
+                  </VCol>
+                </VRow>
 
                 <!-- Payment Form Section -->
-                <v-row>
-                  <v-col>
-                    <v-form>
-                      <v-text-field
+                <VRow>
+                  <VCol>
+                    <VForm>
+                      <VTextField
                         v-model="formData.name"
                         label="Name"
                         required="true"
                         variant="outlined"
-                      ></v-text-field>
-                      <v-text-field
+                      ></VTextField>
+                      <VTextField
                         v-model="formData.cardNumber"
                         type="number"
                         label="Card Number"
                         required="true"
                         variant="outlined"
-                      ></v-text-field>
-                      <v-row>
-                        <v-col>
-                          <v-text-field
+                      ></VTextField>
+                      <VRow>
+                        <VCol>
+                          <VTextField
                             v-model="formData.expiryDate"
                             label="Expiry Date"
                             required="true"
                             type="date"
                             variant="outlined"
-                          ></v-text-field>
-                        </v-col>
-                        <v-col>
-                          <v-text-field
+                          ></VTextField>
+                        </VCol>
+                        <VCol>
+                          <VTextField
                             v-model="formData.cvv"
                             label="CVV"
                             required="true"
                             variant="outlined"
                             type="password"
-                          ></v-text-field>
-                        </v-col>
-                      </v-row>
-                      <v-row>
-                        <v-col>
+                          ></VTextField>
+                        </VCol>
+                      </VRow>
+                      <VRow>
+                        <VCol>
                           <div class="demo-space-x">
                             <VBtn variant="flat" color="info" @click="placeOrder" type="submit">
                               Place Order
                             </VBtn>
                           </div>
-                        </v-col>
-                      </v-row>
-                    </v-form>
-                  </v-col>
-                </v-row>
+                        </VCol>
+                      </VRow>
+                    </VForm>
+                  </VCol>
+                </VRow>
 
                 <!-- address order -->
-                <v-dialog v-model="dialog" max-width="600px">
-                  <v-card>
-                    <v-card-title>Order Details</v-card-title>
-                    <v-card-text>
-                      <v-form ref="orderForm" @submit.prevent="submitOrder">
-                        <v-text-field
+                <VDialog v-model="dialog" max-width="600px">
+                  <VCard>
+                    <VCardTitle>Order Details</VCardTitle>
+                    <VCard-text>
+                      <VForm ref="orderForm" @submit.prevent="submitOrder">
+                        <VTextField
                           v-model="fullName"
                           label="Full Name"
                           required
                           variant="outlined"
-                        ></v-text-field>
-                        <v-text-field
+                        ></VTextField>
+                        <VTextField
                           v-model="address"
                           label="Address"
                           required
                           variant="outlined"
-                        ></v-text-field>
+                        ></VTextField>
 
-                        <v-card-actions>
-                          <v-btn color="primary" type="submit">Submit</v-btn>
-                          <v-btn color="error" @click="closeAddressDialog">Cancel</v-btn>
-                        </v-card-actions>
-                      </v-form>
-                    </v-card-text>
-                  </v-card>
-                </v-dialog>
-              </v-container>
-            </v-card>
-          </v-col>
-        </v-row>
-      </v-card>
-    </v-dialog>
+                        <VCard-actions>
+                          <VBtn color="primary" type="submit">Submit</VBtn>
+                          <VBtn color="error" @click="closeAddressDialog">Cancel</VBtn>
+                        </VCard-actions>
+                      </VForm>
+                    </VCard-text>
+                  </VCard>
+                </VDialog>
+              </VContainer>
+            </VCard>
+          </VCol>
+        </VRow>
+      </VCard>
+    </VDialog>
 
     <h1>
       <router-link to="/marketplace"><VIcon>mdi mdi-chevron-left</VIcon></router-link>
@@ -518,8 +518,8 @@ const updateLocalStorage = (): void => {
       <VIcon class="float-end mt-5" size="30" @click="openDialog">mdi mdi-cart-check</VIcon>
     </h1>
 
-    <v-row class="pt-5">
-      <v-col
+    <VRow class="pt-5">
+      <VCol
         v-for="(subcategory, index) in currentSubcategories"
         :key="index"
         cols="12"
@@ -528,17 +528,17 @@ const updateLocalStorage = (): void => {
         lg="3"
         class="custom-card-col"
       >
-        <v-card max-width="500" hover class="custom-card">
-          <v-img :src="subcategory.imageUrl" height="200"></v-img>
+        <VCard max-width="500" hover class="custom-card">
+          <VImg :src="subcategory.imageUrl" height="200"></VImg>
           <div class="custom-card-title">{{ subcategory.title }}</div>
           <div class="custom-card-text">{{ subcategory.description }}</div>
           <div class="custom-card-subtitle">{{ `$${subcategory.price.toFixed(2)}` }}</div>
-          <v-btn @click="addToCart(subcategory)" class="custom-card-button">
-            <VIcon>mdi mdi-cart-plus</VIcon>Add to Cart</v-btn
+          <VBtn @click="addToCart(subcategory)" class="custom-card-button">
+            <VIcon>mdi mdi-cart-plus</VIcon>Add to Cart</VBtn
           >
-        </v-card>
-      </v-col>
-    </v-row>
+        </VCard>
+      </VCol>
+    </VRow>
   </div>
 </template>
 
