@@ -1,6 +1,15 @@
 <script setup lang="ts">
-import { ref, onMounted, onBeforeUnmount, watch, Ref, nextTick } from 'vue'
-import { useRouter, RouteLocationNormalizedLoaded } from 'vue-router'
+import {
+  ref,
+  onMounted,
+  onBeforeUnmount,
+  watch,
+  Ref,
+  nextTick,
+  DefineComponent,
+  InjectionKey
+} from 'vue'
+import { useRouter, RouteLocationNormalizedLoaded, Router } from 'vue-router'
 import { items, Item, Subcategory } from '../ItemProducts'
 import { toast } from 'vue3-toastify'
 import 'vue3-toastify/dist/index.css'
@@ -9,6 +18,34 @@ import Swal from 'sweetalert2'
 interface CartItem extends Item {
   quantity: number
 }
+
+interface FormData {
+  name: string
+  cardNumber: string
+  expiryDate: string
+  cvv: string
+}
+
+interface AddressDialogData {
+  fullName: Ref<string>
+  address: Ref<string>
+  dialog: Ref<boolean>
+}
+
+interface BillItem {
+  title: string
+  quantity: number
+  price: number
+}
+
+interface OrderBill {
+  selectedDate: string
+  fullName: string
+  address: string
+  itemsInCart: BillItem[]
+  totalAmount: string
+}
+
 const STORAGE_KEY_PREFIX = 'cartItems_'
 const cart: Ref<CartItem[]> = ref([])
 const value: Ref<Item[]> = ref(items)
@@ -157,41 +194,6 @@ const formData = ref({
   cvv: ''
 })
 
-// const placeOrder = (e): void => {
-//   e.preventDefault()
-
-//   if (cart.value.length === 0) {
-//     toast('Please Add Items In the Cart', {
-//       theme: 'auto',
-//       type: 'error',
-//       dangerouslyHTMLString: true
-//     })
-//     return
-//   }
-
-//   if (
-//     !formData.value.name ||
-//     !formData.value.cardNumber ||
-//     !formData.value.expiryDate ||
-//     !formData.value.cvv
-//   ) {
-//     toast('Please fill in all required fields', {
-//       theme: 'auto',
-//       type: 'error',
-//       dangerouslyHTMLString: true
-//     })
-//     return
-//   }
-//   console.log('Placing order with:', formData, cart.value)
-//   formData.value = {
-//     name: '',
-//     cardNumber: '',
-//     expiryDate: '',
-//     cvv: ''
-//   }
-//   openAddressDialog()
-// }
-
 const placeOrder = (e): void => {
   e.preventDefault()
 
@@ -265,7 +267,7 @@ const submitOrder = () => {
     }).then(() => {
       nextTick(() => {
         downloadBill()
-        clearCart() 
+        clearCart()
       })
     })
     fullName.value = ''

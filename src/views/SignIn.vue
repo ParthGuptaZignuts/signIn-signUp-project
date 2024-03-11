@@ -43,6 +43,7 @@ const visible = ref(false)
           variant="outlined"
           @click:append-inner="visible = !visible"
           v-model="formData.password"
+          required="true"
         ></VTextField>
 
         <VBtn block class="mb-8" color="blue" size="large" variant="tonal" type="submit">
