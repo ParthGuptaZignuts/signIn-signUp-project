@@ -17,8 +17,6 @@ const currentId: Ref<string | number> = ref(router.currentRoute.value.params.id)
 const currentSubcategories: Ref<Subcategory[]> = ref([])
 const dialogVisible: Ref<boolean> = ref(false)
 
-
-
 onMounted(() => {
   const storedState = localStorage.getItem('dialogState');
   if (storedState) {
@@ -77,6 +75,9 @@ const updateSubcategories = (): void => {
 const increaseQuantity = (index: number): void => {
   cart.value[index].quantity++
   updateTotalAmount()
+
+  updateLocalStorage()
+
 }
 
 const decreaseQuantity = (index: number): void => {
@@ -86,6 +87,9 @@ const decreaseQuantity = (index: number): void => {
     removeFromCart(index)
   }
   updateTotalAmount()
+
+  updateLocalStorage()
+
 }
 
 const addToCart = (item: Subcategory): void => {
@@ -104,6 +108,9 @@ const addToCart = (item: Subcategory): void => {
   localStorage.setItem(storageKey, JSON.stringify(existingItems))
   cart.value = [...existingItems]
   updateTotalAmount()
+
+  updateLocalStorage()
+
   toast(`${item.title} added to cart`, {
     theme: 'auto',
     type: 'success',
@@ -122,7 +129,7 @@ const removeFromCart = (index: number): void => {
     const removedItem = existingItems.splice(index, 1)[0]
     console.log(`Removed ${removedItem.title} from the cart for date ${selectedDate}`)
   }
-
+  updateLocalStorage()
   localStorage.setItem(storageKey, JSON.stringify(existingItems))
   cart.value = [...existingItems]
 }
@@ -138,6 +145,7 @@ const calculateTotalAmount = (): string => {
 const removeItem = (index: number): void => {
   cart.value.splice(index, 1)
   updateTotalAmount()
+  updateLocalStorage()
   toast(`Item Removed from cart`, {
     theme: 'auto',
     type: 'error',
@@ -271,10 +279,17 @@ const generateBillContent = (): string => {
 
   return billContent;
 };
-
 watch(dialogVisible, (newValue) => {
   localStorage.setItem('dialogState', JSON.stringify(newValue));
 });
+
+// update local storage 
+
+const updateLocalStorage = (): void => {
+  const selectedDate = localStorage.getItem('selectedDate')
+  const storageKey = STORAGE_KEY_PREFIX + selectedDate
+  localStorage.setItem(storageKey, JSON.stringify(cart.value))
+}
 </script>
 
 <template>
