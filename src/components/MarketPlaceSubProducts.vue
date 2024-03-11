@@ -5,9 +5,6 @@ import {
   onBeforeUnmount,
   watch,
   Ref,
-  nextTick,
-  DefineComponent,
-  InjectionKey
 } from 'vue'
 import { useRouter, RouteLocationNormalizedLoaded, Router } from 'vue-router'
 import { items, Item, Subcategory } from '../ItemProducts'
@@ -19,38 +16,11 @@ interface CartItem extends Item {
   quantity: number
 }
 
-interface FormData {
-  name: string
-  cardNumber: string
-  expiryDate: string
-  cvv: string
-}
-
-interface AddressDialogData {
-  fullName: Ref<string>
-  address: Ref<string>
-  dialog: Ref<boolean>
-}
-
-interface BillItem {
-  title: string
-  quantity: number
-  price: number
-}
-
-interface OrderBill {
-  selectedDate: string
-  fullName: string
-  address: string
-  itemsInCart: BillItem[]
-  totalAmount: string
-}
-
 const STORAGE_KEY_PREFIX = 'cartItems_'
 const cart: Ref<CartItem[]> = ref([])
 const value: Ref<Item[]> = ref(items)
 const router = useRouter()
-const currentId: Ref<string | number> = ref(router.currentRoute.value.params.id)
+const currentId : Ref<string | number> = ref(router.currentRoute.value.params.id)
 const currentSubcategories: Ref<Subcategory[]> = ref([])
 const dialogVisible: Ref<boolean> = ref(false)
 
@@ -265,10 +235,8 @@ const submitOrder = () => {
       showConfirmButton: false,
       timer: 1500
     }).then(() => {
-      nextTick(() => {
-        downloadBill()
-        clearCart()
-      })
+    downloadBill() 
+    clearCart() 
     })
     fullName.value = ''
     address.value = ''
@@ -279,11 +247,9 @@ const submitOrder = () => {
 const clearCart = (): void => {
   const selectedDate = localStorage.getItem('selectedDate')
   const storageKey = STORAGE_KEY_PREFIX + selectedDate
-  if (localStorage.getItem(storageKey)) {
-    localStorage.removeItem(storageKey)
-    cart.value = []
-    updateTotalAmount()
-  }
+  localStorage.removeItem(storageKey)
+  cart.value = []
+  updateTotalAmount()
 }
 
 // download bill
