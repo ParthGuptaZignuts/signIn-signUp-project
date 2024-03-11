@@ -33,6 +33,14 @@ const formData = ref<User>({
   password_confirmation: ''
 })
 
+const registerCheckUser = () =>{
+  if(formData.value.name == '' || formData.value.email == '' || formData.value.password == '' || formData.value.password_confirmation == ''){
+    console.log("enter value")
+  }else{
+    registerUser();
+  }
+
+}
 const registerUser = () => {
   axios
     .post('api/register', formData.value)
@@ -53,7 +61,6 @@ const registerUser = () => {
       })
 
       router.push('/signin')
-      // Clear form data after successful registration
       formData.value.name = ''
       formData.value.email = ''
       formData.value.password = ''
@@ -70,8 +77,7 @@ const registerUser = () => {
         showConfirmButton: false,
         timer: 1500
       })
-
-      return Promise.reject(error) // Re-throw the error to handle it elsewhere
+      return Promise.reject(error) 
     })
 }
 </script>
@@ -87,7 +93,7 @@ const registerUser = () => {
     </h1>
 
     <VCard class="mx-auto pa-12 pb-8" elevation="8" max-width="448" rounded="lg">
-      <form @submit.prevent="registerUser">
+      <form @submit.prevent="registerCheckUser">
         <div class="text-subtitle-1 text-medium-emphasis">Name</div>
 
         <VTextField
@@ -152,7 +158,7 @@ const registerUser = () => {
           size="large"
           variant="tonal"
           type="submit"
-          @click="registerUser"
+          @click="registerCheckUser"
         >
           Sign-Up
         </VBtn>

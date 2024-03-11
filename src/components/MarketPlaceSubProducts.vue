@@ -211,6 +211,7 @@ const submitOrder = () => {
       showConfirmButton: false,
       timer: 1500
     }).then(() => {
+      downloadBill()
       clearCart()
     })
     fullName.value = ''
@@ -226,6 +227,40 @@ const clearCart = (): void => {
   cart.value = []
   updateTotalAmount()
 }
+
+// download bill 
+const downloadBill = (): void => {
+  const billContent = generateBillContent();
+  const blob = new Blob([billContent], { type: 'text/plain' });
+  const link = document.createElement('a');
+  link.href = URL.createObjectURL(blob);
+  link.download = 'order_bill.txt';
+  link.click();
+};
+
+const generateBillContent = (): string => {
+  const selectedDate = localStorage.getItem('selectedDate');
+  const fullName = formData.value.name; 
+  const address = address.value; 
+  const itemsInCart = cart.value.map(
+    (item) => `${item.title} (Quantity: ${item.quantity}) - $${(item.price * item.quantity).toFixed(2)}`
+  );
+  const totalAmount = calculateTotalAmount();
+  
+  const billContent = `
+    Order Bill - ${selectedDate}
+    
+    Name: ${fullName}
+    Address: ${address}
+    
+    Items in Cart:
+    ${itemsInCart.join('\n')}
+    
+    Total Amount: $${totalAmount}
+  `;
+
+  return billContent;
+};
 </script>
 
 <template>
