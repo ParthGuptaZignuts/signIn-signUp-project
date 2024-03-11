@@ -141,7 +141,27 @@ const formData = ref({
   cvv: ''
 })
 
-const placeOrder = (): void => {
+const placeOrder = (e): void => {
+  e.preventDefault();
+
+  if (cart.value.length === 0) {
+    toast("Please Add Items In the Cart", {
+      theme: 'auto',
+      type: 'error',
+      dangerouslyHTMLString: true
+    });
+    return;
+  }
+
+
+  if (!formData.value.name || !formData.value.cardNumber || !formData.value.expiryDate || !formData.value.cvv) {
+    toast("Please fill in all required fields", {
+      theme: 'auto',
+      type: 'error',
+      dangerouslyHTMLString: true
+    });
+    return;
+  }
   console.log('Placing order with:', formData, cart.value)
   formData.value = {
     name: '',
@@ -149,7 +169,40 @@ const placeOrder = (): void => {
     expiryDate: '',
     cvv: ''
   }
+  openAddressDialog();
 }
+
+// address order 
+const dialog = ref(false);
+const fullName = ref('');
+const address = ref('');
+
+const openAddressDialog = () => {
+  dialog.value = true;
+};
+
+const closeAddressDialog = () => {
+  fullName.value = "" ;
+  address.value = "" ;
+  dialog.value = false;
+};
+
+const submitOrder = () => {
+  if (!fullName.value || !address.value) {
+    toast("Please fill in all required fields", {
+      theme: 'auto',
+      type: 'error',
+      dangerouslyHTMLString: true
+    });
+    return;
+  }
+  console.log('Full Name:', fullName.value);
+  console.log('Address:', address.value);
+
+  fullName.value = "" ;
+  address.value = "" ;
+  closeAddressDialog();
+};
 </script>
 
 <template>
@@ -265,17 +318,18 @@ const placeOrder = (): void => {
                 <!-- Payment Form Section -->
                 <v-row>
                   <v-col>
-                    <v-form>
+                    <v-form >
                       <v-text-field
                         v-model="formData.name"
                         label="Name"
-                        required
+                        required="true"
                         variant="outlined"
                       ></v-text-field>
                       <v-text-field
                         v-model="formData.cardNumber"
+                        type="number"
                         label="Card Number"
-                        required
+                        required="true"
                         variant="outlined"
                       ></v-text-field>
                       <v-row>
@@ -283,7 +337,8 @@ const placeOrder = (): void => {
                           <v-text-field
                             v-model="formData.expiryDate"
                             label="Expiry Date"
-                            required
+                            required="true"
+                            type="date"
                             variant="outlined"
                           ></v-text-field>
                         </v-col>
@@ -291,23 +346,41 @@ const placeOrder = (): void => {
                           <v-text-field
                             v-model="formData.cvv"
                             label="CVV"
-                            required
+                            required="true"
                             variant="outlined"
+                            type="number"
                           ></v-text-field>
+                        </v-col>
+                      </v-row>
+                      <v-row>
+                        <v-col>
+                          <div class="demo-space-x">
+                            <VBtn variant="flat" color="info" @click="placeOrder" type="submit"> Place Order </VBtn>
+                          </div>
                         </v-col>
                       </v-row>
                     </v-form>
                   </v-col>
                 </v-row>
 
-                <!-- Place Order Button -->
-                <v-row>
-                  <v-col>
-                    <div class="demo-space-x">
-                      <VBtn variant="flat" color="info" @click="placeOrder"> Place Order </VBtn>
-                    </div>
-                  </v-col>
-                </v-row>
+                <!-- address order -->
+                <v-dialog v-model="dialog" max-width="600px">
+                  <v-card>
+                    <v-card-title>Order Details</v-card-title>
+                    <v-card-text>
+                      <v-form ref="orderForm" @submit.prevent="submitOrder">
+                        <v-text-field v-model="fullName" label="Full Name" required variant="outlined"></v-text-field>
+                        <v-text-field v-model="address" label="Address" required variant="outlined"></v-text-field>
+            
+                        <v-card-actions>
+                          <v-btn color="primary" type="submit">Submit</v-btn>
+                          <v-btn color="error" @click="closeAddressDialog">Cancel</v-btn>
+                        </v-card-actions>
+                      </v-form>
+                    </v-card-text>
+                  </v-card>
+                </v-dialog>
+
               </v-container>
             </v-card>
           </v-col>
