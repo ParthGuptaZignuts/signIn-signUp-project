@@ -1,20 +1,20 @@
-import { ref } from 'vue';
+import { ref } from 'vue'
 
 interface SubCategory {
-  id: string;
-  parentCategory: string;
-  title: string;
-  description: string;
-  price: number;
-  imageUrl: string;
+  id: string
+  parentCategory: string
+  title: string
+  description: string
+  price: number
+  imageUrl: string
 }
 
 interface Items {
-  id: string;
-  title: string;
-  description: string;
-  category: string;
-  subCategory: SubCategory[];
+  id: string
+  title: string
+  description: string
+  category: string
+  subCategory: SubCategory[]
 }
 
 export const items = ref<Items[]>([
@@ -61,10 +61,9 @@ export const items = ref<Items[]>([
         parentCategory: 'Food',
         title: 'Cheese',
         description: 'Assorted cheeses for various tastes',
-        price: 5.0, 
+        price: 5.0,
         imageUrl: 'cheese_image_url.jpg'
-      },
-     
+      }
     ]
   },
   {
@@ -128,7 +127,7 @@ export const items = ref<Items[]>([
         description: 'Fashionable sunglasses to protect your eyes in style',
         price: 30.0,
         imageUrl: 'sunglasses_image_url.jpg'
-      },
+      }
     ]
   },
   {
@@ -160,7 +159,7 @@ export const items = ref<Items[]>([
         description: 'Classic denim jeans for a timeless look',
         price: 45.0,
         imageUrl: 'jeans_image_url.jpg'
-      },
+      }
     ]
   },
   {
@@ -181,7 +180,7 @@ export const items = ref<Items[]>([
         id: '18',
         parentCategory: 'Home',
         title: 'Bedding Sets',
-        description: 'Comfortable bedding for a good night\'s sleep',
+        description: "Comfortable bedding for a good night's sleep",
         price: 50.0,
         imageUrl: 'bedding_sets_image_url.jpg'
       },
@@ -192,7 +191,7 @@ export const items = ref<Items[]>([
         description: 'Decorate your home with stylish accessories',
         price: 30.0,
         imageUrl: 'home_decor_image_url.jpg'
-      },
+      }
     ]
   },
   {
@@ -224,7 +223,7 @@ export const items = ref<Items[]>([
         description: 'High-quality coffee beans and blends',
         price: 8.0,
         imageUrl: 'coffee_image_url.jpg'
-      },
+      }
     ]
   },
   {
@@ -280,8 +279,7 @@ export const items = ref<Items[]>([
         description: 'Fresh and nutritious dairy items',
         price: 2.5,
         imageUrl: 'dairy_products_image_url.jpg'
-      },
+      }
     ]
-  },
-]);
-
+  }
+])

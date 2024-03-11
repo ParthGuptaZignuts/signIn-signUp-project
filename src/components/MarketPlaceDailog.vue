@@ -7,7 +7,6 @@ const currentDate = new Date()
 const selectedDate = ref()
 const showProduct = ref(false)
 
-
 watch(selectedDate, (newVal) => {
   localStorage.setItem('selectedDate', new Date(newVal).toLocaleDateString())
   console.log(new Date(newVal).toLocaleDateString())

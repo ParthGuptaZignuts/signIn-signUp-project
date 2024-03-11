@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted, onBeforeUnmount,watch ,Ref } from 'vue'
+import { ref, onMounted, onBeforeUnmount, watch, Ref, nextTick } from 'vue'
 import { useRouter, RouteLocationNormalizedLoaded } from 'vue-router'
 import { items, Item, Subcategory } from '../ItemProducts'
 import { toast } from 'vue3-toastify'
@@ -18,21 +18,23 @@ const currentSubcategories: Ref<Subcategory[]> = ref([])
 const dialogVisible: Ref<boolean> = ref(false)
 
 onMounted(() => {
-  const storedState = localStorage.getItem('dialogState');
+  const storedState = localStorage.getItem('dialogState')
   if (storedState) {
-    dialogVisible.value = JSON.parse(storedState);
+    dialogVisible.value = JSON.parse(storedState)
   }
 
   if (dialogVisible.value) {
-    openDialog();
+    openDialog()
   }
 
-  cart.value = loadCartFromLocalStorage()
   updateSubcategories()
+  cart.value = loadCartFromLocalStorage()
   router.afterEach((to: RouteLocationNormalizedLoaded) => {
     currentId.value = to.params.id
     updateSubcategories()
   })
+
+  updateTotalAmount()
 })
 
 onBeforeUnmount(() => {
@@ -74,10 +76,8 @@ const updateSubcategories = (): void => {
 
 const increaseQuantity = (index: number): void => {
   cart.value[index].quantity++
-  updateTotalAmount()
-
   updateLocalStorage()
-
+  updateTotalAmount()
 }
 
 const decreaseQuantity = (index: number): void => {
@@ -86,10 +86,8 @@ const decreaseQuantity = (index: number): void => {
   } else {
     removeFromCart(index)
   }
-  updateTotalAmount()
-
   updateLocalStorage()
-
+  updateTotalAmount()
 }
 
 const addToCart = (item: Subcategory): void => {
@@ -107,10 +105,8 @@ const addToCart = (item: Subcategory): void => {
 
   localStorage.setItem(storageKey, JSON.stringify(existingItems))
   cart.value = [...existingItems]
-  updateTotalAmount()
-
   updateLocalStorage()
-
+  updateTotalAmount()
   toast(`${item.title} added to cart`, {
     theme: 'auto',
     type: 'success',
@@ -134,12 +130,13 @@ const removeFromCart = (index: number): void => {
   cart.value = [...existingItems]
 }
 
+const calculateTotalAmount = (): string => {
+  return cart.value.reduce((total, item) => total + item.price * item.quantity, 0).toFixed(2)
+}
+
 const totalAmount: Ref<number> = ref(0.0)
 const updateTotalAmount = (): void => {
   totalAmount.value = +calculateTotalAmount()
-}
-const calculateTotalAmount = (): string => {
-  return cart.value.reduce((total, item) => total + item.price * item.quantity, 0).toFixed(2)
 }
 
 const removeItem = (index: number): void => {
@@ -159,6 +156,41 @@ const formData = ref({
   expiryDate: '',
   cvv: ''
 })
+
+// const placeOrder = (e): void => {
+//   e.preventDefault()
+
+//   if (cart.value.length === 0) {
+//     toast('Please Add Items In the Cart', {
+//       theme: 'auto',
+//       type: 'error',
+//       dangerouslyHTMLString: true
+//     })
+//     return
+//   }
+
+//   if (
+//     !formData.value.name ||
+//     !formData.value.cardNumber ||
+//     !formData.value.expiryDate ||
+//     !formData.value.cvv
+//   ) {
+//     toast('Please fill in all required fields', {
+//       theme: 'auto',
+//       type: 'error',
+//       dangerouslyHTMLString: true
+//     })
+//     return
+//   }
+//   console.log('Placing order with:', formData, cart.value)
+//   formData.value = {
+//     name: '',
+//     cardNumber: '',
+//     expiryDate: '',
+//     cvv: ''
+//   }
+//   openAddressDialog()
+// }
 
 const placeOrder = (e): void => {
   e.preventDefault()
@@ -185,6 +217,7 @@ const placeOrder = (e): void => {
     })
     return
   }
+
   console.log('Placing order with:', formData, cart.value)
   formData.value = {
     name: '',
@@ -230,8 +263,10 @@ const submitOrder = () => {
       showConfirmButton: false,
       timer: 1500
     }).then(() => {
-      downloadBill()
-      clearCart()
+      nextTick(() => {
+        downloadBill()
+        clearCart() 
+      })
     })
     fullName.value = ''
     address.value = ''
@@ -242,29 +277,32 @@ const submitOrder = () => {
 const clearCart = (): void => {
   const selectedDate = localStorage.getItem('selectedDate')
   const storageKey = STORAGE_KEY_PREFIX + selectedDate
-  localStorage.removeItem(storageKey)
-  cart.value = []
-  updateTotalAmount()
+  if (localStorage.getItem(storageKey)) {
+    localStorage.removeItem(storageKey)
+    cart.value = []
+    updateTotalAmount()
+  }
 }
 
-// download bill 
+// download bill
 const downloadBill = (): void => {
-  const billContent = generateBillContent();
-  const blob = new Blob([billContent], { type: 'text/plain' });
-  const link = document.createElement('a');
-  link.href = URL.createObjectURL(blob);
-  link.download = 'order_bill.txt';
-  link.click();
-};
+  const billContent = generateBillContent()
+  const blob = new Blob([billContent], { type: 'text/plain' })
+  const link = document.createElement('a')
+  link.href = URL.createObjectURL(blob)
+  link.download = 'order_bill.txt'
+  link.click()
+}
 
 const generateBillContent = (): string => {
-  const selectedDate = localStorage.getItem('selectedDate');
-  const fullName = formData.value.name; 
-  const address = address.value; 
+  const selectedDate = localStorage.getItem('selectedDate')
+  const fullName = formData.value.name
+  const address = address.value
   const itemsInCart = cart.value.map(
-    (item) => `${item.title} (Quantity: ${item.quantity}) - $${(item.price * item.quantity).toFixed(2)}`
-  );
-  const totalAmount = calculateTotalAmount();
+    (item) =>
+      `${item.title} (Quantity: ${item.quantity}) - $${(item.price * item.quantity).toFixed(2)}`
+  )
+  const totalAmount = calculateTotalAmount()
   const billContent = `
     Order Bill - ${selectedDate}
     
@@ -275,20 +313,20 @@ const generateBillContent = (): string => {
     ${itemsInCart.join('\n')}
     
     Total Amount: $${totalAmount}
-  `;
+  `
 
-  return billContent;
-};
+  return billContent
+}
 watch(dialogVisible, (newValue) => {
-  localStorage.setItem('dialogState', JSON.stringify(newValue));
-});
+  localStorage.setItem('dialogState', JSON.stringify(newValue))
+})
 
-// update local storage 
-
+// update local storage
 const updateLocalStorage = (): void => {
   const selectedDate = localStorage.getItem('selectedDate')
   const storageKey = STORAGE_KEY_PREFIX + selectedDate
   localStorage.setItem(storageKey, JSON.stringify(cart.value))
+  updateTotalAmount()
 }
 </script>
 
@@ -455,7 +493,7 @@ const updateLocalStorage = (): void => {
                             label="CVV"
                             required="true"
                             variant="outlined"
-                            type="number"
+                            type="password"
                           ></v-text-field>
                         </v-col>
                       </v-row>

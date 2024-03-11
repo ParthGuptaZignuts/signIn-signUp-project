@@ -9,7 +9,6 @@ const getRandomColor = () => {
   const randomIndex = getRandomIndex()
   return lightColors[randomIndex]
 }
-
 </script>
 
 <template>

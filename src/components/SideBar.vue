@@ -33,13 +33,13 @@ select {
   margin-top: 5px;
   color: white;
   border: 1px solid white;
-  padding: 0.25rem .75rem;
+  padding: 0.25rem 0.75rem;
   border-radius: 5px;
 }
 
 @media only screen and (max-width: 600px) {
   select {
-    width: 100%; 
+    width: 100%;
   }
 }
 </style>

@@ -6,7 +6,7 @@ import DashboardView from '../views/DashboardView.vue'
 import CreatePost from '@/views/CreatePost.vue'
 import ProjectDetails from '@/components/ProjectDetails.vue'
 import MarketPlace from '@/views/MarketPlace.vue'
-import MarketPlaceSubProducts from "@/components/MarketPlaceSubProducts.vue"
+import MarketPlaceSubProducts from '@/components/MarketPlaceSubProducts.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -37,7 +37,7 @@ const router = createRouter({
     {
       path: '/createpost',
       name: 'CreatePost',
-      component: CreatePost,
+      component: CreatePost
     },
     {
       path: '/show/:id',
@@ -57,30 +57,24 @@ const router = createRouter({
       path: '/marketplace/category/:id',
       name: 'marketPlaceSubProduct',
       component: MarketPlaceSubProducts,
-      props : true ,
+      props: true,
       meta: {
         layout: 'default'
       }
     }
-
   ]
 })
 
 router.beforeEach((to, from, next) => {
-  const token = localStorage.getItem('token');
-  
+  const token = localStorage.getItem('token')
+
   if (to.name === 'Dashboard' && (!token || token === undefined)) {
-    next({ name: 'Landing' });
-  } else if (
-    (to.name === 'Landing' || to.name === 'SignUp' || to.name === 'SignIn') &&
-    token
-  ) {
-    next({ name: 'Dashboard' });
+    next({ name: 'Landing' })
+  } else if ((to.name === 'Landing' || to.name === 'SignUp' || to.name === 'SignIn') && token) {
+    next({ name: 'Dashboard' })
   } else {
-    next();
+    next()
   }
-});
+})
 
-export default router;
-
-
+export default router

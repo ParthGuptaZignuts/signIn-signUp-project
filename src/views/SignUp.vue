@@ -33,13 +33,17 @@ const formData = ref<User>({
   password_confirmation: ''
 })
 
-const registerCheckUser = () =>{
-  if(formData.value.name == '' || formData.value.email == '' || formData.value.password == '' || formData.value.password_confirmation == ''){
-    console.log("enter value")
-  }else{
-    registerUser();
+const registerCheckUser = () => {
+  if (
+    formData.value.name == '' ||
+    formData.value.email == '' ||
+    formData.value.password == '' ||
+    formData.value.password_confirmation == ''
+  ) {
+    console.log('enter value')
+  } else {
+    registerUser()
   }
-
 }
 const registerUser = () => {
   axios
@@ -77,7 +81,7 @@ const registerUser = () => {
         showConfirmButton: false,
         timer: 1500
       })
-      return Promise.reject(error) 
+      return Promise.reject(error)
     })
 }
 </script>
