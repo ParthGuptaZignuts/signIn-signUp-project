@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted, onBeforeUnmount, Ref } from 'vue'
+import { ref, onMounted, onBeforeUnmount,watch ,Ref } from 'vue'
 import { useRouter, RouteLocationNormalizedLoaded } from 'vue-router'
 import { items, Item, Subcategory } from '../ItemProducts'
 import { toast } from 'vue3-toastify'
@@ -17,7 +17,18 @@ const currentId: Ref<string | number> = ref(router.currentRoute.value.params.id)
 const currentSubcategories: Ref<Subcategory[]> = ref([])
 const dialogVisible: Ref<boolean> = ref(false)
 
+
+
 onMounted(() => {
+  const storedState = localStorage.getItem('dialogState');
+  if (storedState) {
+    dialogVisible.value = JSON.parse(storedState);
+  }
+
+  if (dialogVisible.value) {
+    openDialog();
+  }
+
   cart.value = loadCartFromLocalStorage()
   updateSubcategories()
   router.afterEach((to: RouteLocationNormalizedLoaded) => {
@@ -246,7 +257,6 @@ const generateBillContent = (): string => {
     (item) => `${item.title} (Quantity: ${item.quantity}) - $${(item.price * item.quantity).toFixed(2)}`
   );
   const totalAmount = calculateTotalAmount();
-  
   const billContent = `
     Order Bill - ${selectedDate}
     
@@ -261,6 +271,10 @@ const generateBillContent = (): string => {
 
   return billContent;
 };
+
+watch(dialogVisible, (newValue) => {
+  localStorage.setItem('dialogState', JSON.stringify(newValue));
+});
 </script>
 
 <template>
