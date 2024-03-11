@@ -359,7 +359,7 @@ const updateLocalStorage = (): void => {
                         <v-row>
                           <!-- Image Column -->
                           <v-col cols="2">
-                            <v-img :src="cartItem.image" max-height="100"></v-img>
+                            <v-img :src="cartItem.imageUrl" max-height="100"></v-img>
                           </v-col>
 
                           <!-- Details Column -->
