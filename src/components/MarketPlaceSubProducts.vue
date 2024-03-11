@@ -4,11 +4,11 @@ import { useRouter, RouteLocationNormalizedLoaded } from 'vue-router'
 import { items, Item, Subcategory } from '../ItemProducts'
 import { toast } from 'vue3-toastify'
 import 'vue3-toastify/dist/index.css'
+import Swal from 'sweetalert2'
 
 interface CartItem extends Item {
   quantity: number
 }
-
 const STORAGE_KEY_PREFIX = 'cartItems_'
 const cart: Ref<CartItem[]> = ref([])
 const value: Ref<Item[]> = ref(items)
@@ -142,25 +142,29 @@ const formData = ref({
 })
 
 const placeOrder = (e): void => {
-  e.preventDefault();
+  e.preventDefault()
 
   if (cart.value.length === 0) {
-    toast("Please Add Items In the Cart", {
+    toast('Please Add Items In the Cart', {
       theme: 'auto',
       type: 'error',
       dangerouslyHTMLString: true
-    });
-    return;
+    })
+    return
   }
 
-
-  if (!formData.value.name || !formData.value.cardNumber || !formData.value.expiryDate || !formData.value.cvv) {
-    toast("Please fill in all required fields", {
+  if (
+    !formData.value.name ||
+    !formData.value.cardNumber ||
+    !formData.value.expiryDate ||
+    !formData.value.cvv
+  ) {
+    toast('Please fill in all required fields', {
       theme: 'auto',
       type: 'error',
       dangerouslyHTMLString: true
-    });
-    return;
+    })
+    return
   }
   console.log('Placing order with:', formData, cart.value)
   formData.value = {
@@ -169,40 +173,59 @@ const placeOrder = (e): void => {
     expiryDate: '',
     cvv: ''
   }
-  openAddressDialog();
+  openAddressDialog()
 }
 
-// address order 
-const dialog = ref(false);
-const fullName = ref('');
-const address = ref('');
+// address order
+const dialog = ref(false)
+const fullName = ref('')
+const address = ref('')
 
 const openAddressDialog = () => {
-  dialog.value = true;
-};
+  dialog.value = true
+}
 
 const closeAddressDialog = () => {
-  fullName.value = "" ;
-  address.value = "" ;
-  dialog.value = false;
-};
+  fullName.value = ''
+  address.value = ''
+  dialog.value = false
+}
 
 const submitOrder = () => {
   if (!fullName.value || !address.value) {
-    toast("Please fill in all required fields", {
+    toast('Please fill in all required fields', {
       theme: 'auto',
       type: 'error',
       dangerouslyHTMLString: true
-    });
-    return;
+    })
+    return
   }
-  console.log('Full Name:', fullName.value);
-  console.log('Address:', address.value);
+  console.log('Full Name:', fullName.value)
+  console.log('Address:', address.value)
 
-  fullName.value = "" ;
-  address.value = "" ;
-  closeAddressDialog();
-};
+  if (fullName.value && address.value) {
+    Swal.fire({
+      icon: 'success',
+      title: 'Order Placed!',
+      text: 'Your order has been successfully placed.',
+      showConfirmButton: false,
+      timer: 1500
+    }).then(() => {
+      clearCart()
+    })
+    fullName.value = ''
+    address.value = ''
+    closeAddressDialog()
+  }
+}
+
+const clearCart = (): void => {
+  const selectedDate = localStorage.getItem('selectedDate')
+  const storageKey = STORAGE_KEY_PREFIX + selectedDate
+  localStorage.removeItem(storageKey)
+  cart.value = []
+  updateTotalAmount()
+}
 </script>
 
 <template>
@@ -211,7 +234,9 @@ const submitOrder = () => {
       <v-card>
         <!-- header -->
         <v-card-title class="d-flex align-center justify-space-between">
-          <span class="headline" style="color:#283046; font-weight:900;font-size:40px">Shopping Cart</span>
+          <span class="headline" style="color: #283046; font-weight: 900; font-size: 40px"
+            >Shopping Cart</span
+          >
           <v-btn icon @click="closeDialog" class="bg-transparent" elevation="0">
             <v-icon>mdi-close</v-icon>
           </v-btn>
@@ -232,17 +257,20 @@ const submitOrder = () => {
                           <v-col cols="2">
                             <v-img :src="cartItem.image" max-height="100"></v-img>
                           </v-col>
-        
+
                           <!-- Details Column -->
                           <v-col cols="5">
                             <v-row>
                               <v-col cols="12">
-                                <v-card-title class="item-title" style="font-size: 18px">{{ cartItem.title }}</v-card-title>
+                                <v-card-title class="item-title" style="font-size: 18px">{{
+                                  cartItem.title
+                                }}</v-card-title>
                               </v-col>
                               <v-col cols="12">
-                                <v-card-subtitle class="item-price" style="font-size: 16px">{{ `$${cartItem.price.toFixed(2)}` }}</v-card-subtitle>
+                                <v-card-subtitle class="item-price" style="font-size: 16px">{{
+                                  `$${cartItem.price.toFixed(2)}`
+                                }}</v-card-subtitle>
                               </v-col>
-                             
                             </v-row>
                           </v-col>
 
@@ -251,26 +279,41 @@ const submitOrder = () => {
                               <v-row align="center">
                                 <!-- Decrease Quantity Button -->
                                 <v-col cols="2">
-                                  <v-btn icon @click="decreaseQuantity(index)" class="quantity-btn bg-transparent" elevation="0">
+                                  <v-btn
+                                    icon
+                                    @click="decreaseQuantity(index)"
+                                    class="quantity-btn bg-transparent"
+                                    elevation="0"
+                                  >
                                     <v-icon>mdi-minus</v-icon>
                                   </v-btn>
                                 </v-col>
-      
+
                                 <!-- Quantity Display -->
                                 <v-col cols="2">
                                   <span class="item-quantity">{{ cartItem.quantity }}</span>
                                 </v-col>
-      
+
                                 <!-- Increase Quantity Button -->
                                 <v-col cols="2">
-                                  <v-btn icon @click="increaseQuantity(index)" class="quantity-btn bg-transparent" elevation="0" >
+                                  <v-btn
+                                    icon
+                                    @click="increaseQuantity(index)"
+                                    class="quantity-btn bg-transparent"
+                                    elevation="0"
+                                  >
                                     <v-icon>mdi-plus</v-icon>
                                   </v-btn>
                                 </v-col>
-      
+
                                 <!-- Delete Button -->
                                 <v-col cols="6">
-                                  <v-btn icon @click="removeItem(index)" class="delete-btn float-end bg-transparent" elevation="0" >
+                                  <v-btn
+                                    icon
+                                    @click="removeItem(index)"
+                                    class="delete-btn float-end bg-transparent"
+                                    elevation="0"
+                                  >
                                     <v-icon>mdi-delete</v-icon>
                                   </v-btn>
                                 </v-col>
@@ -283,7 +326,7 @@ const submitOrder = () => {
                   </v-list-item-content>
                 </v-list-item>
               </v-list-item-group>
-        
+
               <!-- No items message -->
               <v-list-item v-else>
                 <v-list-item-content>No items in the cart</v-list-item-content>
@@ -292,7 +335,7 @@ const submitOrder = () => {
           </v-col>
 
           <!-- right side -->
-          <v-col cols="12" md="4" style="margin: auto ; margin-left: -20px;">
+          <v-col cols="12" md="4" style="margin: auto; margin-left: -20px">
             <v-card
               class="total-card"
               elevation="3"
@@ -318,7 +361,7 @@ const submitOrder = () => {
                 <!-- Payment Form Section -->
                 <v-row>
                   <v-col>
-                    <v-form >
+                    <v-form>
                       <v-text-field
                         v-model="formData.name"
                         label="Name"
@@ -355,7 +398,9 @@ const submitOrder = () => {
                       <v-row>
                         <v-col>
                           <div class="demo-space-x">
-                            <VBtn variant="flat" color="info" @click="placeOrder" type="submit"> Place Order </VBtn>
+                            <VBtn variant="flat" color="info" @click="placeOrder" type="submit">
+                              Place Order
+                            </VBtn>
                           </div>
                         </v-col>
                       </v-row>
@@ -369,9 +414,19 @@ const submitOrder = () => {
                     <v-card-title>Order Details</v-card-title>
                     <v-card-text>
                       <v-form ref="orderForm" @submit.prevent="submitOrder">
-                        <v-text-field v-model="fullName" label="Full Name" required variant="outlined"></v-text-field>
-                        <v-text-field v-model="address" label="Address" required variant="outlined"></v-text-field>
-            
+                        <v-text-field
+                          v-model="fullName"
+                          label="Full Name"
+                          required
+                          variant="outlined"
+                        ></v-text-field>
+                        <v-text-field
+                          v-model="address"
+                          label="Address"
+                          required
+                          variant="outlined"
+                        ></v-text-field>
+
                         <v-card-actions>
                           <v-btn color="primary" type="submit">Submit</v-btn>
                           <v-btn color="error" @click="closeAddressDialog">Cancel</v-btn>
@@ -380,7 +435,6 @@ const submitOrder = () => {
                     </v-card-text>
                   </v-card>
                 </v-dialog>
-
               </v-container>
             </v-card>
           </v-col>
@@ -520,5 +574,4 @@ const submitOrder = () => {
 .delete-col {
   text-align: right;
 }
-
 </style>
