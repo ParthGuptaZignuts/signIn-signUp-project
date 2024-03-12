@@ -26,10 +26,10 @@ const getRandomColor = () => {
         <VCard :color="getRandomColor()" max-width="400" hover>
           <VCardTitle>{{ item.title }}</VCardTitle>
           <VCard-subtitle>{{ item.description }}</VCard-subtitle>
-          <VCard-text>{{ item.category }}</VCard-text>
-          <VCard-actions>
+          <VCardText>{{ item.category }}</VCardText>
+          <VCardActions>
             <VBtn color="#000" :to="`/marketplace/category/${item.id}`">Explore</VBtn>
-          </VCard-actions>
+          </VCardActions>
         </VCard>
       </VCol>
     </VRow>

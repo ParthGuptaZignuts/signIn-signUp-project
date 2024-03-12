@@ -1,13 +1,6 @@
 <script setup lang="ts">
-import {
-  ref,
-  onMounted,
-  onBeforeUnmount,
-  watch,
-  type Ref,
-} from 'vue'
-
-import { useRouter, type RouteLocationNormalizedLoaded} from 'vue-router'
+import { ref, onMounted, onBeforeUnmount, type Ref } from 'vue'
+import { useRouter } from 'vue-router'
 import { items, type Items, type SubCategory } from '../ItemProducts'
 import { toast } from 'vue3-toastify'
 import 'vue3-toastify/dist/index.css'
@@ -23,27 +16,13 @@ const STORAGE_KEY_PREFIX = 'cartItems_'
 const cart: Ref<CartItem[]> = ref([])
 const value: Ref<Items[]> = ref(items)
 const router = useRouter()
-const currentId =ref<any>(router.currentRoute.value.params.id)
+const currentId = ref<any>(router.currentRoute.value.params.id)
 const currentSubcategories: Ref<SubCategory[]> = ref([])
-const dialogVisible = ref<boolean>(false)
+
 
 onMounted(() => {
-  const storedState = localStorage.getItem('dialogState')
-  if (storedState) {
-    dialogVisible.value = JSON.parse(storedState)
-  }
-
-  if (dialogVisible.value) {
-    openDialog()
-  }
-
   updateSubcategories()
   cart.value = loadCartFromLocalStorage()
-  router.afterEach((to: RouteLocationNormalizedLoaded) => {
-    currentId.value = to.params.id
-    updateSubcategories()
-  })
-
   updateTotalAmount()
 })
 
@@ -66,11 +45,6 @@ function loadCartFromLocalStorage(): CartItem[] {
     return []
   }
 }
-
-const openDialog = (): void => {
-  dialogVisible.value = true
-}
-
 
 const filterSubcategories = (itemId: string | number): SubCategory[] => {
   const currentItem = value.value.find((item) => item.id === itemId)
@@ -211,8 +185,8 @@ const submitOrder = () => {
       showConfirmButton: false,
       timer: 1500
     }).then(() => {
-    downloadBill() 
-    clearCart() 
+      downloadBill()
+      clearCart()
     })
     fullName.value = ''
     address.value = ''
@@ -236,7 +210,6 @@ const downloadBill = (): void => {
   link.download = 'order_bill.txt'
   link.click()
 }
-
 const generateBillContent = (): string => {
   const selectedDate = localStorage.getItem('selectedDate')
   const fullName = formData.value.name
@@ -260,10 +233,6 @@ const generateBillContent = (): string => {
 
   return billContent
 }
-watch(dialogVisible, (newValue) => {
-  localStorage.setItem('dialogState', JSON.stringify(newValue))
-})
-
 // update local storage
 const updateLocalStorage = (): void => {
   const selectedDate = localStorage.getItem('selectedDate')
@@ -272,218 +241,214 @@ const updateLocalStorage = (): void => {
   updateTotalAmount()
 }
 const goback = () => {
-  router.go(-1);
+  router.go(-1)
 }
 </script>
 
 <template>
-    <VCard>
-        <!-- header -->
-        <VCardTitle class="d-flex align-center justify-space-between">
-          <span class="headline" style="color: #283046; font-weight: 900; font-size: 40px"
-            >Shopping Cart</span
-          >
-          <VBtn @click="goback" class="bg-transparent" elevation="0">
-            <VIcon>mdi-close</VIcon>
-          </VBtn>
-        </VCardTitle>
-        <VDivider></VDivider>
+  <VCard >
+    <!-- header -->
+    <VCardTitle class="d-flex align-center justify-space-between">
+      <span class="headline" style="color: #283046; font-weight: 900; font-size: 40px"
+        >Shopping Cart</span
+      >
+      <VBtn @click="goback" class="bg-transparent" elevation="0">
+        <VIcon>mdi-close</VIcon>
+      </VBtn>
+    </VCardTitle>
+    <VDivider></VDivider>
 
-        <VRow>
-          <!-- left side  -->
-          <VCol cols="12" md="8">
-            <VList>
-              <VListItemGroup v-if="cart.length > 0">
-                <VListItem v-for="(cartItem, index) in cart" :key="index">
-                  <VListItemContent>
-                    <VCard class="cart-item-card" elevation="3" style="background-color: #f9f9f9">
-                      <VContainer>
+    <VRow>
+      <!-- left side  -->
+      <VCol cols="12" md="8">
+        <VList>
+          <VListItemGroup v-if="cart.length > 0">
+            <VListItem v-for="(cartItem, index) in cart" :key="index">
+              <VListItemContent>
+                <VCard class="cart-item-card" elevation="3" style="background-color: #f9f9f9">
+                  <VContainer>
+                    <VRow>
+                      <!-- Image Column -->
+                      <VCol cols="2">
+                        <VImg :src="cartItem.imageUrl" max-height="100"></VImg>
+                      </VCol>
+
+                      <!-- Details Column -->
+                      <VCol cols="5">
                         <VRow>
-                          <!-- Image Column -->
-                          <VCol cols="2">
-                            <VImg :src="cartItem.imageUrl" max-height="100"></VImg>
+                          <VCol cols="12">
+                            <VCardTitle class="item-title" style="font-size: 18px">{{
+                              cartItem.title
+                            }}</VCardTitle>
                           </VCol>
-
-                          <!-- Details Column -->
-                          <VCol cols="5">
-                            <VRow>
-                              <VCol cols="12">
-                                <VCardTitle class="item-title" style="font-size: 18px">{{
-                                  cartItem.title
-                                }}</VCardTitle>
-                              </VCol>
-                              <VCol cols="12">
-                                <VCard-subtitle class="item-price" style="font-size: 16px">{{
-                                  `$${cartItem.price.toFixed(2)}`
-                                }}</VCard-subtitle>
-                              </VCol>
-                            </VRow>
-                          </VCol>
-
-                          <VCol cols="5">
-                            <VCol cols="12">
-                              <VRow align="center">
-                                <!-- Decrease Quantity Button -->
-                                <VCol cols="2">
-                                  <VBtn
-                                    icon
-                                    @click="decreaseQuantity(index)"
-                                    class="quantity-btn bg-transparent"
-                                    elevation="0"
-                                  >
-                                    <VIcon>mdi-minus</VIcon>
-                                  </VBtn>
-                                </VCol>
-
-                                <!-- Quantity Display -->
-                                <VCol cols="2">
-                                  <span class="item-quantity">{{ cartItem.quantity }}</span>
-                                </VCol>
-
-                                <!-- Increase Quantity Button -->
-                                <VCol cols="2">
-                                  <VBtn
-                                    icon
-                                    @click="increaseQuantity(index)"
-                                    class="quantity-btn bg-transparent"
-                                    elevation="0"
-                                  >
-                                    <VIcon>mdi-plus</VIcon>
-                                  </VBtn>
-                                </VCol>
-
-                                <!-- Delete Button -->
-                                <VCol cols="6">
-                                  <VBtn
-                                    icon
-                                    @click="removeItem(index)"
-                                    class="delete-btn float-end bg-transparent"
-                                    elevation="0"
-                                  >
-                                    <VIcon>mdi-delete</VIcon>
-                                  </VBtn>
-                                </VCol>
-                              </VRow>
-                            </VCol>
+                          <VCol cols="12">
+                            <VCard-subtitle class="item-price" style="font-size: 16px">{{
+                              `$${cartItem.price.toFixed(2)}`
+                            }}</VCard-subtitle>
                           </VCol>
                         </VRow>
-                      </VContainer>
-                    </VCard>
-                  </VListItemContent>
-                </VListItem>
-              </VListItemGroup>
+                      </VCol>
 
-              <!-- No items message -->
-              <VListItem v-else>
-                <VListItemContent>No items in the cart</VListItemContent>
-              </VListItem>
-            </VList>
-          </VCol>
+                      <VCol cols="5">
+                        <VCol cols="12">
+                          <VRow align="center">
+                            <!-- Decrease Quantity Button -->
+                            <VCol cols="2">
+                              <VBtn
+                                icon
+                                @click="decreaseQuantity(index)"
+                                class="quantity-btn bg-transparent"
+                                elevation="0"
+                              >
+                                <VIcon>mdi-minus</VIcon>
+                              </VBtn>
+                            </VCol>
 
-          <!-- right side -->
-          <VCol cols="12" md="4" style="margin: auto; margin-left: -20px">
-            <VCard
-              class="total-card"
-              elevation="3"
-              style="border-radius: 15px; background-color: #283046; height: 800px; color: white"
-            >
-              <VContainer>
-                <!-- Total Amount Section -->
-                <VRow>
-                  <VCol>
-                    <VCardTitle class="total-title" style="font-size: 20px">
-                      Total Amount
-                    </VCardTitle>
-                    <VCard-subtitle class="total-amount" style="font-size: 18px">
-                      ${{ totalAmount.toFixed(2) }}
-                    </VCard-subtitle>
-                    <VDivider></VDivider>
-                    <VCard-subtitle class="item-count"
-                      >Items in Cart: {{ cart.length }}</VCard-subtitle
-                    >
-                  </VCol>
-                </VRow>
+                            <!-- Quantity Display -->
+                            <VCol cols="2">
+                              <span class="item-quantity">{{ cartItem.quantity }}</span>
+                            </VCol>
 
-                <!-- Payment Form Section -->
-                <VRow>
-                  <VCol>
-                    <VForm>
+                            <!-- Increase Quantity Button -->
+                            <VCol cols="2">
+                              <VBtn
+                                icon
+                                @click="increaseQuantity(index)"
+                                class="quantity-btn bg-transparent"
+                                elevation="0"
+                              >
+                                <VIcon>mdi-plus</VIcon>
+                              </VBtn>
+                            </VCol>
+
+                            <!-- Delete Button -->
+                            <VCol cols="6">
+                              <VBtn
+                                icon
+                                @click="removeItem(index)"
+                                class="delete-btn float-end bg-transparent"
+                                elevation="0"
+                              >
+                                <VIcon>mdi-delete</VIcon>
+                              </VBtn>
+                            </VCol>
+                          </VRow>
+                        </VCol>
+                      </VCol>
+                    </VRow>
+                  </VContainer>
+                </VCard>
+              </VListItemContent>
+            </VListItem>
+          </VListItemGroup>
+
+          <!-- No items message -->
+          <VListItem v-else>
+            <VListItemContent>No items in the cart</VListItemContent>
+          </VListItem>
+        </VList>
+      </VCol>
+
+      <!-- right side -->
+      <VCol cols="12" md="4" >
+        <VCard
+          class="total-card"
+          elevation="3"
+          style="border-radius: 15px; background-color: #283046; height: 800px; color: white;"
+        >
+          <VContainer>
+            <!-- Total Amount Section -->
+            <VRow>
+              <VCol>
+                <VCardTitle class="total-title" style="font-size: 20px"> Total Amount </VCardTitle>
+                <VCard-subtitle class="total-amount" style="font-size: 18px">
+                  ${{ totalAmount.toFixed(2) }}
+                </VCard-subtitle>
+                <VDivider></VDivider>
+                <VCard-subtitle class="item-count">Items in Cart: {{ cart.length }}</VCard-subtitle>
+              </VCol>
+            </VRow>
+
+            <!-- Payment Form Section -->
+            <VRow>
+              <VCol>
+                <VForm>
+                  <VTextField
+                    v-model="formData.name"
+                    label="Name"
+                    required="true"
+                    variant="outlined"
+                  ></VTextField>
+                  <VTextField
+                    v-model="formData.cardNumber"
+                    type="number"
+                    label="Card Number"
+                    required="true"
+                    variant="outlined"
+                  ></VTextField>
+                  <VRow>
+                    <VCol>
                       <VTextField
-                        v-model="formData.name"
-                        label="Name"
+                        v-model="formData.expiryDate"
+                        label="Expiry Date"
                         required="true"
+                        type="date"
                         variant="outlined"
                       ></VTextField>
+                    </VCol>
+                    <VCol>
                       <VTextField
-                        v-model="formData.cardNumber"
-                        type="number"
-                        label="Card Number"
+                        v-model="formData.cvv"
+                        label="CVV"
                         required="true"
                         variant="outlined"
+                        type="password"
                       ></VTextField>
-                      <VRow>
-                        <VCol>
-                          <VTextField
-                            v-model="formData.expiryDate"
-                            label="Expiry Date"
-                            required="true"
-                            type="date"
-                            variant="outlined"
-                          ></VTextField>
-                        </VCol>
-                        <VCol>
-                          <VTextField
-                            v-model="formData.cvv"
-                            label="CVV"
-                            required="true"
-                            variant="outlined"
-                            type="password"
-                          ></VTextField>
-                        </VCol>
-                      </VRow>
-                      <VRow>
-                        <VCol>
-                          <div class="demo-space-x">
-                            <VBtn variant="flat" color="info" @click="placeOrder" type="submit">
-                              Place Order
-                            </VBtn>
-                          </div>
-                        </VCol>
-                      </VRow>
-                    </VForm>
-                  </VCol>
-                </VRow>
+                    </VCol>
+                  </VRow>
+                  <VRow>
+                    <VCol>
+                      <div class="demo-space-x">
+                        <VBtn variant="flat" color="info" @click="placeOrder" type="submit">
+                          Place Order
+                        </VBtn>
+                      </div>
+                    </VCol>
+                  </VRow>
+                </VForm>
+              </VCol>
+            </VRow>
 
-                <!-- address order -->
-                <VDialog v-model="dialog" max-width="600px">
-                  <VCard>
-                    <VCardTitle>Order Details</VCardTitle>
-                    <VCard-text>
-                      <VForm ref="orderForm" @submit.prevent="submitOrder">
-                        <VTextField
-                          v-model="fullName"
-                          label="Full Name"
-                          required
-                          variant="outlined"
-                        ></VTextField>
-                        <VTextField
-                          v-model="address"
-                          label="Address"
-                          required
-                          variant="outlined"
-                        ></VTextField>
+            <!-- address order -->
+            <VDialog v-model="dialog" max-width="600px">
+              <VCard>
+                <VCardTitle>Order Details</VCardTitle>
+                <VCardText>
+                  <VForm ref="orderForm" @submit.prevent="submitOrder">
+                    <VTextField
+                      v-model="fullName"
+                      label="Full Name"
+                      required
+                      variant="outlined"
+                    ></VTextField>
+                    <VTextField
+                      v-model="address"
+                      label="Address"
+                      required
+                      variant="outlined"
+                    ></VTextField>
 
-                        <VCard-actions>
-                          <VBtn color="primary" type="submit">Submit</VBtn>
-                          <VBtn color="error" @click="closeAddressDialog">Cancel</VBtn>
-                        </VCard-actions>
-                      </VForm>
-                    </VCard-text>
-                  </VCard>
-                </VDialog>
-              </VContainer>
-            </VCard>
-          </VCol>
-        </VRow>
-      </VCard>
+                    <VCardActions>
+                      <VBtn color="primary" type="submit">Submit</VBtn>
+                      <VBtn color="error" @click="closeAddressDialog">Cancel</VBtn>
+                    </VCardActions>
+                  </VForm>
+                </VCardText>
+              </VCard>
+            </VDialog>
+          </VContainer>
+        </VCard>
+      </VCol>
+    </VRow>
+  </VCard>
 </template>

@@ -68,6 +68,39 @@ const updateSubcategories = () => {
   currentSubcategories.value = filterSubcategories(currentId.value)
 }
 
+const removeFromCart = (itemId: SubCategory): void => {
+  const selectedDate = localStorage.getItem('selectedDate')
+  const storageKey = STORAGE_KEY_PREFIX + selectedDate
+  const existingItems = JSON.parse(localStorage.getItem(storageKey)) || []
+  const updatedItems = existingItems.filter(
+    (cartItem: { id: any }) => cartItem.id !== itemId
+  )
+
+  localStorage.setItem(storageKey, JSON.stringify(updatedItems))
+  cart.value = [...updatedItems]
+  updateLocalStorage()
+  updateTotalAmount()
+  toast(`Item removed from cart`, {
+    theme: 'auto',
+    type: 'error',
+    dangerouslyHTMLString: true
+  })
+}
+
+const isInCart = (itemId) => {
+  return cart.value.some((item) => item.id === itemId);
+};
+
+
+const toggleCartItem = (item) => {
+  if (isInCart(item.id)) {
+    removeFromCart(item.id);
+  } else {
+    addToCart(item);
+  }
+};
+
+
 onMounted(() => {
   updateSubcategories()
   const selectedDate = localStorage.getItem('selectedDate')
@@ -109,9 +142,17 @@ onMounted(() => {
           <div class="custom-card-title">{{ subcategory.title }}</div>
           <div class="custom-card-text">{{ subcategory.description }}</div>
           <div class="custom-card-subtitle">{{ `$${subcategory.price.toFixed(2)}` }}</div>
-          <VBtn @click="addToCart(subcategory)" class="custom-card-button">
-            <VIcon>mdi mdi-cart-plus</VIcon>Add to Cart</VBtn
-          >
+          
+          <VBtn
+          @click="toggleCartItem(subcategory)"
+          :class="{ 'custom-card-button-delete': isInCart(subcategory.id), 'custom-card-button': !isInCart(subcategory.id) }"
+        >
+          <VIcon v-if="isInCart(subcategory.id)">mdi mdi-delete</VIcon>
+          <VIcon v-else>mdi mdi-cart-plus</VIcon>
+          <span v-if="isInCart(subcategory.id)">Remove from Cart</span>
+          <span v-else>Add to Cart</span>
+        </VBtn>
+
         </VCard>
       </VCol>
     </VRow>
@@ -153,7 +194,11 @@ onMounted(() => {
   background-color: #2196f3;
   color: white;
 }
-
+.custom-card-button-delete {
+  margin-top: auto;
+  background-color:red;
+  color: white;
+}
 .item-title {
   font-size: 18px;
   font-weight: bold;
