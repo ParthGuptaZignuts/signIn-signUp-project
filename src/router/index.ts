@@ -7,6 +7,7 @@ import CreatePost from '@/views/CreatePost.vue'
 import ProjectDetails from '@/components/ProjectDetails.vue'
 import MarketPlace from '@/views/MarketPlace.vue'
 import MarketPlaceSubProducts from '@/components/MarketPlaceSubProducts.vue'
+import MarketCart from '@/components/MarketCart.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -58,6 +59,14 @@ const router = createRouter({
       name: 'marketPlaceSubProduct',
       component: MarketPlaceSubProducts,
       props: true,
+      meta: {
+        layout: 'default'
+      }
+    },
+    {
+      path:'/marketplace/cart',
+      name: 'MarketCart',
+      component:MarketCart,
       meta: {
         layout: 'default'
       }

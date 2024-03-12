@@ -2,9 +2,9 @@
 import { ref, watch } from 'vue'
 import MarketPlaceProducts from './MarketPlaceProducts.vue'
 
-const isVisible = ref(true)
+const isVisible = ref<boolean>(true)
 const currentDate = new Date()
-const selectedDate = ref()
+const selectedDate = ref<any>()
 const showProduct = ref(false)
 
 watch(selectedDate, (newVal) => {

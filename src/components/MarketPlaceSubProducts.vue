@@ -22,7 +22,7 @@ const value: Ref<Item[]> = ref(items)
 const router = useRouter()
 const currentId : Ref<string | number> = ref(router.currentRoute.value.params.id)
 const currentSubcategories: Ref<Subcategory[]> = ref([])
-const dialogVisible: Ref<boolean> = ref(false)
+const dialogVisible = ref<boolean>(false)
 
 onMounted(() => {
   const storedState = localStorage.getItem('dialogState')
@@ -515,7 +515,8 @@ const updateLocalStorage = (): void => {
     <h1>
       <router-link to="/marketplace"><VIcon>mdi mdi-chevron-left</VIcon></router-link>
       {{ currentSubcategories[0]?.parentCategory }}
-      <VIcon class="float-end mt-5" size="30" @click="openDialog">mdi mdi-cart-check</VIcon>
+      <!-- <VIcon class="float-end mt-5" size="30" @click="openDialog">mdi mdi-cart-check</VIcon> -->
+      <VBtn class="float-end mt-5 bg-transparent" elevation="0" :to="`/marketplace/cart`"><VIcon  size="30">mdi mdi-cart-check</VIcon></VBtn>
     </h1>
 
     <VRow class="pt-5">
