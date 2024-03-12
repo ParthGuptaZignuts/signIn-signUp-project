@@ -271,6 +271,9 @@ const updateLocalStorage = (): void => {
   localStorage.setItem(storageKey, JSON.stringify(cart.value))
   updateTotalAmount()
 }
+const goback = () => {
+  router.go(-1);
+}
 </script>
 
 <template>
@@ -280,7 +283,7 @@ const updateLocalStorage = (): void => {
           <span class="headline" style="color: #283046; font-weight: 900; font-size: 40px"
             >Shopping Cart</span
           >
-          <VBtn :to="`/marketplace`" class="bg-transparent" elevation="0">
+          <VBtn @click="goback" class="bg-transparent" elevation="0">
             <VIcon>mdi-close</VIcon>
           </VBtn>
         </VCardTitle>
