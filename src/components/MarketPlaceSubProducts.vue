@@ -87,12 +87,12 @@ const removeFromCart = (itemId: SubCategory): void => {
   })
 }
 
-const isInCart = (itemId) => {
-  return cart.value.some((item) => item.id === itemId);
+const isInCart = (itemId: any) => {
+  return cart.value.some((item: { id: any }) => item.id === itemId);
 };
 
 
-const toggleCartItem = (item) => {
+const toggleCartItem = (item: SubCategory) => {
   if (isInCart(item.id)) {
     removeFromCart(item.id);
   } else {
