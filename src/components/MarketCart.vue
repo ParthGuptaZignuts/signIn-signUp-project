@@ -185,8 +185,8 @@ const submitOrder = () => {
       showConfirmButton: false,
       timer: 1500
     }).then(() => {
-      clearCart()
       downloadBill()
+      clearCart()
     })
     fullName.value = ''
     address.value = ''
@@ -211,26 +211,21 @@ const downloadBill = (): void => {
   link.click()
 }
 const generateBillContent = (): string => {
-  const selectedDate = localStorage.getItem('selectedDate')
-  const fullName = formData.value.name
+  const selectedDate = localStorage.getItem('selectedDate');
   const itemsInCart = cart.value.map(
     (item) =>
       `${item.title} (Quantity: ${item.quantity}) - $${(item.price * item.quantity).toFixed(2)}`
-  )
-  const totalAmount = calculateTotalAmount()
+  );
+  const totalAmountValue = calculateTotalAmount();
   const billContent = `
-    Order Bill - ${selectedDate}
-    
-    Name: ${fullName}
-    
+    Order Bill - ${selectedDate}    
     Items in Cart:
     ${itemsInCart.join('\n')}
-    
-    Total Amount: $${totalAmount}
-  `
+    Total Amount: $${totalAmountValue}
+  `;
 
-  return billContent
-}
+  return billContent;
+};
 // update local storage
 const updateLocalStorage = (): void => {
   const selectedDate = localStorage.getItem('selectedDate')
