@@ -4,24 +4,27 @@ import {
   onMounted,
   onBeforeUnmount,
   watch,
-  Ref,
+  type Ref,
 } from 'vue'
-import { useRouter, RouteLocationNormalizedLoaded, Router } from 'vue-router'
-import { items, Item, Subcategory } from '../ItemProducts'
+
+import { useRouter, type RouteLocationNormalizedLoaded} from 'vue-router'
+import { items, type Items, type SubCategory } from '../ItemProducts'
 import { toast } from 'vue3-toastify'
 import 'vue3-toastify/dist/index.css'
 import Swal from 'sweetalert2'
 
-interface CartItem extends Item {
+interface CartItem extends Items {
+  imageUrl: string | Object | undefined
+  price: number
   quantity: number
 }
 
 const STORAGE_KEY_PREFIX = 'cartItems_'
 const cart: Ref<CartItem[]> = ref([])
-const value: Ref<Item[]> = ref(items)
+const value: Ref<Items[]> = ref(items)
 const router = useRouter()
-const currentId : Ref<string | number> = ref(router.currentRoute.value.params.id)
-const currentSubcategories: Ref<Subcategory[]> = ref([])
+const currentId =ref<any>(router.currentRoute.value.params.id)
+const currentSubcategories: Ref<SubCategory[]> = ref([])
 const dialogVisible = ref<boolean>(false)
 
 onMounted(() => {
@@ -68,11 +71,8 @@ const openDialog = (): void => {
   dialogVisible.value = true
 }
 
-const closeDialog = (): void => {
-  dialogVisible.value = false
-}
 
-const filterSubcategories = (itemId: string | number): Subcategory[] => {
+const filterSubcategories = (itemId: string | number): SubCategory[] => {
   const currentItem = value.value.find((item) => item.id === itemId)
   return currentItem ? currentItem.subCategory : []
 }
@@ -95,30 +95,6 @@ const decreaseQuantity = (index: number): void => {
   }
   updateLocalStorage()
   updateTotalAmount()
-}
-
-const addToCart = (item: Subcategory): void => {
-  const selectedDate = localStorage.getItem('selectedDate')
-  const storageKey = STORAGE_KEY_PREFIX + selectedDate
-  const existingItems = JSON.parse(localStorage.getItem(storageKey)) || []
-  const existingItemIndex = existingItems.findIndex((cartItem) => cartItem.id === item.id)
-
-  if (existingItemIndex !== -1) {
-    existingItems[existingItemIndex].quantity++
-  } else {
-    item.quantity = 1
-    existingItems.push(item)
-  }
-
-  localStorage.setItem(storageKey, JSON.stringify(existingItems))
-  cart.value = [...existingItems]
-  updateLocalStorage()
-  updateTotalAmount()
-  toast(`${item.title} added to cart`, {
-    theme: 'auto',
-    type: 'success',
-    dangerouslyHTMLString: true
-  })
 }
 
 const removeFromCart = (index: number): void => {
@@ -164,7 +140,7 @@ const formData = ref({
   cvv: ''
 })
 
-const placeOrder = (e): void => {
+const placeOrder = (e: { preventDefault: () => void }): void => {
   e.preventDefault()
 
   if (cart.value.length === 0) {
@@ -251,7 +227,6 @@ const clearCart = (): void => {
   cart.value = []
   updateTotalAmount()
 }
-
 // download bill
 const downloadBill = (): void => {
   const billContent = generateBillContent()
@@ -509,4 +484,3 @@ const updateLocalStorage = (): void => {
         </VRow>
       </VCard>
 </template>
-

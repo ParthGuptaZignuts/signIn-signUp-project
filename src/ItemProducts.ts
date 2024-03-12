@@ -1,6 +1,7 @@
 import { ref } from 'vue'
 
-interface SubCategory {
+export interface SubCategory {
+  quantity: number
   id: string
   parentCategory: string
   title: string
@@ -9,7 +10,7 @@ interface SubCategory {
   imageUrl: string
 }
 
-interface Items {
+export interface Items {
   id: string
   title: string
   description: string
