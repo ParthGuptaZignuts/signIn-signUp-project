@@ -185,8 +185,8 @@ const submitOrder = () => {
       showConfirmButton: false,
       timer: 1500
     }).then(() => {
-      downloadBill()
       clearCart()
+      downloadBill()
     })
     fullName.value = ''
     address.value = ''
@@ -213,7 +213,6 @@ const downloadBill = (): void => {
 const generateBillContent = (): string => {
   const selectedDate = localStorage.getItem('selectedDate')
   const fullName = formData.value.name
-  const address = address.value
   const itemsInCart = cart.value.map(
     (item) =>
       `${item.title} (Quantity: ${item.quantity}) - $${(item.price * item.quantity).toFixed(2)}`
@@ -223,7 +222,6 @@ const generateBillContent = (): string => {
     Order Bill - ${selectedDate}
     
     Name: ${fullName}
-    Address: ${address}
     
     Items in Cart:
     ${itemsInCart.join('\n')}
