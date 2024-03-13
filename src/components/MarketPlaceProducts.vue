@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import { items } from '../ItemProducts'
 const value = ref(items)
 const lightColors = ['#E5FAFB', '#FDEDE8', '#FEF5E5', '#E6FFFA']

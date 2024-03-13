@@ -145,7 +145,6 @@ const placeOrder = (e: { preventDefault: () => void }): void => {
     return
   }
 
-  console.log('Placing order with:', formData, cart.value)
   formData.value = {
     name: '',
     cardNumber: '',
@@ -179,10 +178,13 @@ const submitOrder = () => {
     })
     return
   }
-  console.log('Full Name:', fullName.value)
-  console.log('Address:', address.value)
 
   if (fullName.value && address.value) {
+    const orderDetails: { 'Full Name': string | null ; Address: string | null } =  {
+      'Full Name': fullName.value,
+      Address: address.value
+    }
+    localStorage.setItem('OrderDetails', JSON.stringify(orderDetails))
     Swal.fire({
       icon: 'success',
       title: 'Order Placed!',
@@ -203,6 +205,7 @@ const clearCart = (): void => {
   const selectedDate = localStorage.getItem('selectedDate')
   const storageKey = STORAGE_KEY_PREFIX + selectedDate
   localStorage.removeItem(storageKey)
+  localStorage.removeItem('OrderDetails');
   cart.value = []
   updateTotalAmount()
 }
@@ -217,13 +220,18 @@ const downloadBill = (): void => {
 }
 const generateBillContent = (): string => {
   const selectedDate = localStorage.getItem('selectedDate')
+  const orderDetailsString  = localStorage.getItem('OrderDetails');
+  const orderDetails = JSON.parse(orderDetailsString);
+  console.log(orderDetails);
   const itemsInCart = cart.value.map(
     (item) =>
       `${item.title} (Quantity: ${item.quantity}) - $${(item.price * item.quantity).toFixed(2)}`
   )
   const totalAmountValue = calculateTotalAmount()
   const billContent = `
-    Order Bill - ${selectedDate}    
+    Order Bill - ${selectedDate} 
+    Name - ${orderDetails["Full Name"]}
+    Address - ${orderDetails.Address}
     Items in Cart:
     ${itemsInCart.join('\n')}
     Total Amount: $${totalAmountValue}
@@ -488,4 +496,3 @@ const limitCvvNumberLength = (event: Event) => {
     </VRow>
   </VCard>
 </template>
-
