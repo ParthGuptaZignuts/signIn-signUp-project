@@ -410,6 +410,7 @@ const limitCvvNumberLength = (event: Event) => {
                     required="true"
                     variant="outlined"
                     :rules="[nameValidationRule]"
+                    maxlength="40"
                   ></VTextField>
                   <VTextField
                     v-model="formData.cardNumber"
@@ -474,12 +475,14 @@ const limitCvvNumberLength = (event: Event) => {
                       required
                       variant="outlined"
                       :rules="[nameValidationRule]"
+                      maxlength="40"
                     ></VTextField>
                     <VTextField
                       v-model="address"
                       label="Address"
                       required
                       variant="outlined"
+                      maxlength="90"
                     ></VTextField>
 
                     <VCardActions>
