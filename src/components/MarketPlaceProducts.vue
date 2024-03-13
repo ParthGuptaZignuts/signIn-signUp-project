@@ -2,9 +2,8 @@
 import { ref } from 'vue'
 import { items } from '../ItemProducts'
 const value = ref(items)
-const lightColors = ["#E5FAFB", "#FDEDE8", "#FEF5E5", "#E6FFFA"]
+const lightColors = ['#E5FAFB', '#FDEDE8', '#FEF5E5', '#E6FFFA']
 const getRandomIndex = () => Math.floor(Math.random() * lightColors.length)
-
 const getRandomColor = () => {
   const randomIndex = getRandomIndex()
   return lightColors[randomIndex]

@@ -1,10 +1,11 @@
 <script setup lang="ts">
-import { ref, onMounted, onBeforeUnmount, type Ref } from 'vue'
+import { ref, type Ref, onMounted, onBeforeUnmount, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { items, type Items, type SubCategory } from '../ItemProducts'
 import { toast } from 'vue3-toastify'
 import 'vue3-toastify/dist/index.css'
 import Swal from 'sweetalert2'
+import { nameValidationRule, cardNumberValidationRule, cardCvvValidationRule } from '../validation'
 
 interface CartItem extends Items {
   imageUrl: string | Object | undefined
@@ -19,7 +20,6 @@ const router = useRouter()
 const currentId = ref<any>(router.currentRoute.value.params.id)
 const currentSubcategories: Ref<SubCategory[]> = ref([])
 
-
 onMounted(() => {
   updateSubcategories()
   cart.value = loadCartFromLocalStorage()
@@ -32,7 +32,7 @@ onBeforeUnmount(() => {
   localStorage.setItem(storageKey, JSON.stringify(cart.value))
 })
 
-function loadCartFromLocalStorage(): CartItem[] {
+const loadCartFromLocalStorage = (): CartItem[] => {
   const selectedDate = localStorage.getItem('selectedDate')
   const storageKey = STORAGE_KEY_PREFIX + selectedDate
   const storedItems = JSON.parse(localStorage.getItem(storageKey))
@@ -114,6 +114,16 @@ const formData = ref({
   cvv: ''
 })
 
+const isFormValid = computed(() => {
+  return (
+    formData.value.name &&
+    formData.value.cardNumber &&
+    formData.value.expiryDate &&
+    formData.value.cvv &&
+    !/\d/.test(formData.value.name)
+  )
+})
+
 const placeOrder = (e: { preventDefault: () => void }): void => {
   e.preventDefault()
 
@@ -126,13 +136,8 @@ const placeOrder = (e: { preventDefault: () => void }): void => {
     return
   }
 
-  if (
-    !formData.value.name ||
-    !formData.value.cardNumber ||
-    !formData.value.expiryDate ||
-    !formData.value.cvv
-  ) {
-    toast('Please fill in all required fields', {
+  if (!isFormValid.value) {
+    toast('Please fill in all required fields correctly', {
       theme: 'auto',
       type: 'error',
       dangerouslyHTMLString: true
@@ -211,21 +216,22 @@ const downloadBill = (): void => {
   link.click()
 }
 const generateBillContent = (): string => {
-  const selectedDate = localStorage.getItem('selectedDate');
+  const selectedDate = localStorage.getItem('selectedDate')
   const itemsInCart = cart.value.map(
     (item) =>
       `${item.title} (Quantity: ${item.quantity}) - $${(item.price * item.quantity).toFixed(2)}`
-  );
-  const totalAmountValue = calculateTotalAmount();
+  )
+  const totalAmountValue = calculateTotalAmount()
   const billContent = `
     Order Bill - ${selectedDate}    
     Items in Cart:
     ${itemsInCart.join('\n')}
     Total Amount: $${totalAmountValue}
-  `;
+  `
 
-  return billContent;
-};
+  return billContent
+}
+
 // update local storage
 const updateLocalStorage = (): void => {
   const selectedDate = localStorage.getItem('selectedDate')
@@ -233,13 +239,37 @@ const updateLocalStorage = (): void => {
   localStorage.setItem(storageKey, JSON.stringify(cart.value))
   updateTotalAmount()
 }
+
 const goback = () => {
   router.go(-1)
+}
+
+// limit card number length
+const limitCardNumberLength = (event: Event) => {
+  const inputElement = event.target as HTMLInputElement
+  const currentValue = inputElement.value.replace(/\s/g, '')
+  if (currentValue.length > 16) {
+    inputElement.value = currentValue.slice(0, 16)
+    inputElement.dispatchEvent(new Event('input'))
+  }
+}
+
+// date
+const currentDate = new Date()
+
+// cardCvv limit
+const limitCvvNumberLength = (event: Event) => {
+  const inputElement = event.target as HTMLInputElement
+  const currentValue = inputElement.value.replace(/\s/g, '')
+  if (currentValue.length > 3) {
+    inputElement.value = currentValue.slice(0, 3)
+    inputElement.dispatchEvent(new Event('input'))
+  }
 }
 </script>
 
 <template>
-  <VCard >
+  <VCard>
     <!-- header -->
     <VCardTitle class="d-flex align-center justify-space-between">
       <span class="headline" style="color: #283046; font-weight: 900; font-size: 40px"
@@ -343,11 +373,11 @@ const goback = () => {
       </VCol>
 
       <!-- right side -->
-      <VCol cols="12" md="4" >
+      <VCol cols="12" md="4">
         <VCard
           class="total-card"
           elevation="3"
-          style="border-radius: 15px; background-color: #283046; height: 800px; color: white;"
+          style="border-radius: 15px; background-color: #283046; height: 800px; color: white"
         >
           <VContainer>
             <!-- Total Amount Section -->
@@ -371,6 +401,7 @@ const goback = () => {
                     label="Name"
                     required="true"
                     variant="outlined"
+                    :rules="[nameValidationRule]"
                   ></VTextField>
                   <VTextField
                     v-model="formData.cardNumber"
@@ -378,6 +409,8 @@ const goback = () => {
                     label="Card Number"
                     required="true"
                     variant="outlined"
+                    @input="limitCardNumberLength"
+                    :rules="[cardNumberValidationRule]"
                   ></VTextField>
                   <VRow>
                     <VCol>
@@ -387,6 +420,7 @@ const goback = () => {
                         required="true"
                         type="date"
                         variant="outlined"
+                        :min="currentDate.toISOString().split('T')[0]"
                       ></VTextField>
                     </VCol>
                     <VCol>
@@ -396,13 +430,21 @@ const goback = () => {
                         required="true"
                         variant="outlined"
                         type="password"
+                        @input="limitCvvNumberLength"
+                        :rules="[cardCvvValidationRule]"
                       ></VTextField>
                     </VCol>
                   </VRow>
                   <VRow>
                     <VCol>
                       <div class="demo-space-x">
-                        <VBtn variant="flat" color="info" @click="placeOrder" type="submit">
+                        <VBtn
+                          variant="flat"
+                          color="info"
+                          @click="placeOrder"
+                          :disabled="!isFormValid"
+                          type="submit"
+                        >
                           Place Order
                         </VBtn>
                       </div>
@@ -423,6 +465,7 @@ const goback = () => {
                       label="Full Name"
                       required
                       variant="outlined"
+                      :rules="[nameValidationRule]"
                     ></VTextField>
                     <VTextField
                       v-model="address"
@@ -445,3 +488,4 @@ const goback = () => {
     </VRow>
   </VCard>
 </template>
+

@@ -64,9 +64,9 @@ const router = createRouter({
       }
     },
     {
-      path:'/marketplace/cart',
+      path: '/marketplace/cart',
       name: 'MarketCart',
-      component:MarketCart,
+      component: MarketCart,
       meta: {
         layout: 'default'
       }
