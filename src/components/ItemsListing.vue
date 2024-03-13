@@ -1,4 +1,5 @@
 <script setup lang="ts">
+// imports
 import { ref, onMounted, computed } from 'vue'
 import axios from 'axios'
 import Swal from 'sweetalert2'
@@ -7,17 +8,15 @@ import ProjectEdit from './ProjectEdit.vue'
 import { watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 
-const { t, locale } = useI18n()
-watch(locale, (newlocale) => {
-  localStorage.setItem('locale', newlocale)
-})
-
+// interface
 interface Project {
   id: number
   name: string
   description: string
 }
 
+// variables
+const { t, locale } = useI18n()
 const projects = ref<Project[]>([])
 const search = ref<string>('')
 const headers = [
@@ -45,6 +44,8 @@ const projectDetails = ref({})
 const createEditDialog = ref(false)
 const pId = ref<string>('')
 
+
+// methods 
 const fetchProjectList = () => {
   axios
     .get<Project[]>('/api/projects')
@@ -90,10 +91,6 @@ const handleDelete = (id: number) => {
     }
   })
 }
-
-onMounted(() => {
-  fetchProjectList()
-})
 
 const filteredProjects = computed(() => {
   return projects.value
@@ -141,6 +138,7 @@ const handleViewDialog = (event: boolean) => {
 const handleEditDialog = (event: boolean) => {
   createEditDialog.value = event
 }
+
 const create = () => {
   createEditDialog.value = true
   pId.value = null
@@ -159,6 +157,15 @@ const downloadData = () => {
   link.click()
   document.body.removeChild(link)
 }
+
+onMounted(() => {
+  fetchProjectList()
+})
+
+// watcher 
+watch(locale, (newlocale) => {
+  localStorage.setItem('locale', newlocale)
+})
 </script>
 
 <template>

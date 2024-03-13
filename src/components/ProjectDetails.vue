@@ -1,11 +1,16 @@
 <script setup lang="ts">
+// imports
 import type Project from '@/Project'
 
+// variable
 const emit = defineEmits(['handleDialog'])
+
+// Props
 defineProps<{
   project: Project
   isVisible: boolean
 }>()
+
 </script>
 
 <template>

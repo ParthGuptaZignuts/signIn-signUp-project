@@ -1,8 +1,13 @@
 <script setup lang="ts">
-import { onMounted, ref } from 'vue'
+// imports
+import { ref } from 'vue'
 import { items } from '../ItemProducts'
-const value = ref(items)
-const lightColors = ['#E5FAFB', '#FDEDE8', '#FEF5E5', '#E6FFFA']
+
+// variables
+const value = ref<any>(items)
+const lightColors : string[] = ['#E5FAFB', '#FDEDE8', '#FEF5E5', '#E6FFFA']
+
+// methods
 const getRandomIndex = () => Math.floor(Math.random() * lightColors.length)
 const getRandomColor = () => {
   const randomIndex = getRandomIndex()

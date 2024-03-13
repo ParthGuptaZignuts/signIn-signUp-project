@@ -1,4 +1,5 @@
 <script setup lang="ts">
+// imports
 import { ref, type Ref, onMounted, onBeforeUnmount, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { items, type Items, type SubCategory } from '../ItemProducts'
@@ -7,25 +8,34 @@ import 'vue3-toastify/dist/index.css'
 import Swal from 'sweetalert2'
 import { nameValidationRule, cardNumberValidationRule, cardCvvValidationRule } from '../validation'
 
+// interface
 interface CartItem extends Items {
   imageUrl: string | Object | undefined
   price: number
   quantity: number
 }
 
+// variables
 const STORAGE_KEY_PREFIX = 'cartItems_'
 const cart: Ref<CartItem[]> = ref([])
 const value: Ref<Items[]> = ref(items)
 const router = useRouter()
 const currentId = ref<any>(router.currentRoute.value.params.id)
 const currentSubcategories: Ref<SubCategory[]> = ref([])
-
-onMounted(() => {
-  updateSubcategories()
-  cart.value = loadCartFromLocalStorage()
-  updateTotalAmount()
+const totalAmount: Ref<number> = ref(0.0)
+const formData = ref({
+  name: '',
+  cardNumber: '',
+  expiryDate: '',
+  cvv: ''
 })
+const dialog = ref<Boolean>(false)
+const fullName = ref<String>('')
+const address = ref<String>('')
+const currentDate = new Date()
+const paymentMethod = ref<'card' | 'cash'>('card')
 
+// methods
 onBeforeUnmount(() => {
   const selectedDate = localStorage.getItem('selectedDate')
   const storageKey = STORAGE_KEY_PREFIX + selectedDate
@@ -91,7 +101,6 @@ const calculateTotalAmount = (): string => {
   return cart.value.reduce((total, item) => total + item.price * item.quantity, 0).toFixed(2)
 }
 
-const totalAmount: Ref<number> = ref(0.0)
 const updateTotalAmount = (): void => {
   totalAmount.value = +calculateTotalAmount()
 }
@@ -106,13 +115,6 @@ const removeItem = (index: number): void => {
     dangerouslyHTMLString: true
   })
 }
-
-const formData = ref({
-  name: '',
-  cardNumber: '',
-  expiryDate: '',
-  cvv: ''
-})
 
 const isFormValid = computed(() => {
   return (
@@ -136,13 +138,22 @@ const placeOrder = (e: { preventDefault: () => void }): void => {
     return
   }
 
-  if (!isFormValid.value) {
+  if (paymentMethod.value === 'card' && !isFormValid.value) {
     toast('Please fill in all required fields correctly', {
       theme: 'auto',
       type: 'error',
       dangerouslyHTMLString: true
     })
     return
+  }
+
+  if (/\d/.test(formData.value.name)) {
+    toast('Name cannot contain numbers', {
+      theme: 'auto',
+      type: 'error',
+      dangerouslyHTMLString: true
+    });
+    return;
   }
 
   formData.value = {
@@ -153,11 +164,6 @@ const placeOrder = (e: { preventDefault: () => void }): void => {
   }
   openAddressDialog()
 }
-
-// address order
-const dialog = ref(false)
-const fullName = ref('')
-const address = ref('')
 
 const openAddressDialog = () => {
   dialog.value = true
@@ -180,7 +186,7 @@ const submitOrder = () => {
   }
 
   if (fullName.value && address.value) {
-    const orderDetails: { 'Full Name': string | null ; Address: string | null } =  {
+    const orderDetails: { 'Full Name': string | null; Address: string | null } = {
       'Full Name': fullName.value,
       Address: address.value
     }
@@ -205,11 +211,11 @@ const clearCart = (): void => {
   const selectedDate = localStorage.getItem('selectedDate')
   const storageKey = STORAGE_KEY_PREFIX + selectedDate
   localStorage.removeItem(storageKey)
-  localStorage.removeItem('OrderDetails');
+  localStorage.removeItem('OrderDetails')
   cart.value = []
   updateTotalAmount()
 }
-// download bill
+
 const downloadBill = (): void => {
   const billContent = generateBillContent()
   const blob = new Blob([billContent], { type: 'text/plain' })
@@ -218,11 +224,12 @@ const downloadBill = (): void => {
   link.download = 'order_bill.txt'
   link.click()
 }
+
 const generateBillContent = (): string => {
   const selectedDate = localStorage.getItem('selectedDate')
-  const orderDetailsString  = localStorage.getItem('OrderDetails');
-  const orderDetails = JSON.parse(orderDetailsString);
-  console.log(orderDetails);
+  const orderDetailsString = localStorage.getItem('OrderDetails')
+  const orderDetails = JSON.parse(orderDetailsString)
+  console.log(orderDetails)
   const itemsInCart = cart.value.map(
     (item) =>
       `${item.title} (Quantity: ${item.quantity}) - $${(item.price * item.quantity).toFixed(2)}`
@@ -230,7 +237,7 @@ const generateBillContent = (): string => {
   const totalAmountValue = calculateTotalAmount()
   const billContent = `
     Order Bill - ${selectedDate} 
-    Name - ${orderDetails["Full Name"]}
+    Name - ${orderDetails['Full Name']}
     Address - ${orderDetails.Address}
     Items in Cart:
     ${itemsInCart.join('\n')}
@@ -240,7 +247,6 @@ const generateBillContent = (): string => {
   return billContent
 }
 
-// update local storage
 const updateLocalStorage = (): void => {
   const selectedDate = localStorage.getItem('selectedDate')
   const storageKey = STORAGE_KEY_PREFIX + selectedDate
@@ -252,7 +258,6 @@ const goback = () => {
   router.go(-1)
 }
 
-// limit card number length
 const limitCardNumberLength = (event: Event) => {
   const inputElement = event.target as HTMLInputElement
   const currentValue = inputElement.value.replace(/\s/g, '')
@@ -262,10 +267,6 @@ const limitCardNumberLength = (event: Event) => {
   }
 }
 
-// date
-const currentDate = new Date()
-
-// cardCvv limit
 const limitCvvNumberLength = (event: Event) => {
   const inputElement = event.target as HTMLInputElement
   const currentValue = inputElement.value.replace(/\s/g, '')
@@ -274,6 +275,12 @@ const limitCvvNumberLength = (event: Event) => {
     inputElement.dispatchEvent(new Event('input'))
   }
 }
+
+onMounted(() => {
+  updateSubcategories()
+  cart.value = loadCartFromLocalStorage()
+  updateTotalAmount()
+})
 </script>
 
 <template>
@@ -287,6 +294,7 @@ const limitCvvNumberLength = (event: Event) => {
         <VIcon>mdi-close</VIcon>
       </VBtn>
     </VCardTitle>
+
     <VDivider></VDivider>
 
     <VRow>
@@ -314,7 +322,7 @@ const limitCvvNumberLength = (event: Event) => {
                           </VCol>
                           <VCol cols="12">
                             <VCard-subtitle class="item-price" style="font-size: 16px">{{
-                              `$${cartItem.price.toFixed(2)}`
+                              `₹${cartItem.price.toFixed(2)}`
                             }}</VCard-subtitle>
                           </VCol>
                         </VRow>
@@ -393,7 +401,7 @@ const limitCvvNumberLength = (event: Event) => {
               <VCol>
                 <VCardTitle class="total-title" style="font-size: 20px"> Total Amount </VCardTitle>
                 <VCard-subtitle class="total-amount" style="font-size: 18px">
-                  ${{ totalAmount.toFixed(2) }}
+                  ₹{{ totalAmount.toFixed(2) }}
                 </VCard-subtitle>
                 <VDivider></VDivider>
                 <VCard-subtitle class="item-count">Items in Cart: {{ cart.length }}</VCard-subtitle>
@@ -412,46 +420,66 @@ const limitCvvNumberLength = (event: Event) => {
                     :rules="[nameValidationRule]"
                     maxlength="40"
                   ></VTextField>
-                  <VTextField
-                    v-model="formData.cardNumber"
-                    type="number"
-                    label="Card Number"
-                    required="true"
-                    variant="outlined"
-                    @input="limitCardNumberLength"
-                    :rules="[cardNumberValidationRule]"
-                  ></VTextField>
+
                   <VRow>
                     <VCol>
-                      <VTextField
-                        v-model="formData.expiryDate"
-                        label="Expiry Date"
-                        required="true"
-                        type="date"
-                        variant="outlined"
-                        :min="currentDate.toISOString().split('T')[0]"
-                      ></VTextField>
-                    </VCol>
-                    <VCol>
-                      <VTextField
-                        v-model="formData.cvv"
-                        label="CVV"
-                        required="true"
-                        variant="outlined"
-                        type="password"
-                        @input="limitCvvNumberLength"
-                        :rules="[cardCvvValidationRule]"
-                      ></VTextField>
+                      <VRadioGroup v-model="paymentMethod">
+                        <VRadio label="Pay with Card" value="card"></VRadio>
+                        <VRadio label="Cash on Delivery" value="cash"></VRadio>
+                      </VRadioGroup>
                     </VCol>
                   </VRow>
+
+                  <template v-if="paymentMethod === 'card'">
+                    <VTextField
+                      v-model="formData.cardNumber"
+                      type="number"
+                      label="Card Number"
+                      required="true"
+                      variant="outlined"
+                      @input="limitCardNumberLength"
+                      :rules="[cardNumberValidationRule]"
+                    ></VTextField>
+                    <VRow>
+                      <VCol>
+                        <VTextField
+                          v-model="formData.expiryDate"
+                          label="Expiry Date"
+                          required="true"
+                          type="date"
+                          variant="outlined"
+                          :min="currentDate.toISOString().split('T')[0]"
+                        ></VTextField>
+                      </VCol>
+                      <VCol>
+                        <VTextField
+                          v-model="formData.cvv"
+                          label="CVV"
+                          required="true"
+                          variant="outlined"
+                          type="password"
+                          @input="limitCvvNumberLength"
+                          :rules="[cardCvvValidationRule]"
+                        ></VTextField>
+                      </VCol>
+                    </VRow>
+                  </template>
+
+                  <template v-if="paymentMethod === 'cash'">
+                    <p>Please keep exact cash ready for payment upon delivery.</p>
+                  </template>
+
                   <VRow>
                     <VCol>
-                      <div class="demo-space-x">
+                      <div :class="paymentMethod === 'card' ? 'demo-space-x' : 'demo-space-x pt-5'">
                         <VBtn
                           variant="flat"
                           color="info"
                           @click="placeOrder"
-                          :disabled="!isFormValid"
+                          :disabled="
+                            (paymentMethod === 'card' && !isFormValid) ||
+                            (paymentMethod === 'cash' && !formData.name)
+                          "
                           type="submit"
                         >
                           Place Order
@@ -496,6 +524,8 @@ const limitCvvNumberLength = (event: Event) => {
           </VContainer>
         </VCard>
       </VCol>
+
     </VRow>
+    
   </VCard>
 </template>

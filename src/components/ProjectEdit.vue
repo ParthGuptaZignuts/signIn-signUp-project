@@ -1,23 +1,25 @@
 <script setup lang="ts">
+// imports
 import { ref, defineProps, watch } from 'vue'
 import axios from 'axios'
 import Swal from 'sweetalert2'
 import type Project from '../Project'
 
+// variables
 const loading = ref(false)
-
 const project = ref<Project>({
   projectName: '',
   projectDescription: ''
 })
+const emit = defineEmits(['handleDialog', 'createEditSuccess'])
 
+// props
 const props = defineProps<{
   projectId: number | string
   isVisible: boolean
 }>()
 
-const emit = defineEmits(['handleDialog', 'createEditSuccess'])
-
+// methods
 const getProject = () => {
   axios
     .get(`/api/projects/${props.projectId}`)
@@ -89,6 +91,7 @@ const handleClose = () => {
   emit('handleDialog', false)
 }
 
+// watcher
 watch(
   () => props.isVisible,
   (newValue) => {

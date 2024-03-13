@@ -1,16 +1,21 @@
 <script setup lang="ts">
+// imports
 import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { items, type SubCategory } from '../ItemProducts'
 import { toast } from 'vue3-toastify'
 import 'vue3-toastify/dist/index.css'
 
+// variables
 const value = ref<any>(items)
 const router = useRouter()
 const currentId = ref<any>(router.currentRoute.value.params.id)
 const STORAGE_KEY_PREFIX = 'cartItems_'
 const cart = ref<any>([])
+const totalAmount = ref<Number>(0.0)
+const currentSubcategories = ref([])
 
+// methods
 const addToCart = (item: SubCategory): void => {
   const selectedDate = localStorage.getItem('selectedDate')
   const storageKey = STORAGE_KEY_PREFIX + selectedDate
@@ -47,7 +52,6 @@ const calculateTotalAmount = (): string => {
     .toFixed(2)
 }
 
-const totalAmount = ref<Number>(0.0)
 const updateTotalAmount = () => {
   return (totalAmount.value = +calculateTotalAmount())
 }
@@ -59,11 +63,11 @@ const updateLocalStorage = (): void => {
   updateTotalAmount()
 }
 
-const currentSubcategories = ref([])
 const filterSubcategories = (itemId: SubCategory) => {
   const currentItem = value.value.find((item: { id: SubCategory }) => item.id === itemId)
   return currentItem ? currentItem.subCategory : []
 }
+
 const updateSubcategories = () => {
   currentSubcategories.value = filterSubcategories(currentId.value)
 }

@@ -1,12 +1,15 @@
 <script setup lang="ts">
+// import
 import { ref, watch } from 'vue'
 import MarketPlaceProducts from './MarketPlaceProducts.vue'
 
+// variables
 const isVisible = ref<boolean>(true)
 const currentDate = new Date()
 const selectedDate = ref<any>()
 const showProduct = ref(false)
 
+// watcher
 watch(selectedDate, (newVal) => {
   localStorage.setItem('selectedDate', new Date(newVal).toLocaleDateString())
   console.log(new Date(newVal).toLocaleDateString())
