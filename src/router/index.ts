@@ -8,6 +8,8 @@ import ProjectDetails from '@/components/ProjectDetails.vue'
 import MarketPlace from '@/views/MarketPlace.vue'
 import MarketPlaceSubProducts from '@/components/MarketPlaceSubProducts.vue'
 import MarketCart from '@/components/MarketCart.vue'
+import fullSectionIndex from '../components/Github/fullSectionIndex.vue'
+import HomePage from '@/views/HomePage.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -67,6 +69,22 @@ const router = createRouter({
       path: '/marketplace/cart',
       name: 'MarketCart',
       component: MarketCart,
+      meta: {
+        layout: 'default'
+      }
+    },
+    {
+      path: '/githubuserfinder',
+      name: 'fullSectionIndex',
+      component: fullSectionIndex,
+      meta: {
+        layout: 'default'
+      }
+    },
+    {
+      path: '/imageHomepage',
+      name: 'imageHomepage',
+      component: HomePage,
       meta: {
         layout: 'default'
       }

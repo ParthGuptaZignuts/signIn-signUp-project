@@ -44,8 +44,7 @@ const projectDetails = ref({})
 const createEditDialog = ref(false)
 const pId = ref<string>('')
 
-
-// methods 
+// methods
 const fetchProjectList = () => {
   axios
     .get<Project[]>('/api/projects')
@@ -162,7 +161,7 @@ onMounted(() => {
   fetchProjectList()
 })
 
-// watcher 
+// watcher
 watch(locale, (newlocale) => {
   localStorage.setItem('locale', newlocale)
 })

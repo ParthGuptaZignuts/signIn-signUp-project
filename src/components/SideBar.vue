@@ -10,7 +10,6 @@ const { t, locale } = useI18n()
 watch(locale, (newlocale) => {
   localStorage.setItem('locale', newlocale)
 })
-
 </script>
 
 <template>
@@ -29,6 +28,19 @@ watch(locale, (newlocale) => {
           </template>
         </VSelect>
       </VListItem>
+
+      <VListItem style="max-width: 100%">
+        <VBtn :to="`/githubuserfinder`" class="bg-transparent justify-space-between" elevation="0">
+          <VIcon>mdi mdi-card-account-details</VIcon
+          ><span class="pl-2">{{ t('Search For Profile') }}</span>
+        </VBtn>
+      </VListItem>
+
+      <VListItem style="max-width: 100%">
+        <VBtn :to="`/imageHomepage`" class="bg-transparent justify-space-between" elevation="0">
+          <VIcon>mdi mdi-image-search</VIcon><span class="pl-2">{{ t('View Products') }}</span>
+        </VBtn>
+      </VListItem>
     </VList>
   </VNavigationDrawer>
 </template>
@@ -45,6 +57,10 @@ select {
 @media only screen and (max-width: 600px) {
   select {
     width: 100%;
+  }
+
+  .ml-2 {
+    margin-left: 0.5rem;
   }
 }
 </style>

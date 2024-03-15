@@ -1,10 +1,10 @@
 <script setup lang="ts">
-// imports 
+// imports
 import { useUserAuthData } from '@/composables/useLogout'
 import { watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 
-// variables 
+// variables
 const { logoutAction } = useUserAuthData()
 const { t, locale } = useI18n()
 

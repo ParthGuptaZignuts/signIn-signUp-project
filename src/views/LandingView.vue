@@ -1,23 +1,53 @@
 <script setup lang="ts"></script>
 
 <template>
-  <VCard
-    class="text-xs-center mt-15 pa-5 d-flex flex-column justify-center align-center"
-    elevation="12"
-    style="height: 80vh; gap: 60px"
-  >
-    <VFlex xs12>
-      <h1 style="font-size: 50px">Welcome to the Application</h1>
-    </VFlex>
-    <VFlex xs12 sm6 offset-sm3 mt-3>
-      <blockquote class="blockquote text-xs-center" style="color: rgb(56, 55, 55); font-size: 30px">
-        It's a basic Single Page application <br />
-        made with Vue calling data from api
-      </blockquote>
-    </VFlex>
-    <VFlex xs12 sm6 offset-sm3 class="text-xs-center" mt-5 style="display: flex; gap: 30px">
-      <VBtn color="primary" to="/signup">Sign Up</VBtn>
-      <VBtn to="/signin">Sign In</VBtn>
-    </VFlex>
-  </VCard>
+  <VContainer class="d-flex flex-column align-center justify-center" fluid>
+    <div class="h-50 w-66 d-flex flex-column align-center justify-center">
+      <VRow align="center" justify="center">
+        <VCol cols="12">
+          <div class="text-center">
+            <h1>Welcome to Our OneSite Management Website</h1>
+            <p>This is the best place to manage your projects efficiently and effectively.</p>
+          </div>
+        </VCol>
+      </VRow>
+      <VRow align="center" justify="center" class="flex-row">
+        <VCol cols="12">
+          <div class="text-center">
+            <RouterLink to="/signup">
+              <VBtn color="white" class="rounded-xl text-black text-none" size="x-large">
+                Sign Up
+              </VBtn>
+            </RouterLink>
+            <RouterLink to="/signin">
+              <VBtn color="grey" class="rounded-xl ma-5 text-black text-none" size="x-large">
+                Sign In
+              </VBtn>
+            </RouterLink>
+          </div>
+        </VCol>
+      </VRow>
+    </div>
+  </VContainer>
 </template>
+<style scoped>
+.v-container {
+  background: url('../assets/background2.jpg') no-repeat center center;
+  background-size: cover;
+  height: 100vh;
+  color: white;
+}
+h1 {
+  font-family: 'Arial', sans-serif;
+  font-size: 3rem;
+  color: #ffffff;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+p {
+  font-family: 'Arial', sans-serif;
+  font-size: 1.2em;
+  color: #ffffff;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+}
+</style>

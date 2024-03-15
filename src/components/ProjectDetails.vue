@@ -10,7 +10,6 @@ defineProps<{
   project: Project
   isVisible: boolean
 }>()
-
 </script>
 
 <template>

@@ -152,8 +152,8 @@ const placeOrder = (e: { preventDefault: () => void }): void => {
       theme: 'auto',
       type: 'error',
       dangerouslyHTMLString: true
-    });
-    return;
+    })
+    return
   }
 
   formData.value = {
@@ -524,8 +524,6 @@ onMounted(() => {
           </VContainer>
         </VCard>
       </VCol>
-
     </VRow>
-    
   </VCard>
 </template>

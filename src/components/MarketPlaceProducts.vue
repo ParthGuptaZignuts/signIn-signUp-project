@@ -5,7 +5,7 @@ import { items } from '../ItemProducts'
 
 // variables
 const value = ref<any>(items)
-const lightColors : string[] = ['#E5FAFB', '#FDEDE8', '#FEF5E5', '#E6FFFA']
+const lightColors: string[] = ['#E5FAFB', '#FDEDE8', '#FEF5E5', '#E6FFFA']
 
 // methods
 const getRandomIndex = () => Math.floor(Math.random() * lightColors.length)
