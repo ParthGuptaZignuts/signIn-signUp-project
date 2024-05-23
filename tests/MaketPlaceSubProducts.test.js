@@ -6,7 +6,7 @@ describe('MarketplaceSubProduct.vue', () => {
     const subcategories = [
       { id: 1, title: 'Item 1', description: 'Description 1', price: 10.99, imageUrl: 'image1.jpg' },
       { id: 2, title: 'Item 2', description: 'Description 2', price: 15.99, imageUrl: 'image2.jpg' }
-    ]
+    ];
 
     const wrapper = mount(MarketplaceSubProduct, {
       props: {

@@ -22,8 +22,9 @@ describe('LandingView.vue', () => {
         }
       }
     })
-    const signUpButton = wrapper.find('a[href="/signup"]')
-    const signInButton = wrapper.find('a[href="/signin"]')
+
+    const signUpButton = wrapper.findComponent(RouterLinkStub, { props: { to: '/signup' } })
+    const signInButton = wrapper.findComponent(RouterLinkStub, { props: { to: '/signin' } })
     
     expect(signUpButton.exists()).toBe(true)
     expect(signInButton.exists()).toBe(true)

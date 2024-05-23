@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import HomeButton from '../components/HomeButton.vue'
-import { useLogin } from '@/composables/useLogin'
+import { useLogin } from "../composables/useLogin"
 
 const { formData, handleLogin } = useLogin()
 const visible = ref(false)

@@ -1,5 +1,5 @@
 import { mount } from '@vue/test-utils'
-import ProjectEdit from "@/components/ProjectEdit.vue"
+import ProjectEdit from "../src/components/ProjectEdit.vue"
 import axios from 'axios'
 
 jest.mock('axios', () => ({

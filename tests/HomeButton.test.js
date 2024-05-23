@@ -1,6 +1,5 @@
 import { mount } from '@vue/test-utils'
 import HomeButton from "../src/components/HomeButton.vue"
-import { VBtn } from 'vuetify/components'
 jest.mock('vuetify/components', () => ({
   VBtn: {
     template: '<button><slot /></button>',

@@ -2,7 +2,6 @@ import { mount } from '@vue/test-utils'
 import MarketplaceDialog from '../src/components/MarketPlaceDailog.vue'
 import MarketPlaceProducts from '../src/components/MarketPlaceProducts.vue'
 
-// Mock the imported component
 jest.mock("../src/components/MarketPlaceProducts.vue", () => ({
   name: 'MarketPlaceProducts',
   template: '<div />'
@@ -43,7 +42,9 @@ describe('MarketplaceDialog.vue', () => {
 
   it('sets the min date for the date picker correctly', () => {
     const minDate = new Date().toISOString().split('T')[0]
-    expect(wrapper.findComponent({ name: 'VDatePicker' }).props('min')).toBe(minDate)
+    const datePicker = wrapper.findComponent({ name: 'VDatePicker' })
+    expect(datePicker.exists()).toBe(true)
+    expect(datePicker.props('min')).toBe(minDate)
   })
 
   it('hides the dialog and shows the products component after selecting a date', async () => {
@@ -53,8 +54,9 @@ describe('MarketplaceDialog.vue', () => {
     await dateInput.setValue(newDate)
     await dateInput.trigger('input')
 
-    expect(wrapper.vm.isVisible).toBe(false)
+    await wrapper.vm.$nextTick() // wait for reactivity to update
 
+    expect(wrapper.vm.isVisible).toBe(false)
     expect(wrapper.findComponent(MarketPlaceProducts).exists()).toBe(true)
   })
 
@@ -66,7 +68,8 @@ describe('MarketplaceDialog.vue', () => {
     await dateInput.setValue(newDate)
     await dateInput.trigger('input')
 
-   
+    await wrapper.vm.$nextTick() // wait for reactivity to update
+
     expect(localStorage.getItem('selectedDate')).toBe(formattedDate)
   })
 })
